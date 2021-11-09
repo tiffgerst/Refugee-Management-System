@@ -1,6 +1,15 @@
 class admin:
     def __init__(self):
         pass
+
+    def create_emergency_plan(self,type,description,geographical_area,start_date):
+        new_plan = emergency_plan(type,description,geographical_area,start_date)
+        new_plan.create()
+
+    def create_camp(self,event):
+        new_camp = camp(event)
+        new_camp.create()
+
     def display_summary(self,event):
         """
         To display:
@@ -11,6 +20,7 @@ class admin:
                 -> index camp
                 -> index volunteers table
         """
+        pass
     def find_refugee(self):
         pass
 
@@ -21,7 +31,7 @@ class admin:
         pass
 
 class emergency_plan:
-    def __init__(self,type,description,geographical_area,start_date):
+    def __init__(self,type,description,geographical_area,start_date,**kwargs):
         """
         Option to add:
             end_date
@@ -31,30 +41,43 @@ class emergency_plan:
         self.description = description
         self.geographical_area = geographical_area
         self.start_date = start_date
-        self.end_date = None
+        self.end_date = kwargs.get('end_date', None) # If no end_date, set to None
+        
+    def create(self):
+        """
+        Save new row to CSV file
+        """
+        pass
+
+class camp:
+    def __init__(self,event_details):
+        pass
 
     def create(self):
         """
-        Save to CSV file
+        Save new row to CSV file
         """
+        pass
 
-class camp(emergency_plan):
+    def count_refugees(self):
+        pass
+
+    def update_resource(self,resource):
+        """
+        Parameters
+        ----------
+        resource: str
+            one of ['food','shelter']
+        """
+        pass
+
+class refugee:
     def __init__(self):
-        super.__init__()
-        pass
-
-    def create(self):
-        """
-        Save to CSV file
-        """
-
-class refugee(camp):
-    def __init__(self):
         pass
     def create(self):
         pass
 
-class volunteer(camp):
+class volunteer:
     def __init__(self):
         pass
     
