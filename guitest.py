@@ -5,10 +5,10 @@ def register_user():
         Also checks if any field was emtpy/already in the database
         - if so, aks user to re-enter details
     """
-   
+
     # also check if username is already in the database (task)
-    # find a way of deleting these error messages if the user re-registers  so that the latest error message dispays 
-    # correctly and doesnt stack (task)
+    # find a way of deleting these error messages if the user re-registers so that only the latest error messages dispalys 
+    # doesnt stack (task)
     if username_entry.get() == '':
         Label(sign_up_screen, text='Please enter a valid username', fg='red').pack()
     if password_entry.get() == '':
@@ -18,7 +18,7 @@ def register_user():
     if email_entry.get() == '':
         Label(sign_up_screen, text='Please enter a valid email', fg='red').pack()
     else:
-         #Add user to the csv file (task)
+         # Add user to the csv file (task)
         login_success_popup()
 
 def login_success_popup():
@@ -28,7 +28,7 @@ def login_success_popup():
     login_success = Toplevel(sign_up_screen)
     login_success.title("Success")
     login_success.geometry("150x50")
-    Label(login_success, text="Login was successful").pack()
+    Label(login_success, text="Login was successful", fg='green').pack()
     Button(login_success, text="OK", command=delete_login_sucess).pack()
 
 def delete_login_sucess():
@@ -52,8 +52,6 @@ def sign_up_volunteer():
 
     sign_up_screen = Toplevel(main_screen)
     sign_up_screen.geometry('500x620')
-    sign_up_screen.columnconfigure(0, weight=1)
-    sign_up_screen.columnconfigure(0, weight=3)
 
     Label(sign_up_screen, text="Please enter the following details:", 
     width="300", height="3", 
@@ -68,25 +66,25 @@ def sign_up_volunteer():
 
     Label(sign_up_screen, text="", bg='#F2F2F2').pack()
 
-    Label(sign_up_screen, text = 'Username:', bg='#F2F2F2', font=("Calibri", 15)).pack()
+    Label(sign_up_screen, text = 'Username: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
 
     Entry(sign_up_screen, textvariable= username_entry, width='30', font=("Calibri", 10)).pack()
     
-    Label(sign_up_screen, text = 'Email:', background='#F2F2F2', font=("Calibri", 15)).pack()
+    Label(sign_up_screen, text = 'Email: *', background='#F2F2F2', font=("Calibri", 15)).pack()
     
     Entry(sign_up_screen,textvariable= email_entry, width="30", font=("Calibri", 10)).pack()
     
-    Label(sign_up_screen, text = 'Phone Number:', bg='#F2F2F2', font=("Calibri", 15)).pack()
+    Label(sign_up_screen, text = 'Phone Number: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
 
     Entry(sign_up_screen, textvariable= phonenumber_entry, width="30", font=("Calibri", 10)).pack()
     
-    Label(sign_up_screen, text = 'Password:', bg='#F2F2F2', font=("Calibri", 15)).pack()
+    Label(sign_up_screen, text = 'Password: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
 
     Entry(sign_up_screen, textvariable= password_entry, show= '*', width="30", font=("Calibri", 10)).pack()
         
     Label(sign_up_screen, text="", bg='#F2F2F2').pack()
     
-    Label(sign_up_screen, text = 'Are you medically trained?', bg='#F2F2F2', font=("Calibri", 15)).pack()
+    Label(sign_up_screen, text = 'Are you medically trained? *', bg='#F2F2F2', font=("Calibri", 15)).pack()
     
     Radiobutton(sign_up_screen, text="Yes", variable=medic_var, value= True, font=("Calibri", 15)).pack()
     Radiobutton(sign_up_screen, text='No', variable=medic_var, value=False, font=("Calibri", 15)).pack()
@@ -104,7 +102,7 @@ def main_account_screen():
     global name_var
     global passw_var
 
-    #setting up the windwo
+    #setting up the window
     main_screen = Tk()
     main_screen.geometry("600x500")
     main_screen.title("E-Adam")
