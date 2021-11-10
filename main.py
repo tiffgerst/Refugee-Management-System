@@ -2,15 +2,15 @@ class admin:
     def __init__(self):
         pass
 
-    def create_emergency_plan(self,type,description,geographical_area,start_date):
-        new_plan = emergency_plan(type,description,geographical_area,start_date)
+    def create_emergency_plan(self, type, description, geographical_area, start_date):
+        new_plan = emergency_plan(type, description, geographical_area, start_date)
         new_plan.create()
 
-    def create_camp(self,event):
+    def create_camp(self, event):
         new_camp = camp(event)
         new_camp.create()
 
-    def display_summary(self,event):
+    def display_summary(self, event):
         """
         To display:
             number of refugees
@@ -21,6 +21,7 @@ class admin:
                 -> index volunteers table
         """
         pass
+
     def find_refugee(self):
         pass
 
@@ -30,8 +31,9 @@ class admin:
         """
         pass
 
+
 class emergency_plan:
-    def __init__(self,type,description,geographical_area,start_date,**kwargs):
+    def __init__(self, type, description, geographical_area, start_date, **kwargs):
         """
         Option to add:
             end_date
@@ -41,16 +43,17 @@ class emergency_plan:
         self.description = description
         self.geographical_area = geographical_area
         self.start_date = start_date
-        self.end_date = kwargs.get('end_date', None) # If no end_date, set to None
-        
+        self.end_date = kwargs.get('end_date', None)  # If no end_date, set to None
+
     def create(self):
         """
         Save new row to CSV file
         """
         pass
 
+
 class camp:
-    def __init__(self,event_details):
+    def __init__(self, event_details):
         pass
 
     def create(self):
@@ -62,7 +65,7 @@ class camp:
     def count_refugees(self):
         pass
 
-    def update_resource(self,resource):
+    def update_resource(self, resource):
         """
         Parameters
         ----------
@@ -71,16 +74,19 @@ class camp:
         """
         pass
 
+
 class refugee:
     def __init__(self):
         pass
+
     def create(self):
         pass
+
 
 class volunteer:
     def __init__(self):
         pass
-    
+
     def create(self):
         pass
 
@@ -90,6 +96,7 @@ class volunteer:
         (name, phone, etc., camp id, availability)
         """
         pass
+
     def create_emergency_profile(self):
         """
         Add a refugee:
