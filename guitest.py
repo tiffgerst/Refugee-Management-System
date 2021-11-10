@@ -1,29 +1,79 @@
+from os import name
 from tkinter import *
+from csv import writer
+import pandas as pd
+
+df = pd.read_csv('./volunteers.csv')
+isLoggedIn = False
+
+
+def login():
+    """
+    login logic
+    sets isLoggedIn to True if successful
+    Displays appropriate messages
+    """
+    u_entry = name_var.get()
+    p_entry = passw_var.get()
+
+
+    
+    user_name_list = df['username'].tolist()
+
+
+    if u_entry in user_name_list:
+        idx = user_name_list.index(u_entry)
+
+        # make sure its a string before comparing
+        if str(df['password'].tolist()[idx]) == p_entry:
+            Label(main_screen, text='Login Successful', fg='Green').pack()
+            isLoggedIn = True
+        else:
+            Label(main_screen, text='Password Incorrect please try again', fg='red').pack()
+
+    else:
+        Label(main_screen, text='Username not found, please sign up', fg='red').pack()
+
 
 
 def register_user():
-    """ Actually adds the user to the database
-        Also checks if any field was emtpy/already in the database
-        - if so, aks user to re-enter details
+    """ 
+    Actually adds the user to the database
+    Also checks if any field was emtpy/already in the database
+    - if so, aks user to re-enter details
     """
 
-    # also check if username is already in the database (task)
+    
     # find a way of deleting these error messages if the user re-registers so that only the latest error messages displays
     # doesnt stack (task)
-    if username_entry.get() == '':
-        Label(sign_up_screen, text='Please enter a valid username', fg='red').pack()
-    if password_entry.get() == '':
+
+    
+
+    u_entry = username_entry.get()
+    p_entry = password_entry.get()
+    num_entry = phonenumber_entry.get()
+    mail_entry = email_entry.get()
+
+
+    if u_entry == '':
+        username_error = Label(sign_up_screen, text='Please enter a valid username', fg='red').pack()
+    elif u_entry in df['username'].tolist():
+        Label(sign_up_screen, text='Username already taken please try again', fg='red').pack()
+    elif p_entry == '':
         Label(sign_up_screen, text='Please enter a valid password', fg='red').pack()
-    if phonenumber_entry.get() == '':
-        Label(sign_up_screen, text='Please enter a valid phonumber', fg='red').pack()
-    if email_entry.get() == '':
+    elif num_entry == '':
+        Label(sign_up_screen, text='Please enter a valid phone number', fg='red').pack()
+    elif mail_entry == '':
         Label(sign_up_screen, text='Please enter a valid email', fg='red').pack()
     else:
-         # Add user to the csv file (task)
+        with open('volunteers.csv','a', newline='') as file:
+            f = writer(file)
+            f.writerows([[u_entry, p_entry, num_entry, mail_entry]])
         register_success_popup()
 
 def register_success_popup():
-    """ Creates pop-up to show successful registration
+    """ 
+    Creates pop-up to show successful registration
     """
     global register_success
     register_success = Toplevel(sign_up_screen)
@@ -33,7 +83,8 @@ def register_success_popup():
     Button(register_success, text="OK", command=delete_register_sucess).pack()
 
 def delete_register_sucess():
-   """ Deletes sign up and register popups
+   """
+   Deletes sign up and register popups
    """ 
    register_success.destroy()
    sign_up_screen.destroy()
@@ -41,7 +92,8 @@ def delete_register_sucess():
     
 
 def sign_up_volunteer():
-    """Sign up window for user
+    """
+    Sign up window for user
     """
     global sign_up_screen
     global username_entry
@@ -96,7 +148,8 @@ def sign_up_volunteer():
 
 
 def main_account_screen():
-    """Setups up the main login window
+    """
+    Setups up the main login window
     """
     global main_screen
     global name_var
@@ -124,7 +177,7 @@ def main_account_screen():
     name_var = StringVar()
     passw_var = StringVar()
 
-    # to implement need to add these strings to a csv file so that we can verify them (task)
+
     # Sets up login form
     # textvariable sets the name_var variable to whatever the user inputs
     # same for the password 
@@ -138,7 +191,7 @@ def main_account_screen():
 
     Label(text="", bg='#F2F2F2').pack()
 
-    Button(text="Login", height="2", width="30").pack()
+    Button(text="Login", height="2", width="30", command=login).pack()
 
     Label(text="", bg='#F2F2F2').pack()
 
