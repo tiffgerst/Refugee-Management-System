@@ -19,22 +19,22 @@ def register_user():
         Label(sign_up_screen, text='Please enter a valid email', fg='red').pack()
     else:
          # Add user to the csv file (task)
-        login_success_popup()
+        register_success_popup()
 
-def login_success_popup():
-    """ Creates pop-up to show successful sign up
+def register_success_popup():
+    """ Creates pop-up to show successful registration
     """
-    global login_success
-    login_success = Toplevel(sign_up_screen)
-    login_success.title("Success")
-    login_success.geometry("150x50")
-    Label(login_success, text="Login was successful", fg='green').pack()
-    Button(login_success, text="OK", command=delete_login_sucess).pack()
+    global register_success
+    register_success = Toplevel(sign_up_screen)
+    register_success.title("Success")
+    register_success.geometry("150x50")
+    Label(register_success, text="Registration was successful", fg='green').pack()
+    Button(register_success, text="OK", command=delete_register_sucess).pack()
 
-def delete_login_sucess():
+def delete_register_sucess():
    """ Deletes sign up and register popups
    """ 
-   login_success.destroy()
+   register_success.destroy()
    sign_up_screen.destroy()
     
     
@@ -52,6 +52,7 @@ def sign_up_volunteer():
 
     sign_up_screen = Toplevel(main_screen)
     sign_up_screen.geometry('500x620')
+    sign_up_screen.configure(bg='#F2F2F2')
 
     Label(sign_up_screen, text="Please enter the following details:", 
     width="300", height="3", 
