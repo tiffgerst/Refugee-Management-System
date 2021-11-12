@@ -3,8 +3,9 @@ from tkinter import *
 from csv import writer
 import pandas as pd
 
-df = pd.read_csv('./volunteers.csv')
+
 isLoggedIn = False
+
 
 
 def login():
@@ -13,14 +14,12 @@ def login():
     sets isLoggedIn to True if successful
     Displays appropriate messages
     """
+
+    df = pd.read_csv('volunteers.csv')
     u_entry = name_var.get()
     p_entry = passw_var.get()
 
-
-    
-    user_name_list = df['username'].tolist()
-
-
+    user_name_list = df["username"].tolist()
     if u_entry in user_name_list:
         idx = user_name_list.index(u_entry)
 
@@ -42,7 +41,7 @@ def register_user():
     Also checks if any field was emtpy/already in the database
     - if so, aks user to re-enter details
     """
-
+    df = pd.read_csv('volunteers.csv')
     
     # find a way of deleting these error messages if the user re-registers so that only the latest error messages displays
     # doesnt stack (task)
@@ -198,6 +197,8 @@ def main_account_screen():
     Button(text="Register", height="2", width="30", command=sign_up_volunteer).pack()
 
     main_screen.mainloop()
+
+
 
 
 main_account_screen()
