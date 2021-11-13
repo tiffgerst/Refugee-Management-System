@@ -1,23 +1,49 @@
 from os import name
 from tkinter import *
 from tkinter import messagebox
+from tkinter import ttk
 from csv import writer
 import pandas as pd
 
 
-isLoggedIn = False
+
+isLoggedIn_vol = False
+isLoggedIn_adm = False
 
 
-def login():
+def login_admin():
     """
-    login logic
+    login logic for admins
+    sets isLoggedIn_adm to True if successful
+    Displays appropriate messages
+    """
+
+    ad_u_entry = name_var_ad.get()
+    ad_p_entry = passw_var_ad.get()
+
+    if ad_u_entry == 'Admin' and ad_p_entry == 'root':
+        isLoggedIn_adm = True
+        Label(main_screen, text='Login Successful', fg='Green').pack()
+    else:
+        messagebox.showerror('Invalid Username or Password',
+        "This sign in screen is made for admins only. \nIf you are a volunteer please either sign in or register under"
+        " the volunteer sign in tab thank you.", 
+        parent=main_screen)
+
+
+
+
+
+def login_volunteer():
+    """
+    login logic for volunteers
     sets isLoggedIn to True if successful
     Displays appropriate messages
     """
 
     df = pd.read_csv('volunteers.csv')
-    u_entry = name_var.get()
-    p_entry = passw_var.get()
+    u_entry = name_var_vol.get()
+    p_entry = passw_var_vol.get()
 
     user_name_list = df["username"].tolist()
     if u_entry in user_name_list:
@@ -26,7 +52,7 @@ def login():
         # make sure its a string before comparing
         if str(df['password'].tolist()[idx]) == p_entry:
             Label(main_screen, text='Login Successful', fg='Green').pack()
-            isLoggedIn = True
+            isLoggedIn_vol = True
         else:
             Label(main_screen, text='Password Incorrect please try again', fg='red').pack()
 
@@ -149,13 +175,92 @@ def sign_up_volunteer():
     Button(sign_up_screen, text="Sign Up", height="2", width="30", command=register_user).pack()
 
 
+def volunteer_signin_tab():
+    """
+    This setups the volunteer sign in tab
+    """
+
+    global name_var_vol
+    global passw_var_vol
+
+    # empty text label for formatting
+    Label(volunteer_sign_in_tab, text="", bg='#F2F2F2').pack()
+    Label(volunteer_sign_in_tab, text="", bg='#F2F2F2').pack()
+
+
+    # initialising name and password variables
+    # sets them as empty strings
+    # can use name_var.get() to retrieve them
+    name_var_vol = StringVar()
+    passw_var_vol = StringVar()
+
+    # Sets up login form
+    # textvariable sets the name_var variable to whatever the user inputs
+    # same for the password
+    Label(volunteer_sign_in_tab, text='Username', bg='#F2F2F2', font=("Calibri", 15)).pack()
+
+    Entry(volunteer_sign_in_tab, textvariable=name_var_vol, width='30', font=("Calibri", 10)).pack()
+
+    Label(volunteer_sign_in_tab, text='Password', background='#F2F2F2', font=("Calibri", 15)).pack()
+
+    Entry(volunteer_sign_in_tab, textvariable=passw_var_vol, show='*',width="30", font=("Calibri", 10)).pack()
+
+    Label(volunteer_sign_in_tab, text="", bg='#F2F2F2').pack()
+
+    Button(volunteer_sign_in_tab, text="Login", height="2", width="30", command=login_volunteer).pack()
+
+    Label(volunteer_sign_in_tab, text="", bg='#F2F2F2').pack()
+
+    # 'command = ' makes the button execute the function called 'sign_up_volunteer'
+    Button(volunteer_sign_in_tab, text="Register", height="2", width="30", command=sign_up_volunteer).pack()
+
+def admin_signin_tab():
+    """
+    This setups the admin sign in tab
+    """
+
+    global name_var_ad
+    global passw_var_ad
+        
+    
+    # empty text label for formatting
+    Label(admin_sign_in_tab, text="", bg='#F2F2F2').pack()
+    Label(admin_sign_in_tab, text="", bg='#F2F2F2').pack()
+
+
+    # initialising name and password variables
+    # sets them as empty strings
+    # can use name_var.get() to retrieve them
+    name_var_ad = StringVar()
+    passw_var_ad = StringVar()
+
+    # Sets up login form
+    # textvariable sets the name_var variable to whatever the user inputs
+    # same for the password
+    Label(admin_sign_in_tab, text='Username', bg='#F2F2F2', font=("Calibri", 15)).pack()
+
+    Entry(admin_sign_in_tab, textvariable=name_var_ad, width='30', font=("Calibri", 10)).pack()
+
+    Label(admin_sign_in_tab, text='Password', background='#F2F2F2', font=("Calibri", 15)).pack()
+
+    Entry(admin_sign_in_tab, textvariable=passw_var_ad, show='*',width="30", font=("Calibri", 10)).pack()
+
+    Label(admin_sign_in_tab, text="", bg='#F2F2F2').pack()
+
+    Button(admin_sign_in_tab, text="Login", height="2", width="30", command=login_admin).pack()
+
+    Label(admin_sign_in_tab, text="", bg='#F2F2F2').pack()
+   
+
+
+
 def main_account_screen():
     """
     Setups up the main login window
     """
     global main_screen
-    global name_var
-    global passw_var
+    global volunteer_sign_in_tab
+    global admin_sign_in_tab
 
     # setting up the window
     main_screen = Tk()
@@ -169,38 +274,28 @@ def main_account_screen():
           font=("Calibri bold", 25),
           bg='teal', fg='white').pack()
 
-    # empty text label for formatting
-    Label(text="", bg='#F2F2F2').pack()
-    Label(text="", bg='#F2F2F2').pack()
 
-    # initialising name and password variables
-    # sets them as empty strings
-    # can use name_var.get() to retrieve them
-    name_var = StringVar()
-    passw_var = StringVar()
+    # creates a notebook which allows for multiple tabs
+    account_screen_notebook = ttk.Notebook(main_screen)
+    account_screen_notebook.pack(expand=True)
 
-    # Sets up login form
-    # textvariable sets the name_var variable to whatever the user inputs
-    # same for the password
-    Label(text='Username', bg='#F2F2F2', font=("Calibri", 15)).pack()
+    # creates the different frames for each tab
+    volunteer_sign_in_tab = Frame(account_screen_notebook, width=600, height= 500, bg='#F2F2F2')
+    volunteer_sign_in_tab.pack(fill='both', expand=True)
 
-    Entry(textvariable=name_var, width='30', font=("Calibri", 10)).pack()
+    admin_sign_in_tab = Frame(account_screen_notebook, width=600, height= 500, bg='#F2F2F2')
+    admin_sign_in_tab.pack(fill='both', expand=True)
+    
+    # adds those frames when the tabe is clicked
+    account_screen_notebook.add(volunteer_sign_in_tab, text='Volunteer Sign in')
+    account_screen_notebook.add(admin_sign_in_tab, text='Admin Sign In')
 
-    Label(text='Password', background='#F2F2F2', font=("Calibri", 15)).pack()
-
-    Entry(textvariable=passw_var, show='*',
-          width="30", font=("Calibri", 10)).pack()
-
-    Label(text="", bg='#F2F2F2').pack()
-
-    Button(text="Login", height="2", width="30", command=login).pack()
-
-    Label(text="", bg='#F2F2F2').pack()
-
-    # 'command = ' makes the button execute the function called 'sign_up_volunteer'
-    Button(text="Register", height="2", width="30", command=sign_up_volunteer).pack()
+    volunteer_signin_tab()
+    admin_signin_tab()
 
     main_screen.mainloop()
+
+
 
 
 main_account_screen()
