@@ -33,3 +33,4 @@ def volunteer_logged_in():
 
     miron_label = Label(volunteer_add_refugee_tab, text= "Please add a refugee:")
     miron_label.pack()
+    volunteer_screen.mainloop()
