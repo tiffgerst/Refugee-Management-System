@@ -3,8 +3,9 @@ from tkinter import *
 from tkinter import messagebox
 from tkinter import ttk
 from csv import writer
+from numpy import exp
 import pandas as pd
-
+from volunteer_hub import *
 
 
 isLoggedIn_vol = False
@@ -23,12 +24,50 @@ def login_admin():
 
     if ad_u_entry == 'Admin' and ad_p_entry == 'root':
         isLoggedIn_adm = True
-        Label(admin_sign_in_tab, text='Login Successful', fg='Green').pack()
+        Label(main_screen, text='Login Successful', fg='Green').pack()
     else:
         messagebox.showerror('Invalid Username or Password',
-                             "This sign in screen is made for admins only. \nIf you are a volunteer please either sign in or register under"
-                             " the volunteer sign in tab thank you.",
-                             parent=main_screen)
+        "This sign in screen is made for admins only. \nIf you are a volunteer please either sign in or register under"
+        " the volunteer sign in tab thank you.", 
+        parent=main_screen)
+
+
+
+# def volunteer_logged_in():
+
+#     """
+#     creates a new window for voluneer dashboard
+#     """
+  
+#     volunteer_screen = Tk()
+#     main_screen.destroy()
+#     volunteer_screen.title("Volunteer Homescreen")
+#     volunteer_screen.geometry('500x620')
+#     volunteer_screen.configure(bg='#F2F2F2')
+#     Label(volunteer_screen,
+#           text="Volunteer Hub:",
+#           width="300", height="3",
+#           font=("Calibri bold", 25),
+#           bg='teal', fg='white').pack()
+    
+
+#     #makes a notebook for volunteers screen
+#     volunteer_screen_notebook = ttk.Notebook(volunteer_screen)
+#     volunteer_screen_notebook.pack(expand=True)
+#     #create a tab to add refugees
+#     volunteer_add_refugee_tab = Frame(volunteer_screen_notebook,  width=600, height= 500, bg='#F2F2F2')
+#     volunteer_add_refugee_tab.pack(fill="both", expand= True)
+#     #create a tab to edit personal settings
+#     volunteer_edit_tab = Frame(volunteer_screen_notebook,  width=600, height= 500, bg='#F2F2F2')
+#     volunteer_edit_tab.pack(fill="both", expand= True)
+#     #adds the frame when the tab is clicked
+#     volunteer_screen_notebook.add(volunteer_add_refugee_tab, text='Add a Refugee')
+#     volunteer_screen_notebook.add(volunteer_edit_tab, text='Edit Personal Details')
+
+#     miron_label = Label(volunteer_add_refugee_tab, text= "Please add a refugee:")
+#     miron_label.pack()
+#     volunteer_screen.mainloop()
+
 
 
 def login_volunteer():
@@ -50,6 +89,7 @@ def login_volunteer():
         if str(df['password'].tolist()[idx]) == p_entry:
             Label(main_screen, text='Login Successful', fg='Green').pack()
             isLoggedIn_vol = True
+            volunteer_logged_in()
         else:
             Label(main_screen, text='Password Incorrect please try again', fg='red').pack()
 
@@ -218,10 +258,12 @@ def admin_signin_tab():
 
     global name_var_ad
     global passw_var_ad
-
+        
+    
     # empty text label for formatting
     Label(admin_sign_in_tab, text="", bg='#F2F2F2').pack()
     Label(admin_sign_in_tab, text="", bg='#F2F2F2').pack()
+
 
     # initialising name and password variables
     # sets them as empty strings
@@ -245,9 +287,11 @@ def admin_signin_tab():
     Button(admin_sign_in_tab, text="Login", height="2", width="30", command=login_admin).pack()
 
     Label(admin_sign_in_tab, text="", bg='#F2F2F2').pack()
+   
 
 
-def main_window():
+
+def main_account_screen():
     """
     Setups up the main login window
     """
@@ -262,7 +306,7 @@ def main_window():
     main_screen.configure(bg='#F2F2F2')
 
     # adding a description for the login
-    Label(text="Please Sign in or \n Register",
+    Label(text="Please Sign in or \n Register as a new volunteer",
           width="300", height="3",
           font=("Calibri bold", 25),
           bg='teal', fg='white').pack()
@@ -291,4 +335,4 @@ def main_window():
 
 
 
-main_window()
+main_account_screen()
