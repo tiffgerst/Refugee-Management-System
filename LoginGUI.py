@@ -8,7 +8,6 @@ import pandas as pd
 isLoggedIn = False
 
 
-
 def login():
     """
     login logic
@@ -35,7 +34,6 @@ def login():
         Label(main_screen, text='Username not found, please sign up', fg='red').pack()
 
 
-
 def register_user():
     """ 
     Actually adds the user to the database
@@ -44,15 +42,17 @@ def register_user():
     - if so, aks user to re-enter details)
     """
     df = pd.read_csv('volunteers.csv')
-    
 
+    # retrieving the varibale called username_entry with .get() method
     u_entry = username_entry.get()
     p_entry = password_entry.get()
     num_entry = phonenumber_entry.get()
     mail_entry = email_entry.get()
+    medic_entry = medic_var.get()
 
 
     if u_entry == '':
+        # displays message box of showerror type and its a child of the sign_up_screen window
        messagebox.showerror('Invalid Username','Please do not leave the username entry blank.', parent=sign_up_screen)
     elif u_entry in df['username'].tolist():
         messagebox.showerror('Invalid Username','This username has already been taken', parent=sign_up_screen)
@@ -63,10 +63,12 @@ def register_user():
     elif mail_entry == '':
         messagebox.showerror('Invalid E-Mail','Please do not leave the email entry blank.', parent=sign_up_screen)
     else:
-        with open('volunteers.csv','a', newline='') as file:
+        with open('volunteers.csv', 'a', newline='') as file:
             f = writer(file)
-            f.writerows([[u_entry, p_entry, num_entry, mail_entry]])
+            f.writerows(
+                [[u_entry, p_entry, num_entry, mail_entry, medic_entry]])
         register_success_popup()
+
 
 def register_success_popup():
     """ 
@@ -79,14 +81,14 @@ def register_success_popup():
     Label(register_success, text="Registration was successful", fg='green').pack()
     Button(register_success, text="OK", command=delete_register_sucess).pack()
 
+
 def delete_register_sucess():
    """
    Deletes sign up and register popups
-   """ 
+   """
    register_success.destroy()
    sign_up_screen.destroy()
-    
-    
+
 
 def sign_up_volunteer():
     """
@@ -99,6 +101,9 @@ def sign_up_volunteer():
     global password_entry
     global medic_var
 
+    # Toplevel makes the signupscreen be a child of the main screen
+    # this means if you close the main screen the signupscreen will also close
+    # it is also displayed 'on top of' the main screen
     sign_up_screen = Toplevel(main_screen)
     sign_up_screen.geometry('500x620')
     sign_up_screen.configure(bg='#F2F2F2')
@@ -169,22 +174,22 @@ def main_account_screen():
     Label(text="", bg='#F2F2F2').pack()
 
     # initialising name and password variables
-    # sets them as empty strings 
-    # can use name_var.get() to retrieve them 
+    # sets them as empty strings
+    # can use name_var.get() to retrieve them
     name_var = StringVar()
     passw_var = StringVar()
 
-
     # Sets up login form
     # textvariable sets the name_var variable to whatever the user inputs
-    # same for the password 
+    # same for the password
     Label(text='Username', bg='#F2F2F2', font=("Calibri", 15)).pack()
 
     Entry(textvariable=name_var, width='30', font=("Calibri", 10)).pack()
 
     Label(text='Password', background='#F2F2F2', font=("Calibri", 15)).pack()
 
-    Entry(textvariable=passw_var, show='*', width="30", font=("Calibri", 10)).pack()
+    Entry(textvariable=passw_var, show='*',
+          width="30", font=("Calibri", 10)).pack()
 
     Label(text="", bg='#F2F2F2').pack()
 
@@ -192,11 +197,10 @@ def main_account_screen():
 
     Label(text="", bg='#F2F2F2').pack()
 
+    # 'command = ' makes the button execute the function called 'sign_up_volunteer'
     Button(text="Register", height="2", width="30", command=sign_up_volunteer).pack()
 
     main_screen.mainloop()
-
-
 
 
 main_account_screen()
