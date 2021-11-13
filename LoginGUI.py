@@ -23,15 +23,12 @@ def login_admin():
 
     if ad_u_entry == 'Admin' and ad_p_entry == 'root':
         isLoggedIn_adm = True
-        Label(main_screen, text='Login Successful', fg='Green').pack()
+        Label(admin_sign_in_tab, text='Login Successful', fg='Green').pack()
     else:
         messagebox.showerror('Invalid Username or Password',
-        "This sign in screen is made for admins only. \nIf you are a volunteer please either sign in or register under"
-        " the volunteer sign in tab thank you.", 
-        parent=main_screen)
-
-
-
+                             "This sign in screen is made for admins only. \nIf you are a volunteer please either sign in or register under"
+                             " the volunteer sign in tab thank you.",
+                             parent=main_screen)
 
 
 def login_volunteer():
@@ -221,12 +218,10 @@ def admin_signin_tab():
 
     global name_var_ad
     global passw_var_ad
-        
-    
+
     # empty text label for formatting
     Label(admin_sign_in_tab, text="", bg='#F2F2F2').pack()
     Label(admin_sign_in_tab, text="", bg='#F2F2F2').pack()
-
 
     # initialising name and password variables
     # sets them as empty strings
@@ -250,11 +245,9 @@ def admin_signin_tab():
     Button(admin_sign_in_tab, text="Login", height="2", width="30", command=login_admin).pack()
 
     Label(admin_sign_in_tab, text="", bg='#F2F2F2').pack()
-   
 
 
-
-def main_account_screen():
+def main_window():
     """
     Setups up the main login window
     """
@@ -269,7 +262,7 @@ def main_account_screen():
     main_screen.configure(bg='#F2F2F2')
 
     # adding a description for the login
-    Label(text="Please Sign in or \n Register as a new volunteer",
+    Label(text="Please Sign in or \n Register",
           width="300", height="3",
           font=("Calibri bold", 25),
           bg='teal', fg='white').pack()
@@ -298,4 +291,4 @@ def main_account_screen():
 
 
 
-main_account_screen()
+main_window()
