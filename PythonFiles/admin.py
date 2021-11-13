@@ -1,13 +1,12 @@
 from user import User
 
 class Admin(User):
-    self.is_admin = True   
 
     def __init__(self): 
         super().__init__()
+        self.is_admin = True
 
-
-    def create_emergency_plan():
+    def create_emergency_plan(self):
         pass
 
     def create_camp(self, event):

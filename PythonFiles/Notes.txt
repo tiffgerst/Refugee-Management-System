@@ -1,4 +1,4 @@
-Each class has it's own file
+Each class has its own file
 
 If a class needs to be used it gets imported at the top of the page
 
@@ -7,6 +7,10 @@ main.py is for creating instances
 test.py is for creating random objects to test functionality
 
 CSV files are used to import/export to/from a database. It is useful for reporting (e.g. pandas)
+
+Setting up a database -
+https://www.sqlalchemy.org
+https://www.sqlitetutorial.net/sqlite-python/
 
 All properties need to be protected: use decorators - @property, @name.setter (Getters and Setters made simpler)
 
