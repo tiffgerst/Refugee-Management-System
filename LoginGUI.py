@@ -1,5 +1,6 @@
 from os import name
 from tkinter import *
+from tkinter import messagebox
 from csv import writer
 import pandas as pd
 
@@ -38,14 +39,11 @@ def login():
 def register_user():
     """ 
     Actually adds the user to the database
-    Also checks if any field was emtpy/already in the database
-    - if so, aks user to re-enter details
+    Does form validation with appropriate error messages
+    (checks if any field was emtpy/already in the database
+    - if so, aks user to re-enter details)
     """
     df = pd.read_csv('volunteers.csv')
-    
-    # find a way of deleting these error messages if the user re-registers so that only the latest error messages displays
-    # doesnt stack (task)
-
     
 
     u_entry = username_entry.get()
@@ -55,15 +53,15 @@ def register_user():
 
 
     if u_entry == '':
-        username_error = Label(sign_up_screen, text='Please enter a valid username', fg='red').pack()
+       messagebox.showerror('Invalid Username','Please do not leave the username entry blank.', parent=sign_up_screen)
     elif u_entry in df['username'].tolist():
-        Label(sign_up_screen, text='Username already taken please try again', fg='red').pack()
+        messagebox.showerror('Invalid Username','This username has already been taken', parent=sign_up_screen)
     elif p_entry == '':
-        Label(sign_up_screen, text='Please enter a valid password', fg='red').pack()
+        messagebox.showerror('Invalid Password','Please do not leave the password entry blank.', parent=sign_up_screen)
     elif num_entry == '':
-        Label(sign_up_screen, text='Please enter a valid phone number', fg='red').pack()
+        messagebox.showerror('Invalid Phone Number','Please do not leave the phone number entry blank.', parent=sign_up_screen)
     elif mail_entry == '':
-        Label(sign_up_screen, text='Please enter a valid email', fg='red').pack()
+        messagebox.showerror('Invalid E-Mail','Please do not leave the email entry blank.', parent=sign_up_screen)
     else:
         with open('volunteers.csv','a', newline='') as file:
             f = writer(file)
