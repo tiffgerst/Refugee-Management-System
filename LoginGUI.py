@@ -3,8 +3,9 @@ from tkinter import *
 from tkinter import messagebox
 from tkinter import ttk
 from csv import writer
+from numpy import exp
 import pandas as pd
-
+from volunteer_hub import *
 
 
 isLoggedIn_vol = False
@@ -32,6 +33,41 @@ def login_admin():
 
 
 
+# def volunteer_logged_in():
+
+#     """
+#     creates a new window for voluneer dashboard
+#     """
+  
+#     volunteer_screen = Tk()
+#     main_screen.destroy()
+#     volunteer_screen.title("Volunteer Homescreen")
+#     volunteer_screen.geometry('500x620')
+#     volunteer_screen.configure(bg='#F2F2F2')
+#     Label(volunteer_screen,
+#           text="Volunteer Hub:",
+#           width="300", height="3",
+#           font=("Calibri bold", 25),
+#           bg='teal', fg='white').pack()
+    
+
+#     #makes a notebook for volunteers screen
+#     volunteer_screen_notebook = ttk.Notebook(volunteer_screen)
+#     volunteer_screen_notebook.pack(expand=True)
+#     #create a tab to add refugees
+#     volunteer_add_refugee_tab = Frame(volunteer_screen_notebook,  width=600, height= 500, bg='#F2F2F2')
+#     volunteer_add_refugee_tab.pack(fill="both", expand= True)
+#     #create a tab to edit personal settings
+#     volunteer_edit_tab = Frame(volunteer_screen_notebook,  width=600, height= 500, bg='#F2F2F2')
+#     volunteer_edit_tab.pack(fill="both", expand= True)
+#     #adds the frame when the tab is clicked
+#     volunteer_screen_notebook.add(volunteer_add_refugee_tab, text='Add a Refugee')
+#     volunteer_screen_notebook.add(volunteer_edit_tab, text='Edit Personal Details')
+
+#     miron_label = Label(volunteer_add_refugee_tab, text= "Please add a refugee:")
+#     miron_label.pack()
+#     volunteer_screen.mainloop()
+
 
 
 def login_volunteer():
@@ -53,6 +89,7 @@ def login_volunteer():
         if str(df['password'].tolist()[idx]) == p_entry:
             Label(main_screen, text='Login Successful', fg='Green').pack()
             isLoggedIn_vol = True
+            volunteer_logged_in()
         else:
             Label(main_screen, text='Password Incorrect please try again', fg='red').pack()
 
