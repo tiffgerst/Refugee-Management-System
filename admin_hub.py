@@ -5,6 +5,47 @@ import pandas as pd
 from csv import writer
 
 
+def delete_emergency_plan_helper():
+      """
+      helper function to actually delete the selected
+      emergency plan from the csv
+      """
+      delete_confirmation = messagebox.askquestion('Delete Emergency Plan' ,
+      'You are about to delete an emergency plan do you wish to continue?')
+      if delete_confirmation == 'yes':
+            df = pd.read_csv('emergency_plans.csv')
+            df.set_index('Plan Name', inplace=True)
+            df = df.drop(combo_list_delete.get(), axis=0)
+            df.to_csv('emergency_plans.csv')
+            clear_treeview()
+            update_treeview()
+            
+
+def comobobox_options_update():
+      global plan_name_list
+      
+      df = pd.read_csv('emergency_plans.csv')
+      plan_name_list = []   
+      #retrieves rows
+      df_rows = df.to_numpy().tolist()
+      for row in df_rows:
+            plan_name_list.append(row[0])
+      
+              
+
+def delete_emergency_plan():
+      global combo_list_delete
+
+
+      Button(emergencyplan_tab, text='Delete an emergency plan', command=delete_emergency_plan_helper).pack()
+
+      
+      combo_list_delete = ttk.Combobox(emergencyplan_tab, value=plan_name_list)
+      combo_list_delete.current(0)
+      combo_list_delete.bind('<<ComboboxSelected>>')
+      combo_list_delete.pack() #change to grid
+
+
 def add_plan_tocsv():
     """
     Form validation for the plan creation
@@ -53,7 +94,9 @@ def register_success_popup():
     global register_success
     #this updates the tree view with the new entry
     clear_treeview()
-    treeview()
+    update_treeview()
+    comobobox_options_update()
+    delete_emergency_plan()
     register_success = Toplevel(add_new_plan_popup)
     register_success.title("Success")
     register_success.geometry("150x50")
@@ -138,7 +181,7 @@ def clear_treeview():
       plan_treeview.delete(*plan_treeview.get_children())
 
 
-def treeview():
+def update_treeview():
     """
     Tree view logic for viewing emergency plan csv
     """
@@ -167,7 +210,7 @@ def search_plan_name(e):
 
     if value == '':
         clear_treeview()
-        treeview()
+        update_treeview()
     else:
         clear_treeview()
         df = pd.read_csv('emergency_plans.csv')
@@ -220,16 +263,26 @@ def show_emergency_plan():
     search_entry = StringVar()
     search_bar = Entry(emergencyplan_viewer, textvariable=search_entry)
     search_bar.pack()
+    #search bar gets updated everytime a key is released
+    #i.e when soemone types something
     search_bar.bind("<KeyRelease>", search_plan_name)
 
-    treeview()
+    update_treeview()
 
     plan_treeview.pack()
 
     Button(emergencyplan_tab, text='Add a new plan',
            command=add_emergency_plan).pack()
-    Button(emergencyplan_tab, text='Delete an emergency plan').pack()
+    
+    # only show delete options if there is an emergency plan
+    df = pd.read_csv('emergency_plans.csv')
+    df_rows = df.to_numpy().tolist()
+    if len(df_rows) > 0:
+      comobobox_options_update()
+      delete_emergency_plan()
 
+      
+    
 
 def admin_logged_in():
     '''
