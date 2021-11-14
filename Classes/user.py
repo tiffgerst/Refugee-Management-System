@@ -1,9 +1,5 @@
 class User:
-    #Constructor (info from registration)
-    def __init__(self, user_id = int, first_name = str, last_name = str, username = str, mobile = int, age = int, email = str, address = str, password = str): 
-        
-        #set all users' admin status to False initially
-        self.is_activated = True
+    def __init__(self, user_id=int, first_name=str, last_name=str, username=str, mobile=str, age=int, email=str, address=str, password=str, is_activated=False, is_admin=False):
 
         #instance variables
         self.user_id = user_id 
@@ -15,22 +11,15 @@ class User:
         self.email = email
         self.address = address
         self.password = password
+        self.is_activated = is_activated
+        self.is_admin = is_admin 
+        #set all users' admin status to False as they register. Ask admin approval to activate
+        
 
 #TODO: MAKE ALL VARIABLES PRIVATE IN ALL FILES WITH:
 # @property 
 # @name.setter 
 #AND USING __name
-
-    #method to check whether a user is an admin or not
-    #send a User object to check if admin 
-    #check syntax
-    def is_admin(self, User):
-        if type(User) == Admin:
-           return True
-        else:
-            return False  
-
-
 
     #Users can create themselves
     def create(self):
