@@ -1,4 +1,3 @@
-
 class Camp:
     def __init__(self, camp_id = int, em_plan_id = int, refugees_count = int, food_rations_count = int, shelter_count = int, volunteers_count = int, medics_count = int):
 
@@ -14,7 +13,6 @@ class Camp:
         """
         Save new row to CSV file
         """
-        pass
     
 #Do these functions need to be under User? 
 #Should we have one function for each instead or  two (add/remove)?

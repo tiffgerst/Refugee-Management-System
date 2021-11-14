@@ -3,7 +3,6 @@ from tkinter import *
 from tkinter import messagebox
 from tkinter import ttk
 from csv import writer
-from numpy import exp
 import pandas as pd
 from volunteer_hub import *
 from admin_hub import *
@@ -284,11 +283,12 @@ def main_account_screen():
     # creates the different frames for each tab
     volunteer_sign_in_tab = Frame(account_screen_notebook, width=600, height= 500, bg='#F2F2F2')
     volunteer_sign_in_tab.pack(fill='both', expand=True)
+    volunteer_sign_in_tab.pack_propagate(False)
 
     admin_sign_in_tab = Frame(account_screen_notebook, width=600, height= 500, bg='#F2F2F2')
     admin_sign_in_tab.pack(fill='both', expand=True)
     
-    # adds those frames when the tabe is clicked
+    # adds those frames when the tab is clicked
     account_screen_notebook.add(volunteer_sign_in_tab, text='Volunteer Sign in')
     account_screen_notebook.add(admin_sign_in_tab, text='Admin Sign In')
 
