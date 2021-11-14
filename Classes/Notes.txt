@@ -8,12 +8,11 @@ test.py is for creating random objects to test functionality
 
 CSV files are used to import/export to/from a database. It is useful for reporting (e.g. pandas)
 
-Setting up a database -
-https://www.sqlalchemy.org
-https://www.sqlitetutorial.net/sqlite-python/
+Setting up a database - db_script.py
 
 All properties need to be protected: use decorators - @property, @name.setter (Getters and Setters made simpler)
 
+All registration of users should be approved by admin!
 
 
 

@@ -1,6 +1,5 @@
 class Camp:
     def __init__(self, camp_id = int, em_plan_id = int, refugees_count = int, food_rations_count = int, shelter_count = int, volunteers_count = int, medics_count = int):
-
         self.camp_id = camp_id
         self.em_plan_id = em_plan_id
         self.refugees_count = refugees_count
@@ -13,9 +12,8 @@ class Camp:
         """
         Save new row to CSV file
         """
-    
-#Do these functions need to be under User? 
-#Should we have one function for each instead or  two (add/remove)?
+
+#Should we have one function for each (update) instead or two (add/remove)?
 
     def add_refugees(self, add_refugees):
         add_refugees = input("Enter number of refugees to be added: ", add_refugees)
