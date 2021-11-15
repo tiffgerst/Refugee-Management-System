@@ -14,9 +14,6 @@ class Volunteer(User):
         #     print("Your age is under the required for this registration. Please contact admin.")
 
 
-#only Admin can access next three but it's good practice to keep these here
-
-
     def activate_volunteer(self):
         self.is_activated = True
         pass
@@ -26,5 +23,16 @@ class Volunteer(User):
         pass
 
     def delete_volunteer(self):
-        #remove object instance
         pass
+
+
+    def create_refugee(self):
+        pass
+
+    def edit_refugee(self):
+        pass
+
+    def delete_refugee(self):
+        pass
+
+

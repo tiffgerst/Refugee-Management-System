@@ -13,7 +13,7 @@ class User:
         self.password = password
         self.is_activated = is_activated
         self.is_admin = is_admin 
-        #set all users' admin status to False as they register. Ask admin approval to activate
+        #set all users' admin status to False as they register. Ask admin approval to activate accounts
         
 
 #TODO: MAKE ALL VARIABLES PRIVATE IN ALL FILES WITH:
@@ -21,18 +21,15 @@ class User:
 # @name.setter 
 #AND USING __name
 
-    #Users can create themselves
-    def create(self):
+#Users can create themselves
+    def create_user(self):
         pass
 
+#Update/Change their profile information
+    def edit_user(self):
+        pass
+
+    
     def log_in(self):
         pass
-
-
-    #Update/Change their profile information
-    def edit_info(self):
-        pass
-
-    #Users can add Refugees to database
-    def create_refugee(self):
-        pass
+    
