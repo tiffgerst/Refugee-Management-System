@@ -14,36 +14,61 @@ def delete_emergency_plan_helper():
       'You are about to delete an emergency plan do you wish to continue?')
       if delete_confirmation == 'yes':
             df = pd.read_csv('emergency_plans.csv')
-            df.set_index('Plan Name', inplace=True)
-            df = df.drop(combo_list_delete.get(), axis=0)
-            df.to_csv('emergency_plans.csv')
+            # trys to delete the value suggested
+            # if the plan name has already been deleted a value error will occur
+            # and in that case a messagebox error will occur
+            try:
+                df.set_index('Plan Name', inplace=True)
+                df = df.drop(combo_list_delete.get(), axis=0)
+                df.to_csv('emergency_plans.csv')
+            except KeyError:
+                messagebox.showerror('Please select a new plan name','Sorry this value has just been deleted please and select a new value')
             clear_treeview()
             update_treeview()
             
+            # updates the combobox list 
+            # if there are no values to delete remove the widget
+            new_combo_list = comobobox_options_update()
+            combo_list_delete.config(values=new_combo_list)
+            if len(new_combo_list) == 0:
+                combo_list_delete.destroy()
+                delete_plan_button.destroy()
 
-def comobobox_options_update():
-      global plan_name_list
-      
-      df = pd.read_csv('emergency_plans.csv')
-      plan_name_list = []   
-      #retrieves rows
-      df_rows = df.to_numpy().tolist()
-      for row in df_rows:
-            plan_name_list.append(row[0])
+            
+            
+
+def comobobox_options_update(): 
+    """
+    helper function to get an updated list of all
+    plan names and return it as a list to pass into
+    a combobox
+    """
+    df = pd.read_csv('emergency_plans.csv')
+    plan_name_list = []   
+    #retrieves rows
+    df_rows = df.to_numpy().tolist()
+    for row in df_rows:
+        plan_name_list.append(row[0])
+    return plan_name_list
       
               
 
 def delete_emergency_plan():
-      global combo_list_delete
+    """
+
+    """
+    global combo_list_delete
+    global delete_plan_button
 
 
-      Button(emergencyplan_tab, text='Delete an emergency plan', command=delete_emergency_plan_helper).pack()
+    delete_plan_button = Button(emergencyplan_tab, text='Delete an emergency plan', command=delete_emergency_plan_helper)
+    delete_plan_button.pack()
 
-      
-      combo_list_delete = ttk.Combobox(emergencyplan_tab, value=plan_name_list)
-      combo_list_delete.current(0)
-      combo_list_delete.bind('<<ComboboxSelected>>')
-      combo_list_delete.pack() #change to grid
+    plan_name_list = comobobox_options_update()
+    combo_list_delete = ttk.Combobox(emergencyplan_tab, value=plan_name_list)
+    combo_list_delete.current(0)
+    combo_list_delete.bind('<<ComboboxSelected>>')
+    combo_list_delete.pack() #change to grid
 
 
 def add_plan_tocsv():
@@ -95,8 +120,13 @@ def register_success_popup():
     #this updates the tree view with the new entry
     clear_treeview()
     update_treeview()
-    comobobox_options_update()
-    delete_emergency_plan()
+    # update the combobox list when creating and entry
+    # if its the first entry then it just generates it
+    new_combo_list = comobobox_options_update()
+    if len(new_combo_list) == 1:
+        delete_emergency_plan()
+    else:
+        combo_list_delete.config(values=new_combo_list)
     register_success = Toplevel(add_new_plan_popup)
     register_success.title("Success")
     register_success.geometry("150x50")
@@ -273,16 +303,9 @@ def show_emergency_plan():
 
     Button(emergencyplan_tab, text='Add a new plan',
            command=add_emergency_plan).pack()
-    
-    # only show delete options if there is an emergency plan
-    df = pd.read_csv('emergency_plans.csv')
-    df_rows = df.to_numpy().tolist()
-    if len(df_rows) > 0:
-      comobobox_options_update()
-      delete_emergency_plan()
 
-      
-    
+
+    delete_emergency_plan()
 
 def admin_logged_in():
     '''
@@ -292,9 +315,11 @@ def admin_logged_in():
 
     global emergencyplan_tab
     global manage_volunteer_tab
+    global admin_screen
+    
 
     admin_screen = Tk()
-    admin_screen.title("Volunteer Hub")
+    admin_screen.title("Admin Hub")
     admin_screen.geometry('820x620')
     admin_screen.configure(bg='#F2F2F2')
 
