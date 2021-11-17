@@ -29,7 +29,7 @@ def delete_emergency_plan_helper():
             # updates the combobox list 
             # if there are no values to delete remove the widget
             new_combo_list = comobobox_options_update()
-            combo_list_delete.config(values=new_combo_list)
+            combo_list_delete.config(values=comobobox_options_update())
             if len(new_combo_list) == 0:
                 combo_list_delete.destroy()
                 delete_plan_button.destroy()
@@ -55,7 +55,7 @@ def comobobox_options_update():
 
 def delete_emergency_plan():
     """
-
+    displays the combobox and the delete button
     """
     global combo_list_delete
     global delete_plan_button
@@ -64,8 +64,7 @@ def delete_emergency_plan():
     delete_plan_button = Button(emergencyplan_tab, text='Delete an emergency plan', command=delete_emergency_plan_helper)
     delete_plan_button.pack()
 
-    plan_name_list = comobobox_options_update()
-    combo_list_delete = ttk.Combobox(emergencyplan_tab, value=plan_name_list)
+    combo_list_delete = ttk.Combobox(emergencyplan_tab, value=comobobox_options_update())
     combo_list_delete.current(0)
     combo_list_delete.bind('<<ComboboxSelected>>')
     combo_list_delete.pack() #change to grid
@@ -80,7 +79,7 @@ def add_plan_tocsv():
       
     df = pd.read_csv('emergency_plans.csv')
 
-    # retrieving the varibale called username_entry with .get() method
+    # retrieving the variable called username_entry with .get() method
     plan_na = plan_name.get()
     plan_ty = plan_type.get()
     plan_loc = plan_location.get()
