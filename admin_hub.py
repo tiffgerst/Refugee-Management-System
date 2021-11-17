@@ -315,6 +315,7 @@ def admin_logged_in():
     global emergencyplan_tab
     global manage_volunteer_tab
     global admin_screen
+    global admin_camp_tab
     
 
     admin_screen = Tk()
@@ -337,9 +338,14 @@ def admin_logged_in():
     manage_volunteer_tab = Frame(admin_hub_notebook, width=500, height= 620, bg='#F2F2F2')
     manage_volunteer_tab.pack(fill='both', expand= True)
 
+    admin_camp_tab = Frame(admin_hub_notebook, width=500, height= 620, bg='#F2F2F2')
+    admin_camp_tab.pack(fill='both', expand= True)
+
+
+
     admin_hub_notebook.add(emergencyplan_tab, text='Emergency Plan')
     admin_hub_notebook.add(manage_volunteer_tab, text='Manage Volunteers')
-
+    admin_hub_notebook.add(admin_camp_tab, text = "Manage Camps")
     show_emergency_plan()
 
 
