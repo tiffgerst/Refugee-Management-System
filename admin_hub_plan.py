@@ -13,25 +13,39 @@ def delete_planedit_sucess():
     edit_success_popup.destroy()
     editor_popup.destroy()
 
-def replace_values():
+def replace_values_helper():
+    """
+    Replaces the values edited by the user and adds them to the csv
+    Refreshes the treeview and gives a popup saying it was successful
+    """
 
     global edit_success_popup
 
-    
+    # reads the csv
+    # gets the index of the plan name that was selected
+    # in this case that was the default plan name that is already in the entry box
+    # replaces all values with the ones in the entry box (index = false makes sure that the index is copied over)
     df = pd.read_csv('emergency_plans.csv')
     index = df.index[df['Plan Name'] == default_plan_name].tolist()
     df.loc[index[0], ['Plan Name', 'Type', 'Description', 'Location', 'Start Date', 'End Date']] = [plan_name.get(), plan_type.get(), plan_description.get(),plan_location.get(), plan_start_date.get(),plan_end_date.get()]
     df.to_csv('emergency_plans.csv', index=False)
+    
+    # clears and updates the treeview
     clear_treeview()
     update_treeview()
+
+    # creates a popup that tells user the plan edit was successful
     edit_success_popup = Toplevel(editor_popup)
     edit_success_popup.title("Success")
-    edit_success_popup.geometry("150x50")
-    Label(edit_success_popup, text="Plan creation was successful", fg='green').pack()
+    Label(edit_success_popup, text="Plan edit was successful", fg='green').pack()
     Button(edit_success_popup, text="OK", command=delete_planedit_sucess).pack()
 
 
-def edit_helper():
+def emergency_plan_editor():
+    """
+    Opens a window that allows users to edit the emergency plan
+    The default values for the entry box are retrieved from the csv
+    """
 
     global default_plan_name
     global editor_popup
@@ -60,8 +74,11 @@ def edit_helper():
     plan_start_date = StringVar()
     plan_end_date = StringVar()
     
+    # gets the dictionary of values that the user has clicked on
     selected_value = plan_treeview.focus()
     
+    # makes all the default strings the first --> sixth element of that dictionary
+    # this corresponds to all the rows of the entry the user has clicked on
     default_plan_name = plan_treeview.item(selected_value)['values'][0]
     default_plan_type = plan_treeview.item(selected_value)['values'][1]
     default_plan_description = plan_treeview.item(selected_value)['values'][2]
@@ -73,6 +90,8 @@ def edit_helper():
 
     Label(editor_popup, text='Plan Name: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
 
+    # making the entry label have a default value of default_plan_name 
+    # the same is true of the other entry widgets
     plan_name_label = Entry(editor_popup, textvariable=plan_name, width='30', font=("Calibri", 10))
     plan_name_label.insert(END, default_plan_name)
     plan_name_label.pack()
@@ -108,54 +127,53 @@ def edit_helper():
     plan_end_date_label.insert(END, default_plan_end_date)
     plan_end_date_label.pack()
 
-    Button(editor_popup, text="Create New Plan", height="2", width="30", command=replace_values).pack(pady=10)
+    Button(editor_popup, text="Create New Plan", height="2", width="30", command=replace_values_helper).pack(pady=10)
     
 
-def edit_emergency_plan_pop():
-      
-      """
-      helper function to actually delete the selected
-      emergency plan from the csv
-      """
-      delete_confirmation = messagebox.askquestion('Edit Emergency Plan' ,
-      'You are about to edit an emergency plan do you wish to continue?')
-      if delete_confirmation == 'yes':
-            try:
-                edit_helper()
-            except KeyError:
-                messagebox.showerror('Please select a new plan name','Sorry this value has just been deleted, please select a new value')
+def edit_emergency_plan_confirm():
+    """
+    Asks user whether they are sure they want to edit and emergency plan
+    Excepts Index Error if a user does not select a plan before trying to edit
+    """
+
+    selected_value = plan_treeview.focus()
+    try:
+        plan_treeview.item(selected_value)['values'][0]
+    except IndexError:
+         messagebox.showerror('Please Select a Plan', 'Please select a plan you wish to edit.')
+    else:
+        delete_confirmation = messagebox.askquestion('Edit Emergency Plan' ,
+        'You are about to edit an emergency plan do you wish to continue?')
+        if delete_confirmation == 'yes':
+            emergency_plan_editor()
             clear_treeview()
             update_treeview()
+       
 
+
+
+def delete_emergency_plan_confirm():
+    """
+    Asks user if they are sure they want to delete an emergency plan, then deletes it.
+    Execpts Index Error if user tries to delete a plan without first selecting one.
+    """
     
-
-
-def edit_emergency_plan():
-    
-    edit_plan_button = Button(emergencyplan_tab, text='Edit an emergency plan')
-    edit_plan_button.pack()
-
-
-def delete_emergency_plan_pop():
-      """
-      helper function to actually delete the selected
-      emergency plan from the csv
-      """
-      selected_value = plan_treeview.focus()
-      selected_value = plan_treeview.item(selected_value)['values'][0]
-      delete_confirmation = messagebox.askquestion('Delete Emergency Plan' ,
-      'You are about to delete an emergency plan do you wish to continue?')
-      if delete_confirmation == 'yes':
+    selected_value = plan_treeview.focus()
+    try:
+        selected_value = plan_treeview.item(selected_value)['values'][0]
+    except IndexError:
+        messagebox.showerror('Please Select a Plan', 'Please select a plan you wish to delete.')
+    else:
+        delete_confirmation = messagebox.askquestion('Delete Emergency Plan' ,
+        'You are about to delete an emergency plan do you wish to continue?')
+        if delete_confirmation == 'yes':
             df = pd.read_csv('emergency_plans.csv')
             # trys to delete the value suggested
             # if the plan name has already been deleted a value error will occur
             # and in that case a messagebox error will occur
-            try:
-                df.set_index('Plan Name', inplace=True)
-                df = df.drop(selected_value, axis=0)
-                df.to_csv('emergency_plans.csv')
-            except KeyError:
-                messagebox.showerror('Please select a new plan name','Sorry this value has just been deleted, please select a new value')
+            df.set_index('Plan Name', inplace=True)
+            df = df.drop(selected_value, axis=0)
+            df.to_csv('emergency_plans.csv')
             clear_treeview()
             update_treeview()
     
@@ -168,7 +186,7 @@ def add_plan_tocsv():
       
     df = pd.read_csv('emergency_plans.csv')
 
-    # retrieving the varibale called username_entry with .get() method
+    # retrieving the varibale called plan_name with .get() method
     plan_na = plan_name.get()
     plan_ty = plan_type.get()
     plan_loc = plan_location.get()
@@ -389,6 +407,6 @@ def show_emergency_plan(x):
 
     Button(emergencyplan_tab, text='Add a new plan',command=add_emergency_plan).pack()
 
-    Button(emergencyplan_tab, text='Edit Plan', command=edit_emergency_plan_pop).pack()
+    Button(emergencyplan_tab, text='Edit Plan', command=edit_emergency_plan_confirm).pack()
 
-    Button(emergencyplan_tab, text='Delete Plan', command=delete_emergency_plan_pop).pack()
+    Button(emergencyplan_tab, text='Delete Plan', command=delete_emergency_plan_confirm).pack()
