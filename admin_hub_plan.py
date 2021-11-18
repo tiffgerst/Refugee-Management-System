@@ -5,11 +5,144 @@ import pandas as pd
 from csv import writer
 
 
-def delete_emergency_plan_helper():
+
+def delete_planedit_sucess():
+    """
+    Deletes plan edit popups
+    """
+    edit_success_popup.destroy()
+    editor_popup.destroy()
+
+def replace_values():
+
+    global edit_success_popup
+
+    
+    df = pd.read_csv('emergency_plans.csv')
+    index = df.index[df['Plan Name'] == default_plan_name].tolist()
+    df.loc[index[0], ['Plan Name', 'Type', 'Description', 'Location', 'Start Date', 'End Date']] = [plan_name.get(), plan_type.get(), plan_description.get(),plan_location.get(), plan_start_date.get(),plan_end_date.get()]
+    df.to_csv('emergency_plans.csv', index=False)
+    clear_treeview()
+    update_treeview()
+    edit_success_popup = Toplevel(editor_popup)
+    edit_success_popup.title("Success")
+    edit_success_popup.geometry("150x50")
+    Label(edit_success_popup, text="Plan creation was successful", fg='green').pack()
+    Button(edit_success_popup, text="OK", command=delete_planedit_sucess).pack()
+
+
+def edit_helper():
+
+    global default_plan_name
+    global editor_popup
+    global plan_name
+    global plan_type
+    global plan_description
+    global plan_location
+    global plan_start_date
+    global plan_end_date
+
+    editor_popup = Toplevel(emergencyplan_tab)
+    editor_popup.title('Editor')
+    editor_popup.geometry('600x500')
+
+    editor_popup.configure(bg='#F2F2F2')
+
+    Label(editor_popup, text="Please edit the following details:",
+        width="300", height="3",
+        font=("Calibri bold", 25),
+        bg='grey', fg='white').pack()
+    
+    plan_name = StringVar()
+    plan_type = StringVar()
+    plan_description = StringVar()
+    plan_location = StringVar()
+    plan_start_date = StringVar()
+    plan_end_date = StringVar()
+    
+    selected_value = plan_treeview.focus()
+    
+    default_plan_name = plan_treeview.item(selected_value)['values'][0]
+    default_plan_type = plan_treeview.item(selected_value)['values'][1]
+    default_plan_description = plan_treeview.item(selected_value)['values'][2]
+    default_plan_location = plan_treeview.item(selected_value)['values'][3]
+    default_plan_start_date = plan_treeview.item(selected_value)['values'][4]
+    default_plan_end_date = plan_treeview.item(selected_value)['values'][5]
+    
+    Label(editor_popup, text="", bg='#F2F2F2').pack()
+
+    Label(editor_popup, text='Plan Name: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
+
+    plan_name_label = Entry(editor_popup, textvariable=plan_name, width='30', font=("Calibri", 10))
+    plan_name_label.insert(END, default_plan_name)
+    plan_name_label.pack()
+
+    Label(editor_popup, text='Plan Type: *', background='#F2F2F2', font=("Calibri", 15)).pack()
+
+    plan_type_label = Entry(editor_popup, textvariable=plan_type, width="30", font=("Calibri", 10))
+    plan_type_label.insert(END, default_plan_type)
+    plan_type_label.pack()
+
+    Label(editor_popup, text='Plan Description: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
+
+    plan_description_label = Entry(editor_popup, textvariable=plan_description, width="30", font=("Calibri", 10))
+    plan_description_label.insert(END, default_plan_description)
+    plan_description_label.pack()
+
+    Label(editor_popup, text='Plan Location: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
+
+    plan_location_label = Entry(editor_popup, textvariable=plan_location, width="30", font=("Calibri", 10))
+    plan_location_label.insert(END, default_plan_location)
+    plan_location_label.pack()
+
+    Label(editor_popup, text='Plan Start Date: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
+
+    plan_start_date_label = Entry(editor_popup, textvariable=plan_start_date, width="30", font=("Calibri", 10))
+    plan_start_date_label.insert(END, default_plan_start_date)
+    plan_start_date_label.pack()
+
+
+    Label(editor_popup, text='Plan End Date: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
+
+    plan_end_date_label = Entry(editor_popup, textvariable=plan_end_date, width="30", font=("Calibri", 10))
+    plan_end_date_label.insert(END, default_plan_end_date)
+    plan_end_date_label.pack()
+
+    Button(editor_popup, text="Create New Plan", height="2", width="30", command=replace_values).pack(pady=10)
+    
+
+def edit_emergency_plan_pop():
+      
       """
       helper function to actually delete the selected
       emergency plan from the csv
       """
+      delete_confirmation = messagebox.askquestion('Edit Emergency Plan' ,
+      'You are about to edit an emergency plan do you wish to continue?')
+      if delete_confirmation == 'yes':
+            try:
+                edit_helper()
+            except KeyError:
+                messagebox.showerror('Please select a new plan name','Sorry this value has just been deleted, please select a new value')
+            clear_treeview()
+            update_treeview()
+
+    
+
+
+def edit_emergency_plan():
+    
+    edit_plan_button = Button(emergencyplan_tab, text='Edit an emergency plan')
+    edit_plan_button.pack()
+
+
+def delete_emergency_plan_pop():
+      """
+      helper function to actually delete the selected
+      emergency plan from the csv
+      """
+      selected_value = plan_treeview.focus()
+      selected_value = plan_treeview.item(selected_value)['values'][0]
       delete_confirmation = messagebox.askquestion('Delete Emergency Plan' ,
       'You are about to delete an emergency plan do you wish to continue?')
       if delete_confirmation == 'yes':
@@ -19,58 +152,13 @@ def delete_emergency_plan_helper():
             # and in that case a messagebox error will occur
             try:
                 df.set_index('Plan Name', inplace=True)
-                df = df.drop(combo_list_delete.get(), axis=0)
+                df = df.drop(selected_value, axis=0)
                 df.to_csv('emergency_plans.csv')
             except KeyError:
-                messagebox.showerror('Please select a new plan name','Sorry this value has just been deleted please and select a new value')
+                messagebox.showerror('Please select a new plan name','Sorry this value has just been deleted, please select a new value')
             clear_treeview()
             update_treeview()
-            
-            # updates the combobox list 
-            # if there are no values to delete remove the widget
-            new_combo_list = comobobox_options_update()
-            combo_list_delete.config(values=new_combo_list)
-            if len(new_combo_list) == 0:
-                combo_list_delete.destroy()
-                delete_plan_button.destroy()
-
-            
-            
-
-def comobobox_options_update(): 
-    """
-    helper function to get an updated list of all
-    plan names and return it as a list to pass into
-    a combobox
-    """
-    df = pd.read_csv('emergency_plans.csv')
-    plan_name_list = []   
-    #retrieves rows
-    df_rows = df.to_numpy().tolist()
-    for row in df_rows:
-        plan_name_list.append(row[0])
-    return plan_name_list
-      
-              
-
-def delete_emergency_plan():
-    """
-
-    """
-    global combo_list_delete
-    global delete_plan_button
-
-
-    delete_plan_button = Button(emergencyplan_tab, text='Delete an emergency plan', command=delete_emergency_plan_helper)
-    delete_plan_button.pack()
-
-    plan_name_list = comobobox_options_update()
-    combo_list_delete = ttk.Combobox(emergencyplan_tab, value=plan_name_list)
-    combo_list_delete.current(0)
-    combo_list_delete.bind('<<ComboboxSelected>>')
-    combo_list_delete.pack() #change to grid
-
-
+    
 def add_plan_tocsv():
     """
     Form validation for the plan creation
@@ -122,11 +210,6 @@ def register_success_popup():
     update_treeview()
     # update the combobox list when creating and entry
     # if its the first entry then it just generates it
-    new_combo_list = comobobox_options_update()
-    if len(new_combo_list) == 1:
-        delete_emergency_plan()
-    else:
-        combo_list_delete.config(values=new_combo_list)
     register_success = Toplevel(add_new_plan_popup)
     register_success.title("Success")
     register_success.geometry("150x50")
@@ -263,7 +346,6 @@ def search_plan_name(e):
                 if value in items:
                     plan_treeview.insert("", "end", values=row)
 
-
 def show_emergency_plan(x):
     '''
     displays the emergency plan in a frame
@@ -301,12 +383,12 @@ def show_emergency_plan(x):
     search_bar.bind("<KeyRelease>", search_plan_name)
 
     update_treeview()
-
     plan_treeview.pack()
+    
+    plan_treeview.bind('<ButtonRelease-1>')
 
-    Button(emergencyplan_tab, text='Add a new plan',
-           command=add_emergency_plan).pack()
+    Button(emergencyplan_tab, text='Add a new plan',command=add_emergency_plan).pack()
 
+    Button(emergencyplan_tab, text='Edit Plan', command=edit_emergency_plan_pop).pack()
 
-    delete_emergency_plan()
-
+    Button(emergencyplan_tab, text='Delete Plan', command=delete_emergency_plan_pop).pack()

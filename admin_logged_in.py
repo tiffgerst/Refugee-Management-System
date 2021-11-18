@@ -45,4 +45,5 @@ def admin_logged_in():
     
     admin_screen.mainloop()
 
-admin_logged_in()
+if __name__ == '__main__':
+    admin_logged_in()
