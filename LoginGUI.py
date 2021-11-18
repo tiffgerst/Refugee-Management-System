@@ -5,7 +5,8 @@ from tkinter import ttk
 from csv import writer
 import pandas as pd
 from volunteer_hub import *
-from admin_hub import *
+from admin_hub_plan import *
+import admin_logged_in as ad
 
 
 isLoggedIn_vol = False
@@ -26,7 +27,7 @@ def login_admin():
         isLoggedIn_adm = True
         Label(main_screen, text='Login Successful', fg='Green').pack()
         main_screen.destroy()
-        admin_logged_in()
+        ad.admin_logged_in()
     else:
         messagebox.showerror('Invalid Username or Password',
         "This sign in screen is made for admins only. \nIf you are a volunteer please either sign in or register under"
