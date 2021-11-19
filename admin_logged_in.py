@@ -13,7 +13,6 @@ def admin_logged_in():
     global admin_screen
     global admin_camp_tab
     
-
     admin_screen = Tk()
     admin_screen.title("Admin Hub")
     admin_screen.geometry('820x620')

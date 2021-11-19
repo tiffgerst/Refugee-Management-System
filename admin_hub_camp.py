@@ -6,7 +6,6 @@ from csv import writer
 from admin_hub_plan import admin_logged_in
 
 
-
 def add_camp():
 
     global add_new_plan_popup
@@ -37,27 +36,21 @@ def add_camp():
     Label(add_new_plan_popup, text="", bg='#F2F2F2').pack()
 
     Label(add_new_plan_popup, text='Plan Name: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
-
     Entry(add_new_plan_popup, textvariable=plan_name, width='30', font=("Calibri", 10)).pack()
 
     Label(add_new_plan_popup, text='Plan Type: *', background='#F2F2F2', font=("Calibri", 15)).pack()
-
     Entry(add_new_plan_popup, textvariable=plan_type, width="30", font=("Calibri", 10)).pack()
 
     Label(add_new_plan_popup, text='Plan Description: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
-
     Entry(add_new_plan_popup, textvariable=plan_description, width="30", font=("Calibri", 10)).pack()
 
     Label(add_new_plan_popup, text='Plan Location: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
-
     Entry(add_new_plan_popup, textvariable=plan_location, width="30", font=("Calibri", 10)).pack()
 
     Label(add_new_plan_popup, text='Plan Start Date: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
-
     Entry(add_new_plan_popup, textvariable=plan_start_date, width="30", font=("Calibri", 10)).pack()
 
     Label(add_new_plan_popup, text='Plan End Date: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
-
     Entry(add_new_plan_popup, textvariable=plan_end_date, width="30", font=("Calibri", 10)).pack()
 
     Button(add_new_plan_popup, text="Create New Plan", height="2", width="30", command=add_plan_tocsv).pack(pady=10)
