@@ -5,7 +5,7 @@ from tkinter import ttk
 from csv import writer
 import pandas as pd
 from volunteer_hub import *
-from admin_hub_plan import *
+from admin.plan import *
 import admin_logged_in as ad
 
 
@@ -41,7 +41,7 @@ def login_volunteer():
     Displays appropriate messages
     """
 
-    df = pd.read_csv('volunteers.csv')
+    df = pd.read_csv('data/volunteers.csv')
     u_entry = name_var_vol.get()
     p_entry = passw_var_vol.get()
 
@@ -69,7 +69,7 @@ def register_user():
     (checks if any field was emtpy/already in the database
     - if so, aks user to re-enter details)
     """
-    df = pd.read_csv('volunteers.csv')
+    df = pd.read_csv('data/volunteers.csv')
 
     # retrieving the varibale called username_entry with .get() method
     u_entry = username_entry.get()
@@ -91,7 +91,7 @@ def register_user():
     elif mail_entry == '':
         messagebox.showerror('Invalid E-Mail','Please do not leave the email entry blank.', parent=sign_up_screen)
     else:
-        with open('volunteers.csv', 'a', newline='') as file:
+        with open('data/volunteers.csv', 'a', newline='') as file:
             f = writer(file)
             f.writerows(
                 [[u_entry, p_entry, num_entry, mail_entry, medic_entry]])
@@ -150,19 +150,15 @@ def sign_up_volunteer():
     Label(sign_up_screen, text="", bg='#F2F2F2').pack()
 
     Label(sign_up_screen, text='Username: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
-
     Entry(sign_up_screen, textvariable=username_entry, width='30', font=("Calibri", 10)).pack()
 
     Label(sign_up_screen, text='Email: *', background='#F2F2F2', font=("Calibri", 15)).pack()
-
     Entry(sign_up_screen, textvariable=email_entry, width="30", font=("Calibri", 10)).pack()
 
     Label(sign_up_screen, text='Phone Number: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
-
     Entry(sign_up_screen, textvariable=phonenumber_entry, width="30", font=("Calibri", 10)).pack()
 
     Label(sign_up_screen, text='Password: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
-
     Entry(sign_up_screen, textvariable=password_entry, show='*', width="30", font=("Calibri", 10)).pack()
 
     Label(sign_up_screen, text="", bg='#F2F2F2').pack()
@@ -216,6 +212,7 @@ def volunteer_signin_tab():
     # 'command = ' makes the button execute the function called 'sign_up_volunteer'
     Button(volunteer_sign_in_tab, text="Register", height="2", width="30", command=sign_up_volunteer).pack()
 
+
 def admin_signin_tab():
     """
     This setups the admin sign in tab
@@ -240,11 +237,9 @@ def admin_signin_tab():
     # textvariable sets the name_var variable to whatever the user inputs
     # same for the password
     Label(admin_sign_in_tab, text='Username', bg='#F2F2F2', font=("Calibri", 15)).pack()
-
     Entry(admin_sign_in_tab, textvariable=name_var_ad, width='30', font=("Calibri", 10)).pack()
 
     Label(admin_sign_in_tab, text='Password', background='#F2F2F2', font=("Calibri", 15)).pack()
-
     Entry(admin_sign_in_tab, textvariable=passw_var_ad, show='*',width="30", font=("Calibri", 10)).pack()
 
     Label(admin_sign_in_tab, text="", bg='#F2F2F2').pack()
@@ -252,8 +247,6 @@ def admin_signin_tab():
     Button(admin_sign_in_tab, text="Login", height="2", width="30", command=login_admin).pack()
 
     Label(admin_sign_in_tab, text="", bg='#F2F2F2').pack()
-   
-
 
 
 def main_account_screen():
@@ -276,7 +269,6 @@ def main_account_screen():
           font=("Calibri bold", 25),
           bg='teal', fg='white').pack()
 
-
     # creates a notebook which allows for multiple tabs
     account_screen_notebook = ttk.Notebook(main_screen)
     account_screen_notebook.pack(expand=True)
@@ -298,7 +290,5 @@ def main_account_screen():
 
     main_screen.mainloop()
 
-
-
-
-main_account_screen()
+if __name__ == "__main__":
+    main_account_screen()
