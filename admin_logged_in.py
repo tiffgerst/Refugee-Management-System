@@ -1,6 +1,6 @@
 from tkinter import *
 from tkinter import ttk
-import admin_hub_plan as ad
+import admin.plan as ad
 
 def admin_logged_in():
     '''

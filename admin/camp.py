@@ -3,7 +3,7 @@ from tkinter import *
 from tkinter import ttk, messagebox
 import pandas as pd
 from csv import writer
-from admin_hub_plan import admin_logged_in
+from admin.plan import admin_logged_in
 
 
 def add_camp():

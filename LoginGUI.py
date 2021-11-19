@@ -5,7 +5,7 @@ from tkinter import ttk
 from csv import writer
 import pandas as pd
 from volunteer_hub import *
-from admin_hub_plan import *
+from admin.plan import *
 import admin_logged_in as ad
 
 
