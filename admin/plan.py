@@ -144,7 +144,7 @@ def edit_plan():
     edit_success_popup = Toplevel(editor_popup)
     edit_success_popup.title("Success")
     Label(edit_success_popup, text="Plan edit was successful", fg='green').pack()
-    Button(edit_success_popup, text="OK", command=delete_popups(edit_success_popup,editor_popup)).pack()
+    Button(edit_success_popup, text="OK", command=delete_popups([edit_success_popup,editor_popup])).pack()
        
 
 def delete_plan_confirm():
@@ -189,7 +189,7 @@ def register_success_popup():
     register_success.title("Success")
     register_success.geometry("150x50")
     Label(register_success, text="Plan creation was successful", fg='green').pack()
-    Button(register_success, text="OK",command=delete_popups(register_success,add_new_plan_popup)).pack()
+    Button(register_success, text="OK",command=delete_popups([register_success,add_new_plan_popup])).pack()
 
 
 def add_plan():
