@@ -31,6 +31,5 @@ def delete_popups(popups):
     while len(popups)>0:
         popups[i].destroy()
         popups.pop(i)
-        i+=1
 
     return

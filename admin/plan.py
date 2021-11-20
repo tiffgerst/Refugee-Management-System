@@ -133,8 +133,8 @@ def edit_plan():
     # Open csv -> change the plan attributes -> save csv
     df = pd.read_csv('data/emergency_plans.csv')
     updated_row = [plan_na, plan_ty, plan_desc,plan_loc, plan_start,plan_end]
-    df.loc[df['Plan Name'] == default_plan_name] = updated_row
-    df.to_csv('data/emergency_plans.csv')
+    df.loc[df['name'] == default_plan_name] = updated_row
+    df.to_csv('data/emergency_plans.csv',index=False)
     
     # Clears and updates the treeview
     clear_treeview()
@@ -162,13 +162,10 @@ def delete_plan_confirm():
         delete_confirmation = messagebox.askquestion('Delete Emergency Plan' ,
         'You are about to delete an emergency plan do you wish to continue?')
         if delete_confirmation == 'yes':
+            # Remove the row
             df = pd.read_csv('data/emergency_plans.csv')
-            # trys to delete the value suggested
-            # if the plan name has already been deleted a value error will occur
-            # and in that case a messagebox error will occur
-            df.set_index('Plan Name', inplace=True)
-            df = df.drop(selected_plan, axis=0)
-            df.to_csv('data/emergency_plans.csv')
+            df = df.loc[df['name'] != selected_plan]
+            df.to_csv('data/emergency_plans.csv',index=False)
             clear_treeview()
             update_treeview()
 
@@ -271,13 +268,17 @@ def save_new_plan():
     if res == False: return
     
     # Check if plan already exists
-    if len(df.loc[df['Plan Name']==plan_na]) != 0:
+    if len(df.loc[df['name']==plan_na]) != 0:
         messagebox.showerror('Invalid Plan Name','This plan name has already been taken', parent=add_new_plan_popup)
         return
 
     # Entry is valid -> update the CSV file
-    df.loc[df['Plan Name'] == plan_na] = [plan_na, plan_ty, plan_desc, plan_loc, plan_start, plan_end]
-    df.to_csv('data/emergency_plans.csv')
+    new_row = pd.DataFrame({
+        'name': [plan_na],'type': [plan_ty],'description': [plan_desc],
+        'location': [plan_loc],'start_date': [plan_start],'end_date': [plan_end]
+        })
+    df = df.append(new_row, ignore_index=True)
+    df.to_csv('data/emergency_plans.csv',index=False)
     register_success_popup()
 
 def clear_treeview():
@@ -325,7 +326,7 @@ def search_plan_name():
         for column in plan_treeview["column"]:
             plan_treeview.heading(column, text=column)
 
-        res = df.loc[df['Plan Name']==value].values[0].tolist()
+        res = df.loc[df['name']==value].values[0].tolist()
         plan_treeview.insert("", "end", values=res)
 
 
