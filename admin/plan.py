@@ -331,8 +331,11 @@ def search_plan_name(e):
         for column in plan_treeview["column"]:
             plan_treeview.heading(column, text=column)
 
-        res = df.loc[df['name']==value].values[0].tolist()
-        plan_treeview.insert("", "end", values=res)
+        res = df.loc[df['name'].str.lower().str.contains(value.lower())]
+        if len(res) == 0:
+            plan_treeview.insert("", "end", values=['No results found'])
+        else:
+            plan_treeview.insert("", "end", values=res.values[0].tolist())
 
 
 def show_emergency_plan(x):
