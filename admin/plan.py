@@ -285,6 +285,7 @@ def save_new_plan():
     df.to_csv('data/emergency_plans.csv',index=False)
     register_success_popup()
 
+
 def clear_treeview():
     """
       Clears the table so that it can be reloaded 
@@ -312,11 +313,11 @@ def update_treeview():
         plan_treeview.insert("", "end", values=list(row.values))
 
 
-def search_plan_name():
+def search_plan_name(e):
     """
     search logic for plan name
     """
-
+    
     value = search_entry.get()
 
     if value == '':
