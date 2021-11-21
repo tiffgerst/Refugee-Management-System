@@ -1,6 +1,10 @@
 from tkinter import *
 from tkinter import ttk, messagebox
 import pandas as pd
+import sys
+import os.path
+sys.path.append(
+    os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)))
 from utilities import check_blanks, delete_popups
 
 
@@ -132,8 +136,9 @@ def edit_plan():
 
     # Open csv -> change the plan attributes -> save csv
     df = pd.read_csv('data/emergency_plans.csv')
-    updated_row = [plan_na, plan_ty, plan_desc,plan_loc, plan_start,plan_end]
-    df.loc[df['name'] == default_plan_name] = updated_row
+    updated_row = [plan_na, plan_ty, plan_desc,plan_loc,plan_start,plan_end]
+    print(updated_row)
+    df.loc[df['name'] == default_plan_name] = [updated_row]
     df.to_csv('data/emergency_plans.csv',index=False)
     
     # Clears and updates the treeview
