@@ -7,11 +7,39 @@ import pandas as pd
 from volunteer_hub import *
 from admin.plan import *
 import admin_logged_in as ad
+import hashlib
+import binascii
 
 
 isLoggedIn_vol = False
 isLoggedIn_adm = False
 
+
+def hash_password(password):
+    """
+    Hash a password for storing
+    returns hex string
+    """
+    salt = hashlib.sha256(os.urandom(60)).hexdigest().encode('ascii')
+    pwdhash = hashlib.pbkdf2_hmac('sha512', password.encode('utf-8'),
+                                  salt, 100000)
+    pwdhash = binascii.hexlify(pwdhash)
+    return (salt + pwdhash).decode('ascii')
+
+
+def verify_password(stored_password, provided_password):
+    """
+    Verify a stored hashed password against one provided by user
+    returns boolean value
+    """
+    salt = stored_password[:64]
+    stored_password = stored_password[64:]
+    pwdhash = hashlib.pbkdf2_hmac('sha512',
+                                  provided_password.encode('utf-8'),
+                                  salt.encode('ascii'),
+                                  100000)
+    pwdhash = binascii.hexlify(pwdhash).decode('ascii')
+    return pwdhash == stored_password
 
 def login_admin():
     """
@@ -48,9 +76,10 @@ def login_volunteer():
     user_name_list = df["username"].tolist()
     if u_entry in user_name_list:
         idx = user_name_list.index(u_entry)
+        stored_password = str(df['password'].tolist()[idx])
 
         # make sure its a string before comparing
-        if str(df['password'].tolist()[idx]) == p_entry:
+        if verify_password(stored_password, p_entry):
             Label(main_screen, text='Login Successful', fg='Green').pack()
             isLoggedIn_vol = True
             main_screen.destroy()
@@ -74,6 +103,7 @@ def register_user():
     # retrieving the varibale called username_entry with .get() method
     u_entry = username_entry.get()
     p_entry = password_entry.get()
+    p_hashed = hash_password(p_entry)
     num_entry = phonenumber_entry.get()
     mail_entry = email_entry.get()
     medic_entry = medic_var.get()
@@ -94,7 +124,7 @@ def register_user():
         with open('data/volunteers.csv', 'a', newline='') as file:
             f = writer(file)
             f.writerows(
-                [[u_entry, p_entry, num_entry, mail_entry, medic_entry]])
+                [[u_entry, p_hashed, num_entry, mail_entry, medic_entry]])
         register_success_popup()
 
 
