@@ -1,7 +1,6 @@
 from os import name
 from tkinter import *
-from tkinter import messagebox
-from tkinter import ttk
+from tkinter import messagebox, ttk
 from csv import writer
 import pandas as pd
 from volunteer_hub import *
