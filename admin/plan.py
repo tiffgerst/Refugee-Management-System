@@ -107,7 +107,7 @@ def plan_edit_window():
     plan_end_date_label.insert(END, default_plan_end_date)
     plan_end_date_label.pack()
 
-    Button(editor_popup, text="Create New Plan", height="2", width="30", command=edit_plan).pack(pady=10)
+    Button(editor_popup, text="Confirm Edit", height="2", width="30", command=edit_plan).pack(pady=10)
     
 
 def edit_plan():
