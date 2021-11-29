@@ -4,7 +4,7 @@ import admin.plan as ad
 
 def admin_logged_in():
     '''
-    Displays admin hub as well has the various 
+    Displays admin hub as well has the various
     tabs for the different actions an admin can do
     '''
 
@@ -12,7 +12,7 @@ def admin_logged_in():
     global manage_volunteer_tab
     global admin_screen
     global admin_camp_tab
-    
+
     admin_screen = Tk()
     admin_screen.title("Admin Hub")
     admin_screen.geometry('820x620')
@@ -39,9 +39,9 @@ def admin_logged_in():
     admin_hub_notebook.add(emergencyplan_tab, text='Emergency Plan')
     admin_hub_notebook.add(manage_volunteer_tab, text='Manage Volunteers')
     admin_hub_notebook.add(admin_camp_tab, text = "Manage Camps")
-    
+
     ad.show_emergency_plan(emergencyplan_tab)
-    
+
     admin_screen.mainloop()
 
 if __name__ == '__main__':
