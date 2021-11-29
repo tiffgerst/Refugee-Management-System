@@ -8,10 +8,9 @@ def volunteer_logged_in():
     tabs for the different actions an admin can do
     '''
 
-    global emergencyplan_tab
-    global manage_volunteer_tab
+    global manage_refugees_tab
     global volunteer_screen
-    global admin_camp_tab
+    global edit_information_tab
     
     volunteer_screen = Tk()
     volunteer_screen.title("Volunteer Hub")
