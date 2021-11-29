@@ -263,7 +263,7 @@ def save_new_refugee():
     # Update the CSV file
     new_row = pd.DataFrame({
         'first_name': [refugee_fi],'family_name': [refugee_fa],'camp_id': [refugee_camp],
-        'num_relatives': [refugee_rel],'medical_conditions': [refugee_cond], , 'on_site': 'True'
+        'num_relatives': [refugee_rel],'medical_conditions': [refugee_cond], 'on_site': 'True'
         })
     df = df.append(new_row, ignore_index=True)
     df.to_csv('data/refugees.csv',index=False)
