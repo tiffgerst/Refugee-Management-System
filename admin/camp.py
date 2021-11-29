@@ -2,57 +2,109 @@ from os import name
 from tkinter import *
 from tkinter import ttk, messagebox
 import pandas as pd
+from utilities import check_blanks, delete_popups
 from csv import writer
-from admin.plan import admin_logged_in
 
+def camp_sucess_pop_up():
+    register_success = Toplevel(add_new_camp_popup)
+    register_success.title("Success")
+    Label(register_success, text="Camp creation was successful", fg='green').pack()
+    Button(register_success, text="OK",command=lambda: delete_popups([register_success,add_new_camp_popup])).pack()
+
+def save_camp():
+    camps_df = pd.read_csv("./data/camps.csv")
+    emergency_plan = camp_plan.get()
+    shelter = camp_shelter.get()
+    food_rations = camp_food_rations.get()
+    name = camp_name.get()
+    other_camps = list(camps_df["campID"])
+    
+    if len(name) == 0:
+        messagebox.showerror(title="Invalid Camp Name", message= "The camp name cannot be left blank")
+    if name in other_camps:
+        messagebox.showerror(title="Invalid Camp Name", message= "The camp name is already taken")
+    elif len(shelter) == 0:
+        messagebox.showerror(title="Invalid Number of Beds", message= "The number of beds cannot be left blank")
+    elif len(food_rations) == 0:
+        messagebox.showerror(title="Invalid Number of Food Rations", message= "The number of food rations cannot be left blank")
+    try:
+        shelter = int(shelter)
+    except ValueError:
+        messagebox.showerror(title="Invalid Number of Beds", message= "The number of beds has to be an integer")
+    try:
+        food_rations = int(food_rations)
+    except ValueError:
+        messagebox.showerror(title="Invalid Number of Food Rations", message= "The number of food rations has to be an integer")
+        
+    if type(shelter) == int and type(food_rations) == int and name not in other_camps:
+        new_row = pd.DataFrame({
+            'emergency_plan_name': [emergency_plan],'campID': [name],'food_rations': [food_rations],
+            'shelter': [shelter]
+            })
+        camps_df = camps_df.append(new_row, ignore_index=True)
+        camps_df.to_csv('data/camps.csv',index=False)
+        camp_sucess_pop_up()
+        
+    
+    
 
 def add_camp():
+    
+    global camp_plan
+    global camp_shelter
+    global camp_food_rations
+    global camp_name 
+    global add_new_camp_popup
+    
+    add_new_camp_popup = Toplevel(admin_camp_tab)
+    add_new_camp_popup.geometry('600x500')
+    
+    df = pd.read_csv("./data/emergency_plans.csv")
+    emergency_plans = df["name"]
+    emergency_plans = list(emergency_plans)
+    
 
-    global add_new_plan_popup
-    global plan_name
-    global plan_type
-    global plan_description
-    global plan_location
-    global plan_start_date
-    global plan_end_date
+    add_new_camp_popup.configure(bg='#F2F2F2')
 
-    add_new_plan_popup = Toplevel(admin_camp_tab)
-    add_new_plan_popup.geometry('600x500')
-
-    add_new_plan_popup.configure(bg='#F2F2F2')
-
-    Label(add_new_plan_popup, text="Please enter the following details:",
+    Label(add_new_camp_popup, text="Please enter the following details:",
         width="300", height="3",
         font=("Calibri bold", 25),
         bg='grey', fg='white').pack()
-
-    plan_name = StringVar()
-    plan_type = StringVar()
-    plan_description = StringVar()
-    plan_location = StringVar()
-    plan_start_date = StringVar()
-    plan_end_date = StringVar()
     
-    Label(add_new_plan_popup, text="", bg='#F2F2F2').pack()
+    camp_name = StringVar()
+    camp_plan = StringVar()
+    camp_shelter = StringVar()
+    camp_food_rations = StringVar()
 
-    Label(add_new_plan_popup, text='Plan Name: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
-    Entry(add_new_plan_popup, textvariable=plan_name, width='30', font=("Calibri", 10)).pack()
+    camp_plan.set(emergency_plans[0])
+   
+    
+    Label(add_new_camp_popup, text="", bg='#F2F2F2').pack()
 
-    Label(add_new_plan_popup, text='Plan Type: *', background='#F2F2F2', font=("Calibri", 15)).pack()
-    Entry(add_new_plan_popup, textvariable=plan_type, width="30", font=("Calibri", 10)).pack()
+    Label(add_new_camp_popup, text='Camp Name: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
+    Entry(add_new_camp_popup, textvariable=camp_name, width='30', font=("Calibri", 10)).pack()
+    Label(add_new_camp_popup, text='Emergency Plan: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
+    options = OptionMenu(add_new_camp_popup, camp_plan , *emergency_plans)
+    options.pack()
+    Label(add_new_camp_popup, text='Number of Beds: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
+    Entry(add_new_camp_popup, textvariable=camp_shelter, width='30', font=("Calibri", 10)).pack()
+    Label(add_new_camp_popup, text='Number of Food Rations: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
+    Entry(add_new_camp_popup, textvariable=camp_food_rations, width='30', font=("Calibri", 10)).pack()
+    Button(add_new_camp_popup, text="Add Camp", height="2", width="30", command=save_camp).pack(pady=10)
+    
+    
+    
+    
 
-    Label(add_new_plan_popup, text='Plan Description: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
-    Entry(add_new_plan_popup, textvariable=plan_description, width="30", font=("Calibri", 10)).pack()
 
-    Label(add_new_plan_popup, text='Plan Location: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
-    Entry(add_new_plan_popup, textvariable=plan_location, width="30", font=("Calibri", 10)).pack()
-
-    Label(add_new_plan_popup, text='Plan Start Date: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
-    Entry(add_new_plan_popup, textvariable=plan_start_date, width="30", font=("Calibri", 10)).pack()
-
-    Label(add_new_plan_popup, text='Plan End Date: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
-    Entry(add_new_plan_popup, textvariable=plan_end_date, width="30", font=("Calibri", 10)).pack()
-
-    Button(add_new_plan_popup, text="Create New Plan", height="2", width="30", command=add_plan_tocsv).pack(pady=10)
-
-add_camp()
+def show_camp(x):
+    '''
+    displays camp in a frame
+    also displays a search bar that searches by plan name
+    '''
+    global admin_camp_tab
+    
+    
+    admin_camp_tab = x
+    Button(admin_camp_tab, text='Add a new camp', command=add_camp).pack()
+    

@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import ttk
 import admin.plan as ad
+import admin.camp as adminCamp
 
 def admin_logged_in():
     '''
@@ -41,6 +42,7 @@ def admin_logged_in():
     admin_hub_notebook.add(admin_camp_tab, text = "Manage Camps")
     
     ad.show_emergency_plan(emergencyplan_tab)
+    adminCamp.show_camp(admin_camp_tab)
     
     admin_screen.mainloop()
 
