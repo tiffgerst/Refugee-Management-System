@@ -106,6 +106,7 @@ def register_user():
     num_entry = phonenumber_entry.get()
     mail_entry = email_entry.get()
     medic_entry = medic_var.get()
+    activation = True
 
 
     if u_entry == '':
@@ -123,7 +124,7 @@ def register_user():
         with open('data/volunteers.csv', 'a', newline='') as file:
             f = writer(file)
             f.writerows(
-                [[u_entry, p_hashed, num_entry, mail_entry, medic_entry]])
+                [[u_entry, p_hashed, num_entry, mail_entry, medic_entry, activation]])
         register_success_popup()
 
 

@@ -8,6 +8,29 @@ sys.path.append(
     os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)))
 from utilities import check_blanks, delete_popups
 
+def delete_volunteer_confirm():
+    """
+    Asks user if they are sure they want to delete a volunteer, then deletes it.
+    Execpts Index Error if user tries to delete a volunteer without first selecting one.
+    """
+    
+    selected_volunteer = plan_treeview.focus()
+    try:
+        selected_volunteer = plan_treeview.item(selected_volunteer)['values'][0]
+    except IndexError:
+        messagebox.showerror('Please Select a Volunteer', 'Please select a Volunteer you wish to delete.')
+    else:
+        delete_confirmation = messagebox.askquestion('Delete Volunteer Plan' ,
+        'You are about to delete a volunteer do you wish to continue?')
+        if delete_confirmation == 'yes':
+            # Remove the row
+            df = pd.read_csv('data/volunteers.csv')
+            df = df.loc[df['username'] != selected_volunteer]
+            df.to_csv('data/volunteers.csv',index=False)
+            clear_treeview()
+            update_treeview()
+
+
 
 def clear_treeview():
     """
@@ -106,4 +129,4 @@ def show_volunteers(x):
 
     #Button(emergencyplan_tab, text='Add a new plan', command=add_plan).pack()
     #Button(emergencyplan_tab, text='Edit Plan', command=edit_plan_confirm).pack()
-    #Button(emergencyplan_tab, text='Delete Plan', command=delete_plan_confirm).pack()
+    Button(volunteer_tab, text='Delete Volunteerg', command=delete_volunteer_confirm).pack()
