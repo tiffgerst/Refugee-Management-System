@@ -84,10 +84,10 @@ def login_volunteer():
             main_screen.destroy()
             volunteer_logged_in()
         else:
-            Label(main_screen, text='Password Incorrect please try again', fg='red').pack()
-
+            messagebox.showerror('Invalid Password', "Your password is incorrect. Please Try Again!", parent=main_screen)
+            
     else:
-        Label(main_screen, text='Username not found, please sign up', fg='red').pack()
+         messagebox.showerror('Invalid Username', "Your username is not found. \n Please Sign Up!", parent=main_screen)
 
 
 def register_user():
