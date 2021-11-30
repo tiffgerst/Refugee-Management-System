@@ -5,7 +5,7 @@ import sys
 import os.path
 sys.path.append(
     os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)))
-from utilities import check_blanks, delete_popups
+from utilities import check_blanks, check_date, delete_popups
 
 
 def edit_plan_confirm():
@@ -26,12 +26,12 @@ def edit_plan_confirm():
         delete_confirmation = messagebox.askquestion('Edit Emergency Plan',
         'You are about to edit an emergency plan do you wish to continue?')
         if delete_confirmation == 'yes':
-            plan_edit_window()
+            edit_plan_window()
             clear_treeview()
             update_treeview()
 
 
-def plan_edit_window():
+def edit_plan_window():
     """
     Opens a window that allows users to edit the emergency plan
     The default values for the entry box are retrieved from the csv
@@ -107,16 +107,20 @@ def plan_edit_window():
     plan_end_date_label.insert(END, default_plan_end_date)
     plan_end_date_label.pack()
 
-    Button(editor_popup, text="Confirm Edit", height="2", width="30", command=edit_plan).pack(pady=10)
+    Button(editor_popup, text="Confirm Edit", height="2", width="30", command=lambda: modify_table(add=False)).pack(pady=10)
     
 
-def edit_plan():
+def modify_table(add):
     """
+    Args
+    ----
+    add : bool
+        is it an edit (False) or an add (True operation)
     Replaces the values edited by the user and adds them to the csv
     Refreshes the treeview and gives a popup saying it was successful
     """
 
-    global edit_success_popup
+    global success_popup
 
     # Retrieve the variables using .get() - value is str
     plan_na = plan_name.get()
@@ -126,30 +130,49 @@ def edit_plan():
     plan_start = plan_start_date.get()
     plan_end = plan_end_date.get()
 
-    # Check for blanks
-    res = check_blanks(
-        form={
-        'name':plan_na,'type':plan_ty,'location':plan_loc,
-        'description':plan_desc,'start date':plan_start,'end date':plan_end},
-        parent=editor_popup)
-    if res == False: return
+    if add == True:
+        text = "creation"
+        parent = add_new_plan_popup
+    
+    else:
+        text = "edit"
+        parent = editor_popup
 
-    # Open csv -> change the plan attributes -> save csv
+    # Generic plan checking
+    res = is_valid_plan(parent,plan_na,plan_ty,plan_loc,plan_desc,plan_start,plan_end)
+    if not res: return
+    else: plan_start, plan_end = res
+
     df = pd.read_csv('data/emergency_plans.csv')
-    updated_row = [plan_na, plan_ty, plan_desc,plan_loc,plan_start,plan_end]
-    df.loc[df['name'] == default_plan_name] = [updated_row]
+    
+    if add == True:
+        # Check if plan already exists
+        if len(df.loc[df['name']==plan_na]) != 0:
+            messagebox.showerror('Invalid Plan Name','This plan name has already been taken', parent=parent)
+            return
+        # New entry is valid -> add new row
+        new_row = pd.DataFrame({
+        'name': [plan_na],'type': [plan_ty],'description': [plan_desc],
+        'location': [plan_loc],'start_date': [plan_start],'end_date': [plan_end]
+        })
+        df = df.append(new_row, ignore_index=True)
+    else:
+        # Edit is valid -> edit row
+        updated_row = [plan_na, plan_ty, plan_desc,plan_loc,plan_start,plan_end]
+        df.loc[df['name'] == default_plan_name] = [updated_row]
+    
+    # Save csv
     df.to_csv('data/emergency_plans.csv',index=False)
     
-    # Clears and updates the treeview
+    # Clear and update the treeview
     clear_treeview()
     update_treeview()
+    
+    success_popup = Toplevel(parent)   
+    success_popup.title("Success")
+    Label(success_popup, text="Plan "+text+" was successful", fg='green').pack()
+    Button(success_popup, text="OK", command=lambda: delete_popups([success_popup,parent])).pack()
 
-    # Creates a popup that tells user the plan edit was successful
-    edit_success_popup = Toplevel(editor_popup)
-    edit_success_popup.title("Success")
-    Label(edit_success_popup, text="Plan edit was successful", fg='green').pack()
-    Button(edit_success_popup, text="OK", command=lambda: delete_popups([edit_success_popup,editor_popup])).pack()
-       
 
 def delete_plan_confirm():
     """
@@ -174,26 +197,7 @@ def delete_plan_confirm():
             update_treeview()
 
 
-def register_success_popup():
-    """ 
-    Creates pop-up to show successful plan creation
-    Updates the tree view
-    """
-    
-    global register_success
-    #this updates the tree view with the new entry
-    clear_treeview()
-    update_treeview()
-    # update the combobox list when creating and entry
-    # if its the first entry then it just generates it
-    register_success = Toplevel(add_new_plan_popup)
-    register_success.title("Success")
-    register_success.geometry("150x50")
-    Label(register_success, text="Plan creation was successful", fg='green').pack()
-    Button(register_success, text="OK",command=lambda: delete_popups([register_success,add_new_plan_popup])).pack()
-
-
-def add_plan():
+def add_plan_window():
     """
     Emergency plan creation screen
     the submit button fowards to add_plan_tocsv function
@@ -238,53 +242,41 @@ def add_plan():
     Label(add_new_plan_popup, text='Plan Location: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
     Entry(add_new_plan_popup, textvariable=plan_location, width="30", font=("Calibri", 10)).pack()
 
-    Label(add_new_plan_popup, text='Plan Start Date: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
+    Label(add_new_plan_popup, text='Plan Start Date: *\n(format: 1 Jul 2019)', bg='#F2F2F2', font=("Calibri", 15)).pack()
     Entry(add_new_plan_popup, textvariable=plan_start_date, width="30", font=("Calibri", 10)).pack()
 
     Label(add_new_plan_popup, text='Plan End Date: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
     Entry(add_new_plan_popup, textvariable=plan_end_date, width="30", font=("Calibri", 10)).pack()
 
-    Button(add_new_plan_popup, text="Create New Plan", height="2", width="30", command=save_new_plan).pack(pady=10)
+    Button(add_new_plan_popup, text="Create New Plan", height="2", width="30", command=lambda: modify_table(add=True)).pack(pady=10)
 
 
-def save_new_plan():
+def is_valid_plan(parent,plan_na,plan_ty,plan_loc,plan_desc,plan_start,plan_end):
     """
-    Form validation for the plan creation
-    Once validated the plan is added to the csv
+    Generic plan validation used for edit and add
     """
-      
-    df = pd.read_csv('data/emergency_plans.csv')
-
-    # Retrieve the variables using .get() - value is str
-    plan_na = plan_name.get()
-    plan_ty = plan_type.get()
-    plan_loc = plan_location.get()
-    plan_desc = plan_description.get()
-    plan_start = plan_start_date.get()
-    plan_end = plan_end_date.get()
-
+    
     # Check for blanks
-    res = check_blanks(
+    blank_res = check_blanks(
         form={
         'name':plan_na,'type':plan_ty,'location':plan_loc,
-        'description':plan_desc,'start date':plan_start,'end date':plan_end},
-        parent=add_new_plan_popup)
-    if res == False: return
+        'description':plan_desc,'start date':plan_start},
+        parent=parent)
+    if blank_res == False: return
+
+    # Check start date
+    start_date_res = check_date(plan_start,"%d %b %Y",parent=parent)
+    if start_date_res == False: return
+
+    # If end date is specified - validate it
+    if plan_end != '':
+        end_date_res = check_date(plan_end,"%d %b %Y",parent=parent)
+        if end_date_res == False: return
+        # If the end date is before the start date
+        if end_date_res<start_date_res: return
+    else: end_date_res = None
     
-    # Check if plan already exists
-    if len(df.loc[df['name']==plan_na]) != 0:
-        messagebox.showerror('Invalid Plan Name','This plan name has already been taken', parent=add_new_plan_popup)
-        return
-
-    # Entry is valid -> update the CSV file
-    new_row = pd.DataFrame({
-        'name': [plan_na],'type': [plan_ty],'description': [plan_desc],
-        'location': [plan_loc],'start_date': [plan_start],'end_date': [plan_end]
-        })
-    df = df.append(new_row, ignore_index=True)
-    df.to_csv('data/emergency_plans.csv',index=False)
-    register_success_popup()
-
+    return start_date_res,end_date_res
 
 def clear_treeview():
     """
@@ -379,6 +371,6 @@ def show_emergency_plan(x):
     
     plan_treeview.bind('<ButtonRelease-1>')
 
-    Button(emergencyplan_tab, text='Add a new plan', command=add_plan).pack()
+    Button(emergencyplan_tab, text='Add a new plan', command=add_plan_window).pack()
     Button(emergencyplan_tab, text='Edit Plan', command=edit_plan_confirm).pack()
     Button(emergencyplan_tab, text='Delete Plan', command=delete_plan_confirm).pack()

@@ -1,5 +1,5 @@
 import tkinter as tk
-
+from datetime import datetime
 
 def check_blanks(form,parent):
     """
@@ -18,6 +18,23 @@ def check_blanks(form,parent):
             return False
 
     return True
+
+
+def check_date(date,format,parent):
+    """
+    Args
+    ----
+    date : str
+    format : str
+        the desired date format e.g. %d %b %Y
+    """
+    
+    try:
+        timestamp = datetime.strptime(date,format)
+        return timestamp
+    except:
+        tk.messagebox.showerror("Invalid Plan Date","Please enter date in the format "+format, parent=parent)
+        return False
 
 
 def delete_popups(popups):
