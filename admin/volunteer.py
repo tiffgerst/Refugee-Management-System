@@ -2,10 +2,6 @@ from tkinter import *
 from tkinter import ttk, messagebox
 import numpy
 import pandas as pd
-import sys
-import os.path
-sys.path.append(
-    os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)))
 from utilities import check_blanks, delete_popups
 
 def delete_volunteer_confirm():

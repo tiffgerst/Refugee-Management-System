@@ -1,11 +1,8 @@
 from tkinter import *
 from tkinter import ttk, messagebox
 import pandas as pd
-import sys
-import os.path
-sys.path.append(
-    os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)))
 from utilities import check_blanks, check_date, delete_popups
+from datetime import datetime
 
 
 def edit_plan_confirm():
@@ -95,6 +92,12 @@ def modify_plan_window(add):
         defaults = list(plan_treeview.item(selected_plan)['values'])
         global default_plan_name
         default_plan_name = defaults[0]
+
+        # If end_date is null (stored as "nan") convert it to empty str
+        if defaults[-1] == 'nan': defaults[-1] = ''
+        else: defaults[-1] = datetime.strftime(pd.to_datetime(defaults[-1]),"%d %b %Y")
+        
+        defaults[-2] = datetime.strftime(pd.to_datetime(defaults[-2]),"%d %b %Y")
     
     Label(modify_popup, text="", bg='#F2F2F2').pack()
 
@@ -120,8 +123,10 @@ def modify_table(add):
     ----
     add : bool
         is it an edit (False) or an add (True operation)
-    Replaces the values edited by the user and adds them to the csv
-    Refreshes the treeview and gives a popup saying it was successful
+    
+    -> Validates a proposed edit or addition
+    -> Changes the csv file if valid 
+    -> Refreshes the treeview and gives a popup saying it was successful
     """
 
     global success_popup
@@ -179,6 +184,10 @@ def modify_table(add):
 def is_valid_plan(parent,plan_na,plan_ty,plan_loc,plan_desc,plan_start,plan_end):
     """
     Generic plan validation used for edit and add
+
+    Checks for blanks and dates
+
+    Returns None if invalid
     """
     
     # Check for blanks
@@ -271,24 +280,24 @@ def show_emergency_plan(x):
     Label(emergencyplan_tab, text='Here are all your emergency plans:',
         width='50', font=('Calibri', 10)).pack()
 
-    #creates a frame within the emergency plan tab frame to display the csv
+    # Creates a frame within the emergency plan tab frame to display the csv
     emergencyplan_viewer = LabelFrame(emergencyplan_tab, width=600, height=300, text='Current Emergency Plans', bg='#F2F2F2')
     emergencyplan_viewer.pack()
     plan_treeview = ttk.Treeview(emergencyplan_viewer)
 
-    #displays the scroll bars for horizontal and vertical scrolling
+    # Displays the scroll bars for horizontal and vertical scrolling
     treescrolly = Scrollbar(emergencyplan_viewer, orient='vertical', command=plan_treeview.yview)
     treescrolly.pack(side='right', fill='y')
     treescrollx = Scrollbar(emergencyplan_viewer, orient='horizontal', command=plan_treeview.xview)
     treescrollx.pack(side='bottom', fill='x')
     plan_treeview.configure(xscrollcommand=treescrollx.set, yscrollcommand=treescrolly.set)
 
-    #displays the search bar
+    # Displays the search bar
     search_entry = StringVar()
     search_bar = Entry(emergencyplan_viewer, textvariable=search_entry)
     search_bar.pack()
-    #search bar gets updated everytime a key is released
-    #i.e when soemone types something
+    # Search bar gets updated everytime a key is released
+    # i.e when someone types something
     search_bar.bind("<KeyRelease>", search_plan_name)
 
     update_treeview()
