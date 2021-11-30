@@ -1,7 +1,6 @@
 from os import name
 from tkinter import *
-from tkinter import messagebox
-from tkinter import ttk
+from tkinter import messagebox, ttk
 from csv import writer
 import pandas as pd
 from volunteer_hub import *
@@ -107,6 +106,7 @@ def register_user():
     num_entry = phonenumber_entry.get()
     mail_entry = email_entry.get()
     medic_entry = medic_var.get()
+    activation = True
 
 
     if u_entry == '':
@@ -124,7 +124,7 @@ def register_user():
         with open('data/volunteers.csv', 'a', newline='') as file:
             f = writer(file)
             f.writerows(
-                [[u_entry, p_hashed, num_entry, mail_entry, medic_entry]])
+                [[u_entry, p_hashed, num_entry, mail_entry, medic_entry, activation]])
         register_success_popup()
 
 
