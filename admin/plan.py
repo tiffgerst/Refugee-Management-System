@@ -26,19 +26,43 @@ def edit_plan_confirm():
         delete_confirmation = messagebox.askquestion('Edit Emergency Plan',
         'You are about to edit an emergency plan do you wish to continue?')
         if delete_confirmation == 'yes':
-            edit_plan_window()
+            modify_plan_window(add=False)
             clear_treeview()
             update_treeview()
 
 
-def edit_plan_window():
+def delete_plan():
     """
-    Opens a window that allows users to edit the emergency plan
-    The default values for the entry box are retrieved from the csv
+    Asks user if they are sure they want to delete an emergency plan, then deletes it.
+    Execpts Index Error if user tries to delete a plan without first selecting one.
     """
+    
+    selected_plan = plan_treeview.focus()
+    try:
+        selected_plan = plan_treeview.item(selected_plan)['values'][0]
+    except IndexError:
+        messagebox.showerror('Please Select a Plan', 'Please select a plan you wish to delete.')
+    else:
+        delete_confirmation = messagebox.askquestion('Delete Emergency Plan' ,
+        'You are about to delete an emergency plan do you wish to continue?')
+        if delete_confirmation == 'yes':
+            # Remove the row
+            df = pd.read_csv('data/emergency_plans.csv')
+            df = df.loc[df['name'] != selected_plan]
+            df.to_csv('data/emergency_plans.csv',index=False)
+            clear_treeview()
+            update_treeview()
 
-    global default_plan_name
-    global editor_popup
+
+def modify_plan_window(add):
+    """
+    Args
+    ----
+    add : bool
+    
+    Opens a window that allows users to add or edit an emergency plan
+    """
+    global modify_popup
     global plan_name
     global plan_type
     global plan_description
@@ -46,13 +70,12 @@ def edit_plan_window():
     global plan_start_date
     global plan_end_date
 
-    editor_popup = Toplevel(emergencyplan_tab)
-    editor_popup.title('Editor')
-    editor_popup.geometry('600x500')
+    modify_popup = Toplevel(emergencyplan_tab)
+    modify_popup.title('Editor')
+    modify_popup.geometry('600x500')
+    modify_popup.configure(bg='#F2F2F2')
 
-    editor_popup.configure(bg='#F2F2F2')
-
-    Label(editor_popup, text="Please edit the following details:",
+    Label(modify_popup, text="Please edit the following details:",
         width="300", height="3",
         font=("Calibri bold", 25),
         bg='grey', fg='white').pack()
@@ -65,49 +88,30 @@ def edit_plan_window():
     plan_start_date = StringVar()
     plan_end_date = StringVar()
     
-    # Event selected -> get the dictionary of values of the event
-    selected_plan = plan_treeview.focus()
+    if add == False:
+        # Extract information about the plan being edited
+        # These attributes will later be used as defaults
+        selected_plan = plan_treeview.focus()
+        defaults = list(plan_treeview.item(selected_plan)['values'])
+        global default_plan_name
+        default_plan_name = defaults[0]
     
-    # Set the default strings on the form using existing data of event
-    default_plan_name = plan_treeview.item(selected_plan)['values'][0]
-    default_plan_type = plan_treeview.item(selected_plan)['values'][1]
-    default_plan_description = plan_treeview.item(selected_plan)['values'][2]
-    default_plan_location = plan_treeview.item(selected_plan)['values'][3]
-    default_plan_start_date = plan_treeview.item(selected_plan)['values'][4]
-    default_plan_end_date = plan_treeview.item(selected_plan)['values'][5]
-    Label(editor_popup, text="", bg='#F2F2F2').pack()
+    Label(modify_popup, text="", bg='#F2F2F2').pack()
 
-    Label(editor_popup, text='Plan Name: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
-    plan_name_label = Entry(editor_popup, textvariable=plan_name, width='30', font=("Calibri", 10))
-    plan_name_label.insert(END, default_plan_name)
-    plan_name_label.pack()
+    for i,(name,textvariable) in enumerate(zip(
+        ['Name: *','Type: *','Description: *','Location: *','Start Date: *\n(format: 1 Jul 2019)','End Date\n(format: 1 Jul 2019)'],
+        [plan_name,plan_type,plan_description,plan_location,plan_start_date,plan_end_date])):
+        
+        # Create label
+        Label(modify_popup, text='Plan '+name, bg='#F2F2F2', font=("Calibri", 15)).pack()
+        label = Entry(modify_popup, textvariable=textvariable, width='30', font=("Calibri", 10))
+        if add == False:
+            # Insert the corresponding default entry
+            label.insert(END, defaults[i])
+        # Save the entry box
+        label.pack()
 
-    Label(editor_popup, text='Plan Type: *', background='#F2F2F2', font=("Calibri", 15)).pack()
-    plan_type_label = Entry(editor_popup, textvariable=plan_type, width="30", font=("Calibri", 10))
-    plan_type_label.insert(END, default_plan_type)
-    plan_type_label.pack()
-
-    Label(editor_popup, text='Plan Description: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
-    plan_description_label = Entry(editor_popup, textvariable=plan_description, width="30", font=("Calibri", 10))
-    plan_description_label.insert(END, default_plan_description)
-    plan_description_label.pack()
-
-    Label(editor_popup, text='Plan Location: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
-    plan_location_label = Entry(editor_popup, textvariable=plan_location, width="30", font=("Calibri", 10))
-    plan_location_label.insert(END, default_plan_location)
-    plan_location_label.pack()
-
-    Label(editor_popup, text='Plan Start Date: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
-    plan_start_date_label = Entry(editor_popup, textvariable=plan_start_date, width="30", font=("Calibri", 10))
-    plan_start_date_label.insert(END, default_plan_start_date)
-    plan_start_date_label.pack()
-
-    Label(editor_popup, text='Plan End Date: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
-    plan_end_date_label = Entry(editor_popup, textvariable=plan_end_date, width="30", font=("Calibri", 10))
-    plan_end_date_label.insert(END, default_plan_end_date)
-    plan_end_date_label.pack()
-
-    Button(editor_popup, text="Confirm Edit", height="2", width="30", command=lambda: modify_table(add=False)).pack(pady=10)
+    Button(modify_popup, text="Confirm", height="2", width="30", command=lambda: modify_table(add)).pack(pady=10)
     
 
 def modify_table(add):
@@ -132,14 +136,12 @@ def modify_table(add):
 
     if add == True:
         text = "creation"
-        parent = add_new_plan_popup
     
     else:
         text = "edit"
-        parent = editor_popup
 
     # Generic plan checking
-    res = is_valid_plan(parent,plan_na,plan_ty,plan_loc,plan_desc,plan_start,plan_end)
+    res = is_valid_plan(modify_popup,plan_na,plan_ty,plan_loc,plan_desc,plan_start,plan_end)
     if not res: return
     else: plan_start, plan_end = res
 
@@ -148,7 +150,7 @@ def modify_table(add):
     if add == True:
         # Check if plan already exists
         if len(df.loc[df['name']==plan_na]) != 0:
-            messagebox.showerror('Invalid Plan Name','This plan name has already been taken', parent=parent)
+            messagebox.showerror('Invalid Plan Name','This plan name has already been taken', parent=modify_popup)
             return
         # New entry is valid -> add new row
         new_row = pd.DataFrame({
@@ -168,87 +170,10 @@ def modify_table(add):
     clear_treeview()
     update_treeview()
     
-    success_popup = Toplevel(parent)   
+    success_popup = Toplevel(modify_popup)   
     success_popup.title("Success")
     Label(success_popup, text="Plan "+text+" was successful", fg='green').pack()
-    Button(success_popup, text="OK", command=lambda: delete_popups([success_popup,parent])).pack()
-
-
-def delete_plan_confirm():
-    """
-    Asks user if they are sure they want to delete an emergency plan, then deletes it.
-    Execpts Index Error if user tries to delete a plan without first selecting one.
-    """
-    
-    selected_plan = plan_treeview.focus()
-    try:
-        selected_plan = plan_treeview.item(selected_plan)['values'][0]
-    except IndexError:
-        messagebox.showerror('Please Select a Plan', 'Please select a plan you wish to delete.')
-    else:
-        delete_confirmation = messagebox.askquestion('Delete Emergency Plan' ,
-        'You are about to delete an emergency plan do you wish to continue?')
-        if delete_confirmation == 'yes':
-            # Remove the row
-            df = pd.read_csv('data/emergency_plans.csv')
-            df = df.loc[df['name'] != selected_plan]
-            df.to_csv('data/emergency_plans.csv',index=False)
-            clear_treeview()
-            update_treeview()
-
-
-def add_plan_window():
-    """
-    Emergency plan creation screen
-    the submit button fowards to add_plan_tocsv function
-    """
-
-    global add_new_plan_popup
-    global plan_name
-    global plan_type
-    global plan_description
-    global plan_location
-    global plan_start_date
-    global plan_end_date
-
-    add_new_plan_popup = Toplevel(emergencyplan_tab)
-    add_new_plan_popup.geometry('600x500')
-
-    add_new_plan_popup.configure(bg='#F2F2F2')
-
-    Label(add_new_plan_popup, text="Please enter the following details:",
-        width="300", height="3",
-        font=("Calibri bold", 25),
-        bg='grey', fg='white').pack()
-
-    plan_name = StringVar()
-    plan_type = StringVar()
-    plan_description = StringVar()
-    plan_location = StringVar()
-    plan_start_date = StringVar()
-    plan_end_date = StringVar()
-    
-    Label(add_new_plan_popup, text="", bg='#F2F2F2').pack()
-
-    Label(add_new_plan_popup, text='Plan Name: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
-    Entry(add_new_plan_popup, textvariable=plan_name, width='30', font=("Calibri", 10)).pack()
-
-    Label(add_new_plan_popup, text='Plan Type: *', background='#F2F2F2', font=("Calibri", 15)).pack()
-    Entry(add_new_plan_popup, textvariable=plan_type, width="30", font=("Calibri", 10)).pack()
-
-    Label(add_new_plan_popup, text='Plan Description: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
-    Entry(add_new_plan_popup, textvariable=plan_description, width="30", font=("Calibri", 10)).pack()
-
-    Label(add_new_plan_popup, text='Plan Location: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
-    Entry(add_new_plan_popup, textvariable=plan_location, width="30", font=("Calibri", 10)).pack()
-
-    Label(add_new_plan_popup, text='Plan Start Date: *\n(format: 1 Jul 2019)', bg='#F2F2F2', font=("Calibri", 15)).pack()
-    Entry(add_new_plan_popup, textvariable=plan_start_date, width="30", font=("Calibri", 10)).pack()
-
-    Label(add_new_plan_popup, text='Plan End Date: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
-    Entry(add_new_plan_popup, textvariable=plan_end_date, width="30", font=("Calibri", 10)).pack()
-
-    Button(add_new_plan_popup, text="Create New Plan", height="2", width="30", command=lambda: modify_table(add=True)).pack(pady=10)
+    Button(success_popup, text="OK", command=lambda: delete_popups([success_popup,modify_popup])).pack()
 
 
 def is_valid_plan(parent,plan_na,plan_ty,plan_loc,plan_desc,plan_start,plan_end):
@@ -344,7 +269,7 @@ def show_emergency_plan(x):
     emergencyplan_tab = x
 
     Label(emergencyplan_tab, text='Here are all your emergency plans:',
-        width='30', font=('Calibri', 10)).pack()
+        width='50', font=('Calibri', 10)).pack()
 
     #creates a frame within the emergency plan tab frame to display the csv
     emergencyplan_viewer = LabelFrame(emergencyplan_tab, width=600, height=300, text='Current Emergency Plans', bg='#F2F2F2')
@@ -371,6 +296,6 @@ def show_emergency_plan(x):
     
     plan_treeview.bind('<ButtonRelease-1>')
 
-    Button(emergencyplan_tab, text='Add a new plan', command=add_plan_window).pack()
+    Button(emergencyplan_tab, text='Add a new plan', command=lambda: modify_plan_window(True)).pack()
     Button(emergencyplan_tab, text='Edit Plan', command=edit_plan_confirm).pack()
-    Button(emergencyplan_tab, text='Delete Plan', command=delete_plan_confirm).pack()
+    Button(emergencyplan_tab, text='Delete Plan', command=delete_plan).pack()
