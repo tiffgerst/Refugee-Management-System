@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import ttk
+import admin.camp as adminCamp
 import admin.plan as ap
 import admin.volunteer as av
 
@@ -41,6 +42,9 @@ def admin_logged_in():
     admin_hub_notebook.add(manage_volunteer_tab, text='Manage Volunteers')
     admin_hub_notebook.add(admin_camp_tab, text = "Manage Camps")
     
+
+    adminCamp.show_camp(admin_camp_tab)
+
     ap.show_emergency_plan(emergencyplan_tab)
     av.show_volunteers(manage_volunteer_tab)
     
