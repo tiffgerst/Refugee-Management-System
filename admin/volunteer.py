@@ -99,7 +99,7 @@ def show_volunteers(x):
 
     volunteer_tab = x
 
-    Label(volunteer_tab , text='Here are all your emergency plans:',
+    Label(volunteer_tab , text='Here are all your volunteers:',
         width='30', font=('Calibri', 10)).pack()
 
     # Creates a frame within the volunteer tab frame to display the csv
