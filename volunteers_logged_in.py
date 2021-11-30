@@ -11,7 +11,7 @@ def volunteer_logged_in():
 
     global manage_refugees_tab
     global volunteer_screen
-    global edit_information_tab
+    # global edit_information_tab
 
     volunteer_screen = Tk()
     volunteer_screen.title("Volunteer Hub")
@@ -27,17 +27,19 @@ def volunteer_logged_in():
     volunteer_hub_notebook = ttk.Notebook(volunteer_screen)
     volunteer_hub_notebook.pack(expand=True)
 
+    Button(volunteer_screen, text='Edit Your Details', command=ed.edit_popup).pack()
+
     manage_refugees_tab = Frame(volunteer_hub_notebook, width=600, height= 620, bg='#F2F2F2')
     manage_refugees_tab.pack(fill='both', expand = True)
 
-    edit_information_tab = Frame(volunteer_hub_notebook, width=500, height= 620, bg='#F2F2F2')
-    edit_information_tab.pack(fill='both', expand= True)
+    # edit_information_tab = Frame(volunteer_hub_notebook, width=500, height= 620, bg='#F2F2F2')
+    # edit_information_tab.pack(fill='both', expand= True)
 
-    volunteer_hub_notebook.add(edit_information_tab, text='Edit Details')
+    # volunteer_hub_notebook.add(edit_information_tab, text='Edit Details')
     volunteer_hub_notebook.add(manage_refugees_tab, text='Manage Refugees')
 
     mr.show_refugee(manage_refugees_tab)
-    ed.display_form(edit_information_tab)
+    # ed.plan_edit_window(edit_information_tab)
 
     volunteer_screen.mainloop()
 

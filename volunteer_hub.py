@@ -4,7 +4,9 @@ from tkinter import ttk
 
 def volunteer_logged_in():
     """
+    DEPRECATED
     creates a new window for volunteer dashboard
+    DEPRECATED
     """
 
     volunteer_screen = Tk()
