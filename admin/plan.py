@@ -6,6 +6,7 @@ import os.path
 sys.path.append(
     os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)))
 from utilities import check_blanks, check_date, delete_popups
+import admin.camp as camp
 
 
 def edit_plan_confirm():
@@ -112,7 +113,12 @@ def modify_plan_window(add):
         label.pack()
 
     Button(modify_popup, text="Confirm", height="2", width="30", command=lambda: modify_table(add)).pack(pady=10)
+   
+def close_pop_up_and_open_add_camp():
+    delete_popups([success_popup,modify_popup])
+    camp.add_camp()
     
+     
 
 def modify_table(add):
     """
@@ -172,8 +178,8 @@ def modify_table(add):
     
     success_popup = Toplevel(modify_popup)   
     success_popup.title("Success")
-    Label(success_popup, text="Plan "+text+" was successful", fg='green').pack()
-    Button(success_popup, text="OK", command=lambda: delete_popups([success_popup,modify_popup])).pack()
+    Label(success_popup, text="Plan "+text+" was successful. Please add a camp for this plan!", fg='green').pack()
+    Button(success_popup, text="OK", command= close_pop_up_and_open_add_camp).pack()
 
 
 def is_valid_plan(parent,plan_na,plan_ty,plan_loc,plan_desc,plan_start,plan_end):
