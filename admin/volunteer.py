@@ -63,8 +63,6 @@ def search_volunteer_name(e):
             plan_treeview.insert("", "end", values=res.values[0].tolist())
 
 
-
-
 def show_volunteers(x):
     '''
     displays the volunteer in a frame
