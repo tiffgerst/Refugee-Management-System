@@ -3,7 +3,7 @@ from tkinter import ttk
 import volunteers.manage_refugees as mr
 import volunteers.edit_information as ed
 
-def volunteer_logged_in():
+def volunteer_logged_in(username):
     '''
     Displays admin hub as well has the various
     tabs for the different actions an admin can do
@@ -27,7 +27,7 @@ def volunteer_logged_in():
     volunteer_hub_notebook = ttk.Notebook(volunteer_screen)
     volunteer_hub_notebook.pack(expand=True)
 
-    Button(volunteer_screen, text='Edit Your Details', command=ed.edit_popup).pack()
+    Button(volunteer_screen, text='Edit Your Details', command=ed.edit_popup(volunteer_screen, username)).pack()
 
     manage_refugees_tab = Frame(volunteer_hub_notebook, width=600, height= 620, bg='#F2F2F2')
     manage_refugees_tab.pack(fill='both', expand = True)
