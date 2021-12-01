@@ -16,13 +16,13 @@ def edit_plan_confirm():
     
     try:
         # Try and index the selected_plan
-        treeview.item(selected_plan)['values'][0]
+        selected_plan = treeview.item(selected_plan)['values'][0]
     except IndexError:
         # No plan selected
         messagebox.showerror('Please Select a Plan', 'Please select a plan you wish to edit.')
     else:
         delete_confirmation = messagebox.askquestion('Edit Emergency Plan',
-        'You are about to edit an emergency plan do you wish to continue?')
+        'You are about to edit the emergency plan: ' +selected_plan+ '. Do you wish to continue?')
         if delete_confirmation == 'yes':
             modify_plan_window(add=False)
             clear_treeview(treeview)
@@ -42,7 +42,7 @@ def delete_plan():
         messagebox.showerror('Please Select a Plan', 'Please select a plan you wish to delete.')
     else:
         delete_confirmation = messagebox.askquestion('Delete Emergency Plan' ,
-        'You are about to delete an emergency plan do you wish to continue?')
+        'You are about to delete the emergency plan: ' +selected_plan+ '. Do you wish to continue?')
         if delete_confirmation == 'yes':
             # Remove the row
             df = pd.read_csv('data/emergency_plans.csv')
