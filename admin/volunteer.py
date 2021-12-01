@@ -13,23 +13,24 @@ def volunteer_activation():
     except IndexError:
         messagebox.showerror('Please Select a Volunteer', 'Please select a Volunteer you wish to activate/deactivate.')
     else:
-        # NOT COMPLETE YET --> 
-
         df = pd.read_csv('data/volunteers.csv')
         username_index = df.index[df['username'] == selected_volunteer].tolist()
-        #df.loc[df[]]
+        current_activation = df.at[username_index[0], 'activation']
 
-        df.at[username_index[0], 'activation'] = False
+        if current_activation == True:
+            deactivation_confirmation = messagebox.askquestion('Deactivate Volunteer' ,
+            'You are about to deactivate the volunteer: ' +selected_volunteer+ '. Do you wish to continue?')
+            if deactivation_confirmation == 'yes':
+                df.at[username_index[0], 'activation'] = False
+        else:
+            activation_confirmation = messagebox.askquestion('Activate Volunteer' ,
+            'You are about to activate the volunteer: ' +selected_volunteer+  '. Do you wish to continue?')
+            if activation_confirmation == 'yes':
+                df.at[username_index[0], 'activation'] = True
+
         df.to_csv('data/volunteers.csv',index=False)
         display_all(treeview,'data/volunteers.csv',cols_to_hide=['password'])
 
-        # delete_confirmation = messagebox.askquestion('Delete Volunteer Plan' ,
-        # 'You are about to delete a volunteer do you wish to continue?')
-        # if delete_confirmation == 'yes':
-        #     # Remove the row
-            
-        ## <---    
- 
 
 def delete_volunteer_confirm():
     """
@@ -44,7 +45,7 @@ def delete_volunteer_confirm():
         messagebox.showerror('Please Select a Volunteer', 'Please select a Volunteer you wish to delete.')
     else:
         delete_confirmation = messagebox.askquestion('Delete Volunteer Plan' ,
-        'You are about to delete a volunteer do you wish to continue?')
+        'You are about to delete the volunteer: ' +selected_volunteer+  '. Do you wish to continue?')
         if delete_confirmation == 'yes':
             # Remove the row
             df = pd.read_csv('data/volunteers.csv')

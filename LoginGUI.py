@@ -73,16 +73,21 @@ def login_volunteer():
         idx = user_name_list.index(u_entry)
         stored_password = str(df['password'].tolist()[idx])
 
+        username_index = df.index[df['username'] == u_entry].tolist()
+        activation_status = df.at[username_index[0], 'activation']
+
         # make sure its a string before comparing
-        if verify_password(stored_password, p_entry):
+        if verify_password(stored_password, p_entry) and activation_status == True:
             Label(main_screen, text='Login Successful', fg='Green').pack()
             main_screen.destroy()
             volunteer_logged_in()
+        elif activation_status == False:
+            messagebox.showerror('Acount Deactivated', "Your account has been deactivated, please contact the e-Adam administrator.", parent=main_screen)
         else:
             messagebox.showerror('Invalid Password', "Your password is incorrect. Please Try Again!", parent=main_screen)
             
     else:
-         messagebox.showerror('Invalid Username', "Your username is not found. \n Please Sign Up!", parent=main_screen)
+         messagebox.showerror('Invalid Username', "This account does not exist. \n Please Sign Up!", parent=main_screen)
 
 
 def register_user():
@@ -102,6 +107,7 @@ def register_user():
     mail_entry = email_entry.get()
     medic_entry = medic_var.get()
     activation = True
+    camp = camp_id.get()
 
 
     if u_entry == '':
@@ -119,7 +125,7 @@ def register_user():
         with open('data/volunteers.csv', 'a', newline='') as file:
             f = writer(file)
             f.writerows(
-                [[u_entry, p_hashed, num_entry, mail_entry, medic_entry, activation]])
+                [[u_entry, p_hashed,camp,num_entry, mail_entry, medic_entry, activation]])
         register_success_popup()
 
 
@@ -130,7 +136,6 @@ def register_success_popup():
     global register_success
     register_success = Toplevel(sign_up_screen)
     register_success.title("Success")
-    register_success.geometry("150x50")
     Label(register_success, text="Registration was successful", fg='green').pack()
     Button(register_success, text="OK", command=delete_register_sucess).pack()
 
@@ -153,6 +158,7 @@ def sign_up_volunteer():
     global email_entry
     global password_entry
     global medic_var
+    global camp_id
 
     # Toplevel makes the signupscreen be a child of the main screen
     # this means if you close the main screen the signupscreen will also close
@@ -160,6 +166,10 @@ def sign_up_volunteer():
     sign_up_screen = Toplevel(main_screen)
     sign_up_screen.geometry('500x620')
     sign_up_screen.configure(bg='#F2F2F2')
+    
+    df = pd.read_csv("./data/camps.csv")
+    all_camps = df["campID"]
+    all_camps = list(all_camps)
 
     Label(sign_up_screen, text="Please enter the following details:",
           width="300", height="3",
@@ -171,6 +181,9 @@ def sign_up_volunteer():
     email_entry = StringVar()
     password_entry = StringVar()
     medic_var = BooleanVar()
+    camp_id = StringVar()
+    
+    camp_id.set(all_camps[0])
 
     Label(sign_up_screen, text="", bg='#F2F2F2').pack()
 
@@ -185,7 +198,9 @@ def sign_up_volunteer():
 
     Label(sign_up_screen, text='Password: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
     Entry(sign_up_screen, textvariable=password_entry, show='*', width="30", font=("Calibri", 10)).pack()
-
+    Label(sign_up_screen, text='Camp: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
+    options = OptionMenu(sign_up_screen, camp_id , *all_camps)
+    options.pack()
     Label(sign_up_screen, text="", bg='#F2F2F2').pack()
 
     Label(sign_up_screen, text='Are you medically trained? *', bg='#F2F2F2', font=("Calibri", 15)).pack()
