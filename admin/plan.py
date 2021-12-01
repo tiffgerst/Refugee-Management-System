@@ -261,7 +261,8 @@ def search_plan_name(e):
         if len(res) == 0:
             plan_treeview.insert("", "end", values=['No results found'])
         else:
-            plan_treeview.insert("", "end", values=res.values[0].tolist())
+            for i in range(len(res)):
+                plan_treeview.insert("", "end", values=res.values[i].tolist())
 
 
 def show_emergency_plan(x):
