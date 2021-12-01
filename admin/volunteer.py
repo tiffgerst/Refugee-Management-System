@@ -2,11 +2,37 @@ from tkinter import *
 from tkinter import ttk, messagebox
 import numpy
 import pandas as pd
-import sys
-import os.path
-sys.path.append(
-    os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)))
 from utilities import check_blanks, delete_popups
+
+
+
+def volunteer_activation():
+    
+    selected_volunteer = vol_treeview.focus()
+    try:
+        selected_volunteer = vol_treeview.item(selected_volunteer)['values'][0]
+    except IndexError:
+        messagebox.showerror('Please Select a Volunteer', 'Please select a Volunteer you wish to activate/deactivate.')
+    else:
+        # NOT COMPLETE YET --> 
+
+        df = pd.read_csv('data/volunteers.csv')
+        username_index = df.index[df['username'] == selected_volunteer].tolist()
+        #df.loc[df[]]
+
+        df.at[username_index[0], 'activation'] = False
+        df.to_csv('data/volunteers.csv',index=False)
+        clear_treeview()
+        update_treeview()
+
+        # delete_confirmation = messagebox.askquestion('Delete Volunteer Plan' ,
+        # 'You are about to delete a volunteer do you wish to continue?')
+        # if delete_confirmation == 'yes':
+        #     # Remove the row
+            
+        ## <---    
+ 
+    
 
 def delete_volunteer_confirm():
     """
@@ -14,9 +40,9 @@ def delete_volunteer_confirm():
     Execpts Index Error if user tries to delete a volunteer without first selecting one.
     """
     
-    selected_volunteer = plan_treeview.focus()
+    selected_volunteer = vol_treeview.focus()
     try:
-        selected_volunteer = plan_treeview.item(selected_volunteer)['values'][0]
+        selected_volunteer = vol_treeview.item(selected_volunteer)['values'][0]
     except IndexError:
         messagebox.showerror('Please Select a Volunteer', 'Please select a Volunteer you wish to delete.')
     else:
@@ -37,7 +63,7 @@ def clear_treeview():
       Clears the table so that it can be reloaded 
     """
 
-    plan_treeview.delete(*plan_treeview.get_children())
+    vol_treeview.delete(*vol_treeview.get_children())
 
 
 def update_treeview():
@@ -50,16 +76,16 @@ def update_treeview():
     df = pd.read_csv('data/volunteers.csv')
     remove_password_col = list(df.columns)
     remove_password_col.pop(1)
-    plan_treeview["column"] = remove_password_col
-    plan_treeview["show"] = "headings"
+    vol_treeview["column"] = remove_password_col
+    vol_treeview["show"] = "headings"
 
-    for column in plan_treeview["column"]:
-        plan_treeview.heading(column, text=column)
+    for column in vol_treeview["column"]:
+        vol_treeview.heading(column, text=column)
 
     #retrieves rows and displays them
     for _,row in df.iterrows():
         remove_password_row = numpy.delete(row.values, 1)
-        plan_treeview.insert("", "end", values=list(remove_password_row))
+        vol_treeview.insert("", "end", values=list(remove_password_row))
 
 def search_volunteer_name(e):
     """
@@ -74,16 +100,16 @@ def search_volunteer_name(e):
     else:
         clear_treeview()
         df = pd.read_csv('data/volunteers.csv')
-        plan_treeview["column"] = list(df.columns)
-        plan_treeview["show"] = "headings"
-        for column in plan_treeview["column"]:
-            plan_treeview.heading(column, text=column)
+        vol_treeview["column"] = list(df.columns)
+        vol_treeview["show"] = "headings"
+        for column in vol_treeview["column"]:
+            vol_treeview.heading(column, text=column)
 
         res = df.loc[df['username'].str.lower().str.contains(value.lower())]
         if len(res) == 0:
-            plan_treeview.insert("", "end", values=['No results found'])
+            vol_treeview.insert("", "end", values=['No results found'])
         else:
-            plan_treeview.insert("", "end", values=res.values[0].tolist())
+            vol_treeview.insert("", "end", values=res.values[0].tolist())
 
 
 def show_volunteers(x):
@@ -92,7 +118,7 @@ def show_volunteers(x):
     also displays a search bar that searches by volunteer name
     '''
 
-    global plan_treeview
+    global vol_treeview
     global search_bar
     global search_entry
     global volunteer_tab 
@@ -105,14 +131,14 @@ def show_volunteers(x):
     # Creates a frame within the volunteer tab frame to display the csv
     volunteer_viewer = LabelFrame(volunteer_tab, width=600, height=300, text='All Volunteers', bg='#F2F2F2')
     volunteer_viewer.pack()
-    plan_treeview = ttk.Treeview(volunteer_viewer)
+    vol_treeview = ttk.Treeview(volunteer_viewer)
 
     # Displays the scroll bars for horizontal and vertical scrolling
-    treescrolly = Scrollbar(volunteer_viewer, orient='vertical', command=plan_treeview.yview)
+    treescrolly = Scrollbar(volunteer_viewer, orient='vertical', command=vol_treeview.yview)
     treescrolly.pack(side='right', fill='y')
-    treescrollx = Scrollbar(volunteer_viewer, orient='horizontal', command=plan_treeview.xview)
+    treescrollx = Scrollbar(volunteer_viewer, orient='horizontal', command=vol_treeview.xview)
     treescrollx.pack(side='bottom', fill='x')
-    plan_treeview.configure(xscrollcommand=treescrollx.set, yscrollcommand=treescrolly.set)
+    vol_treeview.configure(xscrollcommand=treescrollx.set, yscrollcommand=treescrolly.set)
 
     # Displays the search bar
     search_entry = StringVar()
@@ -123,10 +149,9 @@ def show_volunteers(x):
     search_bar.bind("<KeyRelease>", search_volunteer_name)
 
     update_treeview()
-    plan_treeview.pack()
+    vol_treeview.pack()
     
-    plan_treeview.bind('<ButtonRelease-1>')
+    vol_treeview.bind('<ButtonRelease-1>')
 
-    #Button(emergencyplan_tab, text='Add a new plan', command=add_plan).pack()
-    #Button(emergencyplan_tab, text='Edit Plan', command=edit_plan_confirm).pack()
-    Button(volunteer_tab, text='Delete Volunteerg', command=delete_volunteer_confirm).pack()
+    Button(volunteer_tab, text='Activate/Deactive Volunteer', command=volunteer_activation).pack()
+    Button(volunteer_tab, text='Delete Volunteer', command=delete_volunteer_confirm).pack()
