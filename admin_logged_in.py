@@ -45,8 +45,8 @@ def admin_logged_in():
 
     adminCamp.show_camp(admin_camp_tab)
 
-    ap.show_emergency_plan(emergencyplan_tab)
-    av.show_volunteers(manage_volunteer_tab)
+    ap.main(emergencyplan_tab)
+    av.main(manage_volunteer_tab)
     
     admin_screen.mainloop()
 

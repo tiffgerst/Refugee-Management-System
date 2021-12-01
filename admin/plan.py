@@ -1,7 +1,7 @@
 from tkinter import *
 from tkinter import ttk, messagebox
 import pandas as pd
-from utilities import check_blanks, check_date, delete_popups
+from utilities import check_blanks,check_date,delete_popups,display_all,clear_treeview
 from datetime import datetime
 
 
@@ -11,11 +11,11 @@ def edit_plan_confirm():
     Excepts Index Error if a user does not select a plan before trying to edit
     """
 
-    selected_plan = plan_treeview.focus()
+    selected_plan = treeview.focus()
     
     try:
         # Try and index the selected_plan
-        plan_treeview.item(selected_plan)['values'][0]
+        treeview.item(selected_plan)['values'][0]
     except IndexError:
         # No plan selected
         messagebox.showerror('Please Select a Plan', 'Please select a plan you wish to edit.')
@@ -24,8 +24,8 @@ def edit_plan_confirm():
         'You are about to edit an emergency plan do you wish to continue?')
         if delete_confirmation == 'yes':
             modify_plan_window(add=False)
-            clear_treeview()
-            update_treeview()
+            clear_treeview(treeview)
+            display_all(treeview,'data/emergency_plans.csv')
 
 
 def delete_plan():
@@ -34,9 +34,9 @@ def delete_plan():
     Execpts Index Error if user tries to delete a plan without first selecting one.
     """
     
-    selected_plan = plan_treeview.focus()
+    selected_plan = treeview.focus()
     try:
-        selected_plan = plan_treeview.item(selected_plan)['values'][0]
+        selected_plan = treeview.item(selected_plan)['values'][0]
     except IndexError:
         messagebox.showerror('Please Select a Plan', 'Please select a plan you wish to delete.')
     else:
@@ -47,8 +47,8 @@ def delete_plan():
             df = pd.read_csv('data/emergency_plans.csv')
             df = df.loc[df['name'] != selected_plan]
             df.to_csv('data/emergency_plans.csv',index=False)
-            clear_treeview()
-            update_treeview()
+            clear_treeview(treeview)
+            display_all(treeview,'data/emergency_plans.csv')
 
 
 def modify_plan_window(add):
@@ -90,8 +90,8 @@ def modify_plan_window(add):
         
         # Extract information about the plan being edited
         # These attributes will later be used as defaults
-        selected_plan = plan_treeview.focus()
-        defaults = list(plan_treeview.item(selected_plan)['values'])
+        selected_plan = treeview.focus()
+        defaults = list(treeview.item(selected_plan)['values'])
         global default_plan_name
         default_plan_name = defaults[0]
         defaults.pop(0)
@@ -181,8 +181,8 @@ def modify_table(add):
     df.to_csv('data/emergency_plans.csv',index=False)
     
     # Clear and update the treeview
-    clear_treeview()
-    update_treeview()
+    clear_treeview(treeview)
+    display_all(treeview,'data/emergency_plans.csv')
     
     success_popup = Toplevel(modify_popup)   
     success_popup.title("Success")
@@ -221,32 +221,6 @@ def is_valid_plan(parent,plan_na,plan_ty,plan_loc,plan_desc,plan_start,plan_end)
     
     return start_date_res,end_date_res
 
-def clear_treeview():
-    """
-      Clears the table so that it can be reloaded 
-    """
-
-    plan_treeview.delete(*plan_treeview.get_children())
-
-
-def update_treeview():
-    """
-    Tree view logic for viewing emergency plan csv
-    """
-
-    #opens csv using pandas and converts columns to list
-    #also makes the first columns headings
-    df = pd.read_csv('data/emergency_plans.csv')
-    plan_treeview["column"] = list(df.columns)
-    plan_treeview["show"] = "headings"
-
-    for column in plan_treeview["column"]:
-        plan_treeview.heading(column, text=column)
-
-    #retrieves rows and displays them
-    for _,row in df.iterrows():
-        plan_treeview.insert("", "end", values=list(row.values))
-
 
 def search_plan_name(e):
     """
@@ -256,31 +230,20 @@ def search_plan_name(e):
     value = search_entry.get()
 
     if value == '':
-        clear_treeview()
-        update_treeview()
+        clear_treeview(treeview)
+        display_all(treeview,'data/emergency_plans.csv')
     else:
-        clear_treeview()
-        df = pd.read_csv('data/emergency_plans.csv')
-        plan_treeview["column"] = list(df.columns)
-        plan_treeview["show"] = "headings"
-        for column in plan_treeview["column"]:
-            plan_treeview.heading(column, text=column)
-
-        res = df.loc[df['name'].str.lower().str.contains(value.lower())]
-        if len(res) == 0:
-            plan_treeview.insert("", "end", values=['No results found'])
-        else:
-            for i in range(len(res)):
-                plan_treeview.insert("", "end", values=res.values[i].tolist())
+        clear_treeview(treeview)
+        display_all(treeview,'data/emergency_plans.csv',search=('name',value))
 
 
-def show_emergency_plan(x):
+def main(x):
     '''
     displays the emergency plan in a frame
     also displays a search bar that searches by plan name
     '''
 
-    global plan_treeview
+    global treeview
     global search_bar
     global search_entry
     global emergencyplan_tab
@@ -293,14 +256,14 @@ def show_emergency_plan(x):
     # Creates a frame within the emergency plan tab frame to display the csv
     emergencyplan_viewer = LabelFrame(emergencyplan_tab, width=600, height=300, text='Current Emergency Plans', bg='#F2F2F2')
     emergencyplan_viewer.pack()
-    plan_treeview = ttk.Treeview(emergencyplan_viewer)
+    treeview = ttk.Treeview(emergencyplan_viewer)
 
     # Displays the scroll bars for horizontal and vertical scrolling
-    treescrolly = Scrollbar(emergencyplan_viewer, orient='vertical', command=plan_treeview.yview)
+    treescrolly = Scrollbar(emergencyplan_viewer, orient='vertical', command=treeview.yview)
     treescrolly.pack(side='right', fill='y')
-    treescrollx = Scrollbar(emergencyplan_viewer, orient='horizontal', command=plan_treeview.xview)
+    treescrollx = Scrollbar(emergencyplan_viewer, orient='horizontal', command=treeview.xview)
     treescrollx.pack(side='bottom', fill='x')
-    plan_treeview.configure(xscrollcommand=treescrollx.set, yscrollcommand=treescrolly.set)
+    treeview.configure(xscrollcommand=treescrollx.set, yscrollcommand=treescrolly.set)
 
     # Displays the search bar
     search_entry = StringVar()
@@ -310,10 +273,10 @@ def show_emergency_plan(x):
     # i.e when someone types something
     search_bar.bind("<KeyRelease>", search_plan_name)
 
-    update_treeview()
-    plan_treeview.pack()
+    display_all(treeview,'data/emergency_plans.csv')
+    treeview.pack()
     
-    plan_treeview.bind('<ButtonRelease-1>')
+    treeview.bind('<ButtonRelease-1>')
 
     Button(emergencyplan_tab, text='Add a new plan', command=lambda: modify_plan_window(True)).pack()
     Button(emergencyplan_tab, text='Edit Plan', command=edit_plan_confirm).pack()
