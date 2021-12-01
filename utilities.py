@@ -2,7 +2,7 @@ import tkinter as tk
 from datetime import datetime
 import pandas as pd
 
-def check_blanks(form,parent):
+def check_blanks(name,form,parent):
     """
     Args
     ----
@@ -13,7 +13,7 @@ def check_blanks(form,parent):
     """
     for key in form:
         if form[key] == "":
-            message1 = 'Invalid Plan '+key.title()
+            message1 = 'Invalid '+name+' '+key.title()
             message2 = 'Please do not leave the '+key+' entry blank.'
             tk.messagebox.showerror(message1,message2, parent=parent)
             return False

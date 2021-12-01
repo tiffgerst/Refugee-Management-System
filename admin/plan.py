@@ -185,7 +185,7 @@ def modify_table(add):
     success_popup = Toplevel(modify_popup)   
     success_popup.title("Success")
     Label(success_popup, text="Plan "+text+" was successful. Please add a camp for this plan!", fg='green').pack()
-    _ = lambda:delete_popups([success_popup,modify_popup]); camp.add_camp()
+    _ = lambda:delete_popups([success_popup,modify_popup]); camp.add_camp_window()
     Button(success_popup, text="OK", command=_).pack()
 
 
@@ -200,6 +200,7 @@ def is_valid_plan(parent,plan_na,plan_ty,plan_loc,plan_desc,plan_start,plan_end)
     
     # Check for blanks
     blank_res = check_blanks(
+        name='Plan',
         form={
         'name':plan_na,'type':plan_ty,'location':plan_loc,
         'description':plan_desc,'start date':plan_start},
