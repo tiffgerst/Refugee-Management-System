@@ -5,10 +5,41 @@ import pandas as pd
 from utilities import check_blanks, delete_popups
 from csv import writer
 
+
+def clear_treeview():
+    """
+      Clears the table so that it can be reloaded 
+    """
+
+    camp_treeview.delete(*camp_treeview.get_children())
+
+
+def update_treeview():
+    """
+    Tree view logic for viewing emergency plan csv
+    """
+
+    #opens csv using pandas and converts columns to list
+    #also makes the first columns headings
+    df = pd.read_csv('data/camps.csv')
+    camp_treeview["column"] = list(df.columns)
+    camp_treeview["show"] = "headings"
+
+    for column in camp_treeview["column"]:
+        camp_treeview.heading(column, text=column)
+
+    #retrieves rows and displays them
+    for _,row in df.iterrows():
+        camp_treeview.insert("", "end", values=list(row.values))
+
+
+
 def camp_sucess_pop_up():
     register_success = Toplevel(add_new_camp_popup)
     register_success.title("Success")
     Label(register_success, text="Camp creation was successful", fg='green').pack()
+    clear_treeview()
+    update_treeview()
     Button(register_success, text="OK",command=lambda: delete_popups([register_success,add_new_camp_popup])).pack()
 
 def save_camp():
@@ -94,17 +125,74 @@ def add_camp():
     
     
     
+def search_camp_name(e):
+    """
+    search logic for camp name
+    """
     
+    value = search_entry.get()
+
+    if value == '':
+        clear_treeview()
+        update_treeview()
+    else:
+        clear_treeview()
+        df = pd.read_csv('data/camps.csv')
+        camp_treeview["column"] = list(df.columns)
+        camp_treeview["show"] = "headings"
+        for column in camp_treeview["column"]:
+            camp_treeview.heading(column, text=column)
+
+        res = df.loc[df['name'].str.lower().str.contains(value.lower())]
+        if len(res) == 0:
+            camp_treeview.insert("", "end", values=['No results found'])
+        else:
+            camp_treeview.insert("", "end", values=res.values[0].tolist())
+
+  
 
 
 def show_camp(x):
     '''
     displays camp in a frame
-    also displays a search bar that searches by plan name
+    also displays a search bar that searches by camp name
     '''
+
+    global camp_treeview
+    global search_bar
+    global search_entry
     global admin_camp_tab
     
-    
     admin_camp_tab = x
+
+  
+
+    Label(admin_camp_tab, text='Here are all your Camps:',
+        width='50', font=('Calibri', 10)).pack()
+
+    #creates a frame within the emergency plan tab frame to display the csv
+    camp_viewer = LabelFrame(admin_camp_tab, width=600, height=300, text='Current Camps', bg='#F2F2F2')
+    camp_viewer.pack()
+    camp_treeview = ttk.Treeview(camp_viewer)
+
+    #displays the scroll bars for horizontal and vertical scrolling
+    treescrolly = Scrollbar(camp_viewer, orient='vertical', command=camp_treeview.yview)
+    treescrolly.pack(side='right', fill='y')
+    treescrollx = Scrollbar(camp_viewer, orient='horizontal', command=camp_treeview.xview)
+    treescrollx.pack(side='bottom', fill='x')
+    camp_treeview.configure(xscrollcommand=treescrollx.set, yscrollcommand=treescrolly.set)
+
+    #displays the search bar
+    search_entry = StringVar()
+    search_bar = Entry(camp_viewer, textvariable=search_entry)
+    search_bar.pack()
+    #search bar gets updated everytime a key is released
+    #i.e when soemone types something
+    search_bar.bind("<KeyRelease>", search_camp_name)
+
+    update_treeview()
+    camp_treeview.pack()
+    
+    camp_treeview.bind('<ButtonRelease-1>')
     Button(admin_camp_tab, text='Add a new camp', command=add_camp).pack()
     
