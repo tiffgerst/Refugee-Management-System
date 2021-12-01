@@ -3,15 +3,7 @@ from tkinter import ttk
 
 
 def volunteer_logged_in():
-    """
-<<<<<<< HEAD
-    DEPRECATED
-    creates a new window for volunteer dashboard
-    DEPRECATED
-=======
-    creates a new window for volunteer dashboard
->>>>>>> 5ccf776 (Half-working volunteer hub)
-    """
+
 
     volunteer_screen = Tk()
     volunteer_screen.title("Volunteer Homescreen")
