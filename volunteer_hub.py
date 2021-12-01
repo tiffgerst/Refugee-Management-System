@@ -4,7 +4,6 @@ from tkinter import ttk
 
 def volunteer_logged_in():
 
-
     volunteer_screen = Tk()
     volunteer_screen.title("Volunteer Homescreen")
     volunteer_screen.geometry('500x620')
