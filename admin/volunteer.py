@@ -17,9 +17,19 @@ def volunteer_activation():
 
         df = pd.read_csv('data/volunteers.csv')
         username_index = df.index[df['username'] == selected_volunteer].tolist()
-        #df.loc[df[]]
+        current_activation = df.at[username_index[0], 'activation']
 
-        df.at[username_index[0], 'activation'] = False
+        if current_activation == True:
+            deactivation_confirmation = messagebox.askquestion('Deactivate Volunteer' ,
+            'You are about to deactivate a volunteer do you wish to continue?')
+            if deactivation_confirmation == 'yes':
+                df.at[username_index[0], 'activation'] = False
+        else:
+            activation_confirmation = messagebox.askquestion('Activate Volunteer' ,
+            'You are about to activate a volunteer do you wish to continue?')
+            if activation_confirmation == 'yes':
+                df.at[username_index[0], 'activation'] = True
+
         df.to_csv('data/volunteers.csv',index=False)
         clear_treeview(treeview)
         display_all(treeview,'data/volunteers.csv',cols_to_hide=['password'])
