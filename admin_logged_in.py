@@ -1,8 +1,20 @@
 from tkinter import *
-from tkinter import ttk
+from tkinter import ttk, messagebox
 import admin.camp as adminCamp
 import admin.plan as ap
 import admin.volunteer as av
+import LoginGUI
+
+
+def logout():
+    """
+    Allows user to logout
+    """
+    logout_q = messagebox.askquestion('Logout', 'Are you sure you want to log out?')
+
+    if logout_q == 'yes':
+        admin_screen.destroy()
+        LoginGUI.main_account_screen()
 
 def admin_logged_in():
     '''
@@ -25,6 +37,8 @@ def admin_logged_in():
         width="300", height="3",
         font=("Calibri bold", 25),
         bg='teal', fg='white').pack()
+    
+    
 
     admin_hub_notebook = ttk.Notebook(admin_screen)
     admin_hub_notebook.pack(expand=True)
@@ -42,7 +56,7 @@ def admin_logged_in():
     admin_hub_notebook.add(manage_volunteer_tab, text='Manage Volunteers')
     admin_hub_notebook.add(admin_camp_tab, text = "Manage Camps")
     
-
+    Button(admin_screen, text="Logout", command=logout).pack()
     adminCamp.show_camp(admin_camp_tab)
 
     ap.main(emergencyplan_tab)

@@ -73,16 +73,21 @@ def login_volunteer():
         idx = user_name_list.index(u_entry)
         stored_password = str(df['password'].tolist()[idx])
 
+        username_index = df.index[df['username'] == u_entry].tolist()
+        activation_status = df.at[username_index[0], 'activation']
+
         # make sure its a string before comparing
-        if verify_password(stored_password, p_entry):
+        if verify_password(stored_password, p_entry) and activation_status == True:
             Label(main_screen, text='Login Successful', fg='Green').pack()
             main_screen.destroy()
             volunteer_logged_in()
+        elif activation_status == False:
+            messagebox.showerror('Acount Deactivated', "Your account has been deactivated, please contact the e-Adam administrator.", parent=main_screen)
         else:
             messagebox.showerror('Invalid Password', "Your password is incorrect. Please Try Again!", parent=main_screen)
             
     else:
-         messagebox.showerror('Invalid Username', "Your username is not found. \n Please Sign Up!", parent=main_screen)
+         messagebox.showerror('Invalid Username', "This account does not exist. \n Please Sign Up!", parent=main_screen)
 
 
 def register_user():
