@@ -41,19 +41,9 @@ def admin_logged_in():
     admin_hub_notebook.add(emergencyplan_tab, text='Emergency Plan')
     admin_hub_notebook.add(manage_volunteer_tab, text='Manage Volunteers')
     admin_hub_notebook.add(admin_camp_tab, text = "Manage Camps")
-<<<<<<< HEAD
-    
-
-    adminCamp.show_camp(admin_camp_tab)
-
-    ap.main(emergencyplan_tab)
-    av.main(manage_volunteer_tab)
-    
-=======
 
     ad.show_emergency_plan(emergencyplan_tab)
 
->>>>>>> 5ccf776 (Half-working volunteer hub)
     admin_screen.mainloop()
 
 if __name__ == '__main__':
