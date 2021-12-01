@@ -1,5 +1,3 @@
-from os import name
-import os
 from tkinter import *
 from tkinter import messagebox, ttk
 from csv import writer
@@ -7,35 +5,8 @@ import pandas as pd
 from volunteers_logged_in import *
 from admin.plan import *
 import admin_logged_in as ad
-import hashlib
-import binascii
+from utilities import hash_password, verify_password
 
-
-def hash_password(password):
-    """
-    Hash a password for storing
-    returns hex string
-    """
-    salt = hashlib.sha256(os.urandom(60)).hexdigest().encode('ascii')
-    pwdhash = hashlib.pbkdf2_hmac('sha512', password.encode('utf-8'),
-                                  salt, 100000)
-    pwdhash = binascii.hexlify(pwdhash)
-    return (salt + pwdhash).decode('ascii')
-
-
-def verify_password(stored_password, provided_password):
-    """
-    Verify a stored hashed password against one provided by user
-    returns boolean value
-    """
-    salt = stored_password[:64]
-    stored_password = stored_password[64:]
-    pwdhash = hashlib.pbkdf2_hmac('sha512',
-                                  provided_password.encode('utf-8'),
-                                  salt.encode('ascii'),
-                                  100000)
-    pwdhash = binascii.hexlify(pwdhash).decode('ascii')
-    return pwdhash == stored_password
 
 def login_admin():
     """
