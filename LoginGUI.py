@@ -77,7 +77,7 @@ def login_volunteer():
         if verify_password(stored_password, p_entry):
             Label(main_screen, text='Login Successful', fg='Green').pack()
             main_screen.destroy()
-            volunteer_logged_in()
+            volunteer_logged_in(u_entry)
         else:
             messagebox.showerror('Invalid Password', "Your password is incorrect. Please Try Again!", parent=main_screen)
             
