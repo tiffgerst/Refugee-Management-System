@@ -4,7 +4,8 @@ import pandas as pd
 from utilities import check_blanks, delete_popups, display_all
 
 
-def add_camp_window():
+def add_camp_window(**kwargs):
+    default = kwargs.get('default',None)
     
     global camp_plan
     global camp_shelter
@@ -32,7 +33,10 @@ def add_camp_window():
     camp_shelter = StringVar()
     camp_food_rations = StringVar()
 
-    camp_plan.set(emergency_plans[0])
+    if default:
+        camp_plan.set(default)
+    else:
+        camp_plan.set(emergency_plans[0])
    
     Label(add_new_camp_popup, text="", bg='#F2F2F2').pack()
 
@@ -171,5 +175,5 @@ def main(x):
     treeview.pack()
     
     treeview.bind('<ButtonRelease-1>')
-    Button(admin_camp_tab, text='Add a new camp', command=add_camp).pack()
+    Button(admin_camp_tab, text='Add a new camp', command=add_camp_window).pack()
     Button(admin_camp_tab, text='Delete camp', command=delete_camp).pack()

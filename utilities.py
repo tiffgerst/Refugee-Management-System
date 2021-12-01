@@ -6,10 +6,14 @@ def check_blanks(name,form,parent):
     """
     Args
     ----
+    name : str
+        one of: camp, plan
+    
     form : dict
         key = str of attribute name
         value = the value entered by the user
-    parent : tkinter
+    
+    parent : tkinter object
     """
     for key in form:
         if form[key] == "":
@@ -26,13 +30,20 @@ def check_date(date,format,parent):
     Args
     ----
     date : str
+    
     format : str
         the desired date format e.g. %d %b %Y
+
+    Returns
+    -------
+    str or bool
+        timestamp if the date is valid
+        False if not
     """
     
     try:
         timestamp = datetime.strptime(date,format)
-        return timestamp
+        return timestamp.strftime('%d %b %Y')
     except:
         tk.messagebox.showerror("Invalid Plan Date","Please enter date in the format "+format, parent=parent)
         return False
@@ -58,9 +69,11 @@ def display_all(parent,csv,**kwargs):
     Args
     ----
     parent - treeview object
+
     csv - str
         the location of the csv e.g. "data/volunteers.csv"
-    cols_to_hide (optional) - list
+
+    cols_to_hide - list of strings (optional) 
         a list of columns to hide
     """
     
