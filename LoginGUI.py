@@ -196,8 +196,9 @@ def sign_up_volunteer():
     Label(sign_up_screen, text='Phone Number: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
     Entry(sign_up_screen, textvariable=phonenumber_entry, width="30", font=("Calibri", 10)).pack()
 
-    Label(sign_up_screen, text='Password: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
+    Label(sign_up_screen, text='New Password: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
     Entry(sign_up_screen, textvariable=password_entry, show='*', width="30", font=("Calibri", 10)).pack()
+    
     Label(sign_up_screen, text='Camp: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
     options = OptionMenu(sign_up_screen, camp_id , *all_camps)
     options.pack()

@@ -27,7 +27,7 @@ def volunteer_logged_in(username):
     volunteer_hub_notebook = ttk.Notebook(volunteer_screen)
     volunteer_hub_notebook.pack(expand=True)
 
-    Button(volunteer_screen, text='Edit Your Details', command=ed.edit_popup(volunteer_screen, username)).pack()
+    Button(volunteer_screen, text='Edit Your Details', command=lambda: ed.edit_popup(volunteer_screen,username)).pack()
 
     manage_refugees_tab = Frame(volunteer_hub_notebook, width=600, height= 620, bg='#F2F2F2')
     manage_refugees_tab.pack(fill='both', expand = True)
