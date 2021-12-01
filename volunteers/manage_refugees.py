@@ -13,11 +13,11 @@ def edit_refugee_confirm():
     Excepts Index Error if a user does not select a refugee before trying to edit
     """
 
-    selected_refugee = refugee_treeview.focus()
+    selected_refugee = refugees_treeview.focus()
 
     try:
         # Try and index the selected_refugee
-        refugee_treeview.item(selected_refugee)['values'][0]
+        refugees_treeview.item(selected_refugee)['values'][0]
     except IndexError:
         # No refugee selected
         messagebox.showerror('Please Select a refugee', 'Please select a refugee you wish to edit.')
@@ -43,7 +43,6 @@ def refugee_edit_window():
     global medical_conditions
     global camp_id
     global on_site
-    global default_first_name
 
     editor_popup = Toplevel(refugee_tab)
     editor_popup.title('Editor')
@@ -118,7 +117,6 @@ def edit_refugee():
     refugee_camp = camp_id.get()
     refugee_cond = medical_conditions.get()
     refugee_rel = num_relatives.get()
-    refugee_on = on_site.get()
 
     # Check for blanks
     res = check_blanks(
@@ -130,7 +128,7 @@ def edit_refugee():
 
     # Open csv -> change the refugee attributes -> save csv
     df = pd.read_csv('data/refugees.csv')
-    updated_row = [refugee_fi, refugee_fa, refugee_camp, refugee_cond, refugee_rel, refugee_on]
+    updated_row = [refugee_fi, refugee_fa, refugee_camp, refugee_cond, refugee_rel]
     df.loc[df['first_name'] == default_first_name] = [updated_row]
     df.to_csv('data/refugees.csv',index=False)
 
@@ -148,31 +146,23 @@ def edit_refugee():
 def delete_refugee_confirm():
     """
     Asks user if they are sure they want to delete refugee, then deletes it.
-    Excepts Index Error if user tries to delete a refugee without first selecting one.
+    Execpts Index Error if user tries to delete a refugee without first selecting one.
     """
-    refugee_fi = refugee_first_name.get()
-    refugee_fa = refugee_family_name.get()
-    refugee_camp = camp_id.get()
-    refugee_cond = medical_conditions.get()
-    refugee_rel = num_relatives.get()
-    refugee_on = on_site.get()
 
     selected_refugee = refugee_treeview.focus()
-    default_first_name = refugee_treeview.item(selected_refugee)['values'][0]
     try:
         selected_refugee = refugee_treeview.item(selected_refugee)['values'][0]
         print(selected_refugee)
     except IndexError:
-        messagebox.showerror('Please Select a Refugee', 'Please select a Refugee you wish to mark as departed.')
+        messagebox.showerror('Please Select a Refugee', 'Please select a Refugee you wish to deactivate.')
     else:
-        delete_confirmation = messagebox.askquestion('Mark Refugee as Departed' ,
-        'You are about to mark a refugee as departed - do you wish to continue?')
+        delete_confirmation = messagebox.askquestion('Deactivate Refugee' ,
+        'You are about to deactivate a refugee do you wish to continue?')
         if delete_confirmation == 'yes':
             # Remove the row
             df = pd.read_csv('data/refugees.csv')
-            # df = df.loc[df['on_site'] != selected_refugee]
-            updated_row = [refugee_fi, refugee_fa, refugee_camp, refugee_cond, refugee_rel, 'False']
-            df.loc[df['first_name'] == default_first_name] = updated_row
+            #df = df.loc[df['on_site'] != selected_refugee]
+            df['on_site']
             df.to_csv('data/refugees.csv',index=False)
             clear_treeview()
             update_treeview()
@@ -273,7 +263,7 @@ def save_new_refugee():
     # Update the CSV file
     new_row = pd.DataFrame({
         'first_name': [refugee_fi],'family_name': [refugee_fa],'camp_id': [refugee_camp],
-        'num_relatives': [refugee_rel],'medical_conditions': [refugee_cond], 'on_site': 'True'
+        'num_relatives': [refugee_rel],'medical_conditions': [refugee_cond], , 'on_site': 'True'
         })
     df = df.append(new_row, ignore_index=True)
     df.to_csv('data/refugees.csv',index=False)
@@ -371,5 +361,5 @@ def show_refugee(x):
     refugee_treeview.bind('<ButtonRelease-1>')
 
     Button(refugee_tab, text='Add new Refugee', command=add_refugee).pack()
-    Button(refugee_tab, text='Edit Refugee', command=refugee_edit_window).pack()
-    Button(refugee_tab, text='Mark refugee as departed', command=delete_refugee_confirm).pack()
+    Button(refugee_tab, text='Edit Refugee', command=edit_refugee).pack()
+    Button(refugee_tab, text='Deactivate refugee', command=delete_refugee_confirm).pack()
