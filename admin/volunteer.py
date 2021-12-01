@@ -14,6 +14,8 @@ def volunteer_activation():
     except IndexError:
         messagebox.showerror('Please Select a Volunteer', 'Please select a Volunteer you wish to activate/deactivate.')
     else:
+        # NOT COMPLETE YET --> 
+
         df = pd.read_csv('data/volunteers.csv')
         username_index = df.index[df['username'] == selected_volunteer].tolist()
         #df.loc[df[]]
@@ -28,7 +30,7 @@ def volunteer_activation():
         # if delete_confirmation == 'yes':
         #     # Remove the row
             
-            
+        ## <---    
  
     
 
