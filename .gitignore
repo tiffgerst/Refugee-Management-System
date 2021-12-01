@@ -1,3 +1,7 @@
 .idea
 
 .venv
+example.ipynb
+test.py
+test2.py
+__pycache__
