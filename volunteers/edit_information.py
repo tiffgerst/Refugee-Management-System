@@ -1,8 +1,9 @@
 from tkinter import *
 from tkinter import ttk
+import pandas as pd
 
 
-def edit_popup():
+def edit_popup(screen, user):
     global edit_details
     global editor_popup
     global refugee_family_name
@@ -13,7 +14,7 @@ def edit_popup():
     global on_site
     global default_first_name
 
-    editor_popup = Toplevel(refugee_tab)
+    editor_popup = Toplevel(screen)
     editor_popup.title('Editor')
     editor_popup.geometry('600x500')
 
@@ -28,47 +29,51 @@ def edit_popup():
     vol_username = StringVar()
     vol_password = StringVar()
     vol_camp_id = StringVar()
-    vol_phonenumbermedical_conditions = StringVar()
+    vol_phonenumber = StringVar()
     vol_medic = StringVar()
-    
-    
+
+
 
     # Event selected -> get the dictionary of values of the event
-    selected_refugee = refugee_treeview.focus()
+    selected_volunteer = user
+    df = pd.read_csv('data/volunteers.csv')
+    row = df.loc[df['username'] == selected_volunteer]
+    print(row)
+    print(row['username'])
+
 
     # Set the default strings on the form using existing data of event
-    default_first_name = refugee_treeview.item(selected_refugee)['values'][0]
-    default_family_name = refugee_treeview.item(selected_refugee)['values'][1]
-    default_camp_id = refugee_treeview.item(selected_refugee)['values'][2]
-    default_medical_conditions = refugee_treeview.item(selected_refugee)['values'][3]
-    default_num_relatives = refugee_treeview.item(selected_refugee)['values'][4]
-    default_on_site = refugee_treeview.item(selected_refugee)['values'][5]
+    # default_username = row.iloc[0]
+    # default_password = row.iloc[1]
+    # default_camp_id = row.iloc[2]
+    # default_phone = row.iloc[3]
+    # default_medic = row.iloc[4]
     Label(editor_popup, text="", bg='#F2F2F2').pack()
-
-    Label(editor_popup, text='Refugee First Name: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
-    refugee_first_name_label = Entry(editor_popup, textvariable=refugee_first_name, width='30', font=("Calibri", 10))
-    refugee_first_name_label.insert(END, default_first_name)
-    refugee_first_name_label.pack()
-
-    Label(editor_popup, text='Refugee Family Name: *', background='#F2F2F2', font=("Calibri", 15)).pack()
-    refugee_family_name_label = Entry(editor_popup, textvariable=refugee_family_name, width="30", font=("Calibri", 10))
-    refugee_family_name_label.insert(END, default_family_name)
-    refugee_family_name_label.pack()
-
-    Label(editor_popup, text='Camp ID: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
-    camp_id_label = Entry(editor_popup, textvariable=camp_id, width="30", font=("Calibri", 10))
-    camp_id_label.insert(END, default_camp_id)
-    camp_id_label.pack()
-
-    Label(editor_popup, text='Medical Conditions: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
-    medical_conditions = Entry(editor_popup, textvariable=medical_conditions, width="30", font=("Calibri", 10))
-    medical_conditions.insert(END, default_medical_conditions)
-    medical_conditions.pack()
-
-    Label(editor_popup, text='Number of Relatives: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
-    num_relatives_label = Entry(editor_popup, textvariable=num_relatives, width="30", font=("Calibri", 10))
-    num_relatives_label.insert(END, default_num_relatives)
-    num_relatives_label.pack()
+    #
+    # Label(editor_popup, text='Refugee First Name: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
+    # refugee_first_name_label = Entry(editor_popup, textvariable=refugee_first_name, width='30', font=("Calibri", 10))
+    # refugee_first_name_label.insert(END, default_first_name)
+    # refugee_first_name_label.pack()
+    #
+    # Label(editor_popup, text='Refugee Family Name: *', background='#F2F2F2', font=("Calibri", 15)).pack()
+    # refugee_family_name_label = Entry(editor_popup, textvariable=refugee_family_name, width="30", font=("Calibri", 10))
+    # refugee_family_name_label.insert(END, default_family_name)
+    # refugee_family_name_label.pack()
+    #
+    # Label(editor_popup, text='Camp ID: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
+    # camp_id_label = Entry(editor_popup, textvariable=camp_id, width="30", font=("Calibri", 10))
+    # camp_id_label.insert(END, default_camp_id)
+    # camp_id_label.pack()
+    #
+    # Label(editor_popup, text='Medical Conditions: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
+    # medical_conditions = Entry(editor_popup, textvariable=medical_conditions, width="30", font=("Calibri", 10))
+    # medical_conditions.insert(END, default_medical_conditions)
+    # medical_conditions.pack()
+    #
+    # Label(editor_popup, text='Number of Relatives: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
+    # num_relatives_label = Entry(editor_popup, textvariable=num_relatives, width="30", font=("Calibri", 10))
+    # num_relatives_label.insert(END, default_num_relatives)
+    # num_relatives_label.pack()
 
     Button(editor_popup, text="Edit Refugee", height="2", width="30", command=edit_refugee).pack(pady=10)
 
