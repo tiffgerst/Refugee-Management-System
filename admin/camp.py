@@ -88,7 +88,7 @@ def add_camp():
     camps_df = camps_df.append(new_row, ignore_index=True)
     camps_df.to_csv('data/camps.csv',index=False)
     
-    display_all(camp_treeview,'data/camps.csv')
+    display_all(treeview,'data/camps.csv')
     
     success_popup = Toplevel(add_new_camp_popup)
     success_popup.title("Success")
@@ -104,9 +104,31 @@ def search_camp_name(e):
     value = search_entry.get()
 
     if value == '':
-        display_all(camp_treeview,'data/camps.csv')
+        display_all(treeview,'data/camps.csv')
     else:
-        display_all(camp_treeview,'data/camps.csv',search=('campID',value))
+        display_all(treeview,'data/camps.csv',search=('campID',value))
+
+
+def delete_camp():
+    """
+    Asks user if they are sure they want to delete an camp, then deletes it.
+    Execpts Index Error if user tries to delete a plan without first selecting one.
+    """
+    
+    selected_camp = treeview.focus()
+    try:
+        selected_camp = treeview.item(selected_camp)['values'][1]
+    except IndexError:
+        messagebox.showerror('Please Select a Camp', 'Please select a camp you wish to delete.')
+    else:
+        delete_confirmation = messagebox.askquestion('Delete Camp' ,
+        'You are about to delete a camp do you wish to continue?')
+        if delete_confirmation == 'yes':
+            # Remove the row
+            df = pd.read_csv('data/camps.csv')
+            df = df.loc[df['campID'] != selected_camp]
+            df.to_csv('data/camps.csv',index=False)
+            display_all(treeview,'data/camps.csv')
 
 
 def main(x):
@@ -115,7 +137,7 @@ def main(x):
     also displays a search bar that searches by camp name
     '''
 
-    global camp_treeview
+    global treeview
     global search_bar
     global search_entry
     global admin_camp_tab
@@ -128,14 +150,14 @@ def main(x):
     #creates a frame within the emergency plan tab frame to display the csv
     camp_viewer = LabelFrame(admin_camp_tab, width=600, height=300, text='Current Camps', bg='#F2F2F2')
     camp_viewer.pack()
-    camp_treeview = ttk.Treeview(camp_viewer)
+    treeview = ttk.Treeview(camp_viewer)
 
     #displays the scroll bars for horizontal and vertical scrolling
-    treescrolly = Scrollbar(camp_viewer, orient='vertical', command=camp_treeview.yview)
+    treescrolly = Scrollbar(camp_viewer, orient='vertical', command=treeview.yview)
     treescrolly.pack(side='right', fill='y')
-    treescrollx = Scrollbar(camp_viewer, orient='horizontal', command=camp_treeview.xview)
+    treescrollx = Scrollbar(camp_viewer, orient='horizontal', command=treeview.xview)
     treescrollx.pack(side='bottom', fill='x')
-    camp_treeview.configure(xscrollcommand=treescrollx.set, yscrollcommand=treescrolly.set)
+    treeview.configure(xscrollcommand=treescrollx.set, yscrollcommand=treescrolly.set)
 
     #displays the search bar
     search_entry = StringVar()
@@ -145,8 +167,9 @@ def main(x):
     #i.e when soemone types something
     search_bar.bind("<KeyRelease>", search_camp_name)
 
-    display_all(camp_treeview,'data/camps.csv')
-    camp_treeview.pack()
+    display_all(treeview,'data/camps.csv')
+    treeview.pack()
     
-    camp_treeview.bind('<ButtonRelease-1>')
+    treeview.bind('<ButtonRelease-1>')
     Button(admin_camp_tab, text='Add a new camp', command=add_camp).pack()
+    Button(admin_camp_tab, text='Delete camp', command=delete_camp).pack()
