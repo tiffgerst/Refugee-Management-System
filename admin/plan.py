@@ -1,7 +1,7 @@
 from tkinter import *
 from tkinter import ttk, messagebox
 import pandas as pd
-from utilities import check_blanks,check_date,delete_popups,display_all,clear_treeview
+from utilities import check_blanks,check_date,delete_popups,display_all
 from datetime import datetime
 import admin.camp as camp
 
@@ -25,7 +25,6 @@ def edit_plan_confirm():
         'You are about to edit an emergency plan do you wish to continue?')
         if delete_confirmation == 'yes':
             modify_plan_window(add=False)
-            clear_treeview(treeview)
             display_all(treeview,'data/emergency_plans.csv')
 
 
@@ -48,7 +47,6 @@ def delete_plan():
             df = pd.read_csv('data/emergency_plans.csv')
             df = df.loc[df['name'] != selected_plan]
             df.to_csv('data/emergency_plans.csv',index=False)
-            clear_treeview(treeview)
             display_all(treeview,'data/emergency_plans.csv')
 
 
@@ -187,7 +185,6 @@ def modify_table(add):
     df.to_csv('data/emergency_plans.csv',index=False)
     
     # Clear and update the treeview
-    clear_treeview(treeview)
     display_all(treeview,'data/emergency_plans.csv')
     
     success_popup = Toplevel(modify_popup)   
@@ -236,10 +233,8 @@ def search_plan_name(e):
     value = search_entry.get()
 
     if value == '':
-        clear_treeview(treeview)
         display_all(treeview,'data/emergency_plans.csv')
     else:
-        clear_treeview(treeview)
         display_all(treeview,'data/emergency_plans.csv',search=('name',value))
 
 

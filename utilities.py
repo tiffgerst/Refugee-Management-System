@@ -63,8 +63,10 @@ def display_all(parent,csv,**kwargs):
     cols_to_hide (optional) - list
         a list of columns to hide
     """
+    
     cols_to_hide = kwargs.get("cols_to_hide",None)
     search = kwargs.get('search',None)
+    parent.delete(*parent.get_children())
 
     df = pd.read_csv(csv)
     
@@ -82,7 +84,3 @@ def display_all(parent,csv,**kwargs):
 
     for _,row in df.iterrows():
         parent.insert("", "end", values=list(row))
-
-
-def clear_treeview(treeview):
-    treeview.delete(*treeview.get_children())

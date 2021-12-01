@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import ttk, messagebox
 import numpy
 import pandas as pd
-from utilities import check_blanks, delete_popups, display_all, clear_treeview
+from utilities import check_blanks, delete_popups, display_all
 
 
 def volunteer_activation():
@@ -21,7 +21,6 @@ def volunteer_activation():
 
         df.at[username_index[0], 'activation'] = False
         df.to_csv('data/volunteers.csv',index=False)
-        clear_treeview(treeview)
         display_all(treeview,'data/volunteers.csv',cols_to_hide=['password'])
 
         # delete_confirmation = messagebox.askquestion('Delete Volunteer Plan' ,
@@ -51,7 +50,6 @@ def delete_volunteer_confirm():
             df = pd.read_csv('data/volunteers.csv')
             df = df.loc[df['username'] != selected_volunteer]
             df.to_csv('data/volunteers.csv',index=False)
-            clear_treeview(treeview)
             display_all(treeview,'data/volunteers.csv',cols_to_hide=['password'])
 
 
@@ -63,11 +61,9 @@ def search_volunteer_name(e):
     value = search_entry.get()
 
     if value == '':
-        clear_treeview(treeview)
         display_all(
             parent=treeview,csv='data/volunteers.csv',cols_to_hide=['password'])
     else:
-        clear_treeview(treeview)
         display_all(
             parent=treeview,csv='data/volunteers.csv',cols_to_hide=['password'],
             search=('username',value))

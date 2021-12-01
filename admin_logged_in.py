@@ -3,6 +3,7 @@ from tkinter import ttk
 import admin.camp as adminCamp
 import admin.plan as ap
 import admin.volunteer as av
+from utilities import display_all
 
 def admin_logged_in():
     '''

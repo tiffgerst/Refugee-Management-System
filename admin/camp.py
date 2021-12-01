@@ -2,7 +2,7 @@ from os import name
 from tkinter import *
 from tkinter import ttk, messagebox
 import pandas as pd
-from utilities import check_blanks, delete_popups
+from utilities import check_blanks, delete_popups, display_all
 from csv import writer
 
 
@@ -33,7 +33,6 @@ def update_treeview():
         camp_treeview.insert("", "end", values=list(row.values))
 
 
-
 def camp_sucess_pop_up():
     register_success = Toplevel(add_new_camp_popup)
     register_success.title("Success")
@@ -41,6 +40,7 @@ def camp_sucess_pop_up():
     clear_treeview()
     update_treeview()
     Button(register_success, text="OK",command=lambda: delete_popups([register_success,add_new_camp_popup])).pack()
+
 
 def save_camp():
     camps_df = pd.read_csv("./data/camps.csv")
@@ -77,8 +77,6 @@ def save_camp():
         camp_sucess_pop_up()
         
     
-    
-
 def add_camp():
     
     global camp_plan
@@ -123,8 +121,7 @@ def add_camp():
     Entry(add_new_camp_popup, textvariable=camp_food_rations, width='30', font=("Calibri", 10)).pack()
     Button(add_new_camp_popup, text="Add Camp", height="2", width="30", command=save_camp).pack(pady=10)
     
-    
-    
+
 def search_camp_name(e):
     """
     search logic for camp name
@@ -133,23 +130,9 @@ def search_camp_name(e):
     value = search_entry.get()
 
     if value == '':
-        clear_treeview()
-        update_treeview()
+        display_all(camp_treeview,'data/camps.csv')
     else:
-        clear_treeview()
-        df = pd.read_csv('data/camps.csv')
-        camp_treeview["column"] = list(df.columns)
-        camp_treeview["show"] = "headings"
-        for column in camp_treeview["column"]:
-            camp_treeview.heading(column, text=column)
-
-        res = df.loc[df['name'].str.lower().str.contains(value.lower())]
-        if len(res) == 0:
-            camp_treeview.insert("", "end", values=['No results found'])
-        else:
-            camp_treeview.insert("", "end", values=res.values[0].tolist())
-
-  
+        display_all(camp_treeview,'data/camps.csv',search=('campID',value))
 
 
 def show_camp(x):
@@ -195,4 +178,3 @@ def show_camp(x):
     
     camp_treeview.bind('<ButtonRelease-1>')
     Button(admin_camp_tab, text='Add a new camp', command=add_camp).pack()
-    
