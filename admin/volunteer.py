@@ -4,6 +4,34 @@ import numpy
 import pandas as pd
 from utilities import check_blanks, delete_popups, display_all, clear_treeview
 
+
+def volunteer_activation():
+    
+    selected_volunteer = treeview.focus()
+    try:
+        selected_volunteer = treeview.item(selected_volunteer)['values'][0]
+    except IndexError:
+        messagebox.showerror('Please Select a Volunteer', 'Please select a Volunteer you wish to activate/deactivate.')
+    else:
+        # NOT COMPLETE YET --> 
+
+        df = pd.read_csv('data/volunteers.csv')
+        username_index = df.index[df['username'] == selected_volunteer].tolist()
+        #df.loc[df[]]
+
+        df.at[username_index[0], 'activation'] = False
+        df.to_csv('data/volunteers.csv',index=False)
+        clear_treeview(treeview)
+        display_all(treeview,'data/volunteers.csv',cols_to_hide=['password'])
+
+        # delete_confirmation = messagebox.askquestion('Delete Volunteer Plan' ,
+        # 'You are about to delete a volunteer do you wish to continue?')
+        # if delete_confirmation == 'yes':
+        #     # Remove the row
+            
+        ## <---    
+ 
+
 def delete_volunteer_confirm():
     """
     Asks user if they are sure they want to delete a volunteer, then deletes it.
@@ -86,6 +114,5 @@ def main(x):
     
     treeview.bind('<ButtonRelease-1>')
 
-    #Button(emergencyplan_tab, text='Add a new plan', command=add_plan).pack()
-    #Button(emergencyplan_tab, text='Edit Plan', command=edit_plan_confirm).pack()
-    Button(volunteer_tab, text='Delete Volunteerg', command=delete_volunteer_confirm).pack()
+    Button(volunteer_tab, text='Activate/Deactive Volunteer', command=volunteer_activation).pack()
+    Button(volunteer_tab, text='Delete Volunteer', command=delete_volunteer_confirm).pack()

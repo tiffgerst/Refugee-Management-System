@@ -10,10 +10,6 @@ import hashlib
 import binascii
 
 
-isLoggedIn_vol = False
-isLoggedIn_adm = False
-
-
 def hash_password(password):
     """
     Hash a password for storing
@@ -51,7 +47,6 @@ def login_admin():
     ad_p_entry = passw_var_ad.get()
 
     if ad_u_entry == 'Admin' and ad_p_entry == 'root':
-        isLoggedIn_adm = True
         Label(main_screen, text='Login Successful', fg='Green').pack()
         main_screen.destroy()
         ad.admin_logged_in()
@@ -80,7 +75,6 @@ def login_volunteer():
         # make sure its a string before comparing
         if verify_password(stored_password, p_entry):
             Label(main_screen, text='Login Successful', fg='Green').pack()
-            isLoggedIn_vol = True
             main_screen.destroy()
             volunteer_logged_in()
         else:
