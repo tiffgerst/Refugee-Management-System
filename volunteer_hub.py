@@ -4,7 +4,7 @@ from tkinter import ttk
 
 def volunteer_logged_in():
     """
-    creates a new window for voluneer dashboard
+    creates a new window for volunteer dashboard
     """
 
     volunteer_screen = Tk()
