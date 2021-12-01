@@ -83,7 +83,7 @@ def login_volunteer():
             Label(main_screen, text='Login Successful', fg='Green').pack()
             isLoggedIn_vol = True
             main_screen.destroy()
-            volunteer_logged_in()
+            volunteer_logged_in(u_entry)
         else:
             Label(main_screen, text='Password Incorrect please try again', fg='red').pack()
 
