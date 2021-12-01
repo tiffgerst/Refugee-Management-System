@@ -100,6 +100,30 @@ def add_camp():
     Button(success_popup, text="OK",command=lambda: delete_popups([success_popup,add_new_camp_popup])).pack()
 
 
+def edit_camp_shelter(sign):
+    selected_camp = treeview.focus()
+    
+    try:
+        # Try and index the selected camp
+        selected_camp = treeview.item(selected_camp)['values'][1]
+    except IndexError:
+        # No camp selected
+        messagebox.showerror('Please Select a Plan', 'Please select a plan you wish to edit.')
+
+    global shelter_delta
+    shelter_delta = shelter_delta.get()
+
+    # Modify
+    df = pd.read_csv('data/camps.csv')
+    if sign == "+":
+        df.loc[df['campID'] == selected_camp,'shelter'] += shelter_delta
+    else:
+        df.loc[df['campID'] == selected_camp,'shelter'] -= shelter_delta
+
+    df.to_csv('data/camps.csv',index=False)
+    display_all(treeview,'data/camps.csv')
+    return
+
 def search_camp_name(e):
     """
     search logic for camp name
@@ -177,3 +201,12 @@ def main(x):
     treeview.bind('<ButtonRelease-1>')
     Button(admin_camp_tab, text='Add a new camp', command=add_camp_window).pack()
     Button(admin_camp_tab, text='Delete camp', command=delete_camp).pack()
+    
+    # Make a frame to pack +,- and entry for edit shelter
+    shelter_frame = LabelFrame(admin_camp_tab)
+    global shelter_delta
+    shelter_delta = IntVar()
+    Button(shelter_frame, text='+', command=lambda: edit_camp_shelter('+')).pack(side=LEFT)
+    Button(shelter_frame, text='-', command=lambda: edit_camp_shelter('-')).pack(side=LEFT)
+    Entry(shelter_frame,textvariable=shelter_delta).pack(side=LEFT)
+    shelter_frame.pack()
