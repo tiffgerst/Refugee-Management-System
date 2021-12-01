@@ -1,6 +1,6 @@
 from tkinter import *
 from tkinter import ttk, messagebox
-import admin.camp as adminCamp
+import admin.camp as ac
 import admin.plan as ap
 import admin.volunteer as av
 import LoginGUI
@@ -57,8 +57,8 @@ def admin_logged_in():
     admin_hub_notebook.add(admin_camp_tab, text = "Manage Camps")
     
     Button(admin_screen, text="Logout", command=logout).pack()
-    adminCamp.show_camp(admin_camp_tab)
 
+    ac.main(admin_camp_tab)
     ap.main(emergencyplan_tab)
     av.main(manage_volunteer_tab)
     

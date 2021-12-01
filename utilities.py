@@ -2,18 +2,22 @@ import tkinter as tk
 from datetime import datetime
 import pandas as pd
 
-def check_blanks(form,parent):
+def check_blanks(name,form,parent):
     """
     Args
     ----
+    name : str
+        one of: camp, plan
+    
     form : dict
         key = str of attribute name
         value = the value entered by the user
-    parent : tkinter
+    
+    parent : tkinter object
     """
     for key in form:
         if form[key] == "":
-            message1 = 'Invalid Plan '+key.title()
+            message1 = 'Invalid '+name+' '+key.title()
             message2 = 'Please do not leave the '+key+' entry blank.'
             tk.messagebox.showerror(message1,message2, parent=parent)
             return False
@@ -26,13 +30,20 @@ def check_date(date,format,parent):
     Args
     ----
     date : str
+    
     format : str
         the desired date format e.g. %d %b %Y
+
+    Returns
+    -------
+    str or bool
+        timestamp if the date is valid
+        False if not
     """
     
     try:
         timestamp = datetime.strptime(date,format)
-        return timestamp
+        return timestamp.strftime('%d %b %Y')
     except:
         tk.messagebox.showerror("Invalid Plan Date","Please enter date in the format "+format, parent=parent)
         return False
@@ -58,13 +69,17 @@ def display_all(parent,csv,**kwargs):
     Args
     ----
     parent - treeview object
+
     csv - str
         the location of the csv e.g. "data/volunteers.csv"
-    cols_to_hide (optional) - list
+
+    cols_to_hide - list of strings (optional) 
         a list of columns to hide
     """
+    
     cols_to_hide = kwargs.get("cols_to_hide",None)
     search = kwargs.get('search',None)
+    parent.delete(*parent.get_children())
 
     df = pd.read_csv(csv)
     
@@ -82,7 +97,3 @@ def display_all(parent,csv,**kwargs):
 
     for _,row in df.iterrows():
         parent.insert("", "end", values=list(row))
-
-
-def clear_treeview(treeview):
-    treeview.delete(*treeview.get_children())
