@@ -71,11 +71,6 @@ def modify_plan_window(add):
     modify_popup.title('Editor')
     modify_popup.geometry('600x500')
     modify_popup.configure(bg='#F2F2F2')
-
-    Label(modify_popup, text="Please edit the following details:",
-        width="300", height="3",
-        font=("Calibri bold", 25),
-        bg='grey', fg='white').pack()
     
     # Define some variables to be used as inputs
     plan_name = StringVar()
@@ -84,27 +79,41 @@ def modify_plan_window(add):
     plan_location = StringVar()
     plan_start_date = StringVar()
     plan_end_date = StringVar()
+
+    names = ['Name: *','Type: *','Description: *','Location: *','Start Date: *\n(format: 1 Jul 2019)','End Date\n(format: 1 Jul 2019)']
+    textvariables = [plan_name,plan_type,plan_description,plan_location,plan_start_date,plan_end_date]
     
     if add == False:
+        # We shouldn't be able to modify the plan name if we are editting
+        names.pop(0)
+        textvariables.pop(0)
+        
         # Extract information about the plan being edited
         # These attributes will later be used as defaults
         selected_plan = plan_treeview.focus()
         defaults = list(plan_treeview.item(selected_plan)['values'])
         global default_plan_name
         default_plan_name = defaults[0]
+        defaults.pop(0)
 
         # If end_date is null (stored as "nan") convert it to empty str
         if defaults[-1] == 'nan': defaults[-1] = ''
         else: defaults[-1] = datetime.strftime(pd.to_datetime(defaults[-1]),"%d %b %Y")
         
         defaults[-2] = datetime.strftime(pd.to_datetime(defaults[-2]),"%d %b %Y")
-    
-    Label(modify_popup, text="", bg='#F2F2F2').pack()
 
-    for i,(name,textvariable) in enumerate(zip(
-        ['Name: *','Type: *','Description: *','Location: *','Start Date: *\n(format: 1 Jul 2019)','End Date\n(format: 1 Jul 2019)'],
-        [plan_name,plan_type,plan_description,plan_location,plan_start_date,plan_end_date])):
-        
+        title = default_plan_name+"\nPlease edit the following details:"
+    else:
+        title = "Please enter plan details"
+    
+    Label(modify_popup, text=title,
+        width="300", height="3",
+        font=("Calibri bold", 25),
+        bg='grey', fg='white').pack()
+
+    Label(modify_popup, text="* = required", bg='#F2F2F2').pack()
+
+    for i,(name,textvariable) in enumerate(zip(names,textvariables)):
         # Create label
         Label(modify_popup, text='Plan '+name, bg='#F2F2F2', font=("Calibri", 15)).pack()
         label = Entry(modify_popup, textvariable=textvariable, width='30', font=("Calibri", 10))
