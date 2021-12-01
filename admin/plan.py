@@ -1,11 +1,8 @@
 from tkinter import *
 from tkinter import ttk, messagebox
 import pandas as pd
-import sys
-import os.path
-sys.path.append(
-    os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)))
 from utilities import check_blanks, check_date, delete_popups
+from datetime import datetime
 import admin.camp as camp
 
 
@@ -75,11 +72,6 @@ def modify_plan_window(add):
     modify_popup.title('Editor')
     modify_popup.geometry('600x500')
     modify_popup.configure(bg='#F2F2F2')
-
-    Label(modify_popup, text="Please edit the following details:",
-        width="300", height="3",
-        font=("Calibri bold", 25),
-        bg='grey', fg='white').pack()
     
     # Define some variables to be used as inputs
     plan_name = StringVar()
@@ -88,21 +80,41 @@ def modify_plan_window(add):
     plan_location = StringVar()
     plan_start_date = StringVar()
     plan_end_date = StringVar()
+
+    names = ['Name: *','Type: *','Description: *','Location: *','Start Date: *\n(format: 1 Jul 2019)','End Date\n(format: 1 Jul 2019)']
+    textvariables = [plan_name,plan_type,plan_description,plan_location,plan_start_date,plan_end_date]
     
     if add == False:
+        # We shouldn't be able to modify the plan name if we are editting
+        names.pop(0)
+        textvariables.pop(0)
+        
         # Extract information about the plan being edited
         # These attributes will later be used as defaults
         selected_plan = plan_treeview.focus()
         defaults = list(plan_treeview.item(selected_plan)['values'])
         global default_plan_name
         default_plan_name = defaults[0]
-    
-    Label(modify_popup, text="", bg='#F2F2F2').pack()
+        defaults.pop(0)
 
-    for i,(name,textvariable) in enumerate(zip(
-        ['Name: *','Type: *','Description: *','Location: *','Start Date: *\n(format: 1 Jul 2019)','End Date\n(format: 1 Jul 2019)'],
-        [plan_name,plan_type,plan_description,plan_location,plan_start_date,plan_end_date])):
+        # If end_date is null (stored as "nan") convert it to empty str
+        if defaults[-1] == 'nan': defaults[-1] = ''
+        else: defaults[-1] = datetime.strftime(pd.to_datetime(defaults[-1]),"%d %b %Y")
         
+        defaults[-2] = datetime.strftime(pd.to_datetime(defaults[-2]),"%d %b %Y")
+
+        title = default_plan_name+"\nPlease edit the following details:"
+    else:
+        title = "Please enter plan details"
+    
+    Label(modify_popup, text=title,
+        width="300", height="3",
+        font=("Calibri bold", 25),
+        bg='grey', fg='white').pack()
+
+    Label(modify_popup, text="* = required", bg='#F2F2F2').pack()
+
+    for i,(name,textvariable) in enumerate(zip(names,textvariables)):
         # Create label
         Label(modify_popup, text='Plan '+name, bg='#F2F2F2', font=("Calibri", 15)).pack()
         label = Entry(modify_popup, textvariable=textvariable, width='30', font=("Calibri", 10))
@@ -126,8 +138,10 @@ def modify_table(add):
     ----
     add : bool
         is it an edit (False) or an add (True operation)
-    Replaces the values edited by the user and adds them to the csv
-    Refreshes the treeview and gives a popup saying it was successful
+    
+    -> Validates a proposed edit or addition
+    -> Changes the csv file if valid 
+    -> Refreshes the treeview and gives a popup saying it was successful
     """
 
     global success_popup
@@ -185,6 +199,10 @@ def modify_table(add):
 def is_valid_plan(parent,plan_na,plan_ty,plan_loc,plan_desc,plan_start,plan_end):
     """
     Generic plan validation used for edit and add
+
+    Checks for blanks and dates
+
+    Returns None if invalid
     """
     
     # Check for blanks
@@ -258,7 +276,8 @@ def search_plan_name(e):
         if len(res) == 0:
             plan_treeview.insert("", "end", values=['No results found'])
         else:
-            plan_treeview.insert("", "end", values=res.values[0].tolist())
+            for i in range(len(res)):
+                plan_treeview.insert("", "end", values=res.values[i].tolist())
 
 
 def show_emergency_plan(x):
@@ -277,24 +296,24 @@ def show_emergency_plan(x):
     Label(emergencyplan_tab, text='Here are all your emergency plans:',
         width='50', font=('Calibri', 10)).pack()
 
-    #creates a frame within the emergency plan tab frame to display the csv
+    # Creates a frame within the emergency plan tab frame to display the csv
     emergencyplan_viewer = LabelFrame(emergencyplan_tab, width=600, height=300, text='Current Emergency Plans', bg='#F2F2F2')
     emergencyplan_viewer.pack()
     plan_treeview = ttk.Treeview(emergencyplan_viewer)
 
-    #displays the scroll bars for horizontal and vertical scrolling
+    # Displays the scroll bars for horizontal and vertical scrolling
     treescrolly = Scrollbar(emergencyplan_viewer, orient='vertical', command=plan_treeview.yview)
     treescrolly.pack(side='right', fill='y')
     treescrollx = Scrollbar(emergencyplan_viewer, orient='horizontal', command=plan_treeview.xview)
     treescrollx.pack(side='bottom', fill='x')
     plan_treeview.configure(xscrollcommand=treescrollx.set, yscrollcommand=treescrolly.set)
 
-    #displays the search bar
+    # Displays the search bar
     search_entry = StringVar()
     search_bar = Entry(emergencyplan_viewer, textvariable=search_entry)
     search_bar.pack()
-    #search bar gets updated everytime a key is released
-    #i.e when soemone types something
+    # Search bar gets updated everytime a key is released
+    # i.e when someone types something
     search_bar.bind("<KeyRelease>", search_plan_name)
 
     update_treeview()
