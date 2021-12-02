@@ -24,7 +24,7 @@ def edit_volunteer():
         form={
             'camp_name':vol_camp,
             'phone_number':vol_phone,
-            'mail':vol_em
+            'email':vol_em
         },
         parent=editor_popup)
     if res == False: return
@@ -99,7 +99,7 @@ def edit_popup(screen, user):
     options = OptionMenu(editor_popup, camp_name , *all_camps)
     options.pack()
     
-    Label(editor_popup, text='Phone Number *', bg='#F2F2F2', font=("Calibri", 15)).pack()
+    Label(editor_popup, text='Phone Number: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
     vol_phonenumber_label = Entry(editor_popup, textvariable=vol_phonenumber, width="30", font=("Calibri", 10))
     vol_phonenumber_label.insert(END, row.values[0][4])
     vol_phonenumber_label.pack()

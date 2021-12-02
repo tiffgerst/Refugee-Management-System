@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import messagebox, ttk
 from csv import writer
 import pandas as pd
-from volunteers_logged_in import *
+import volunteers_logged_in
 from admin.plan import *
 import admin_logged_in as ad
 from utilities import hash_password, verify_password
@@ -51,7 +51,7 @@ def login_volunteer():
         if verify_password(stored_password, p_entry) and activation_status == True:
             Label(main_screen, text='Login Successful', fg='Green').pack()
             main_screen.destroy()
-            volunteer_show(u_entry)
+            volunteers_logged_in.volunteer_show(u_entry)
         elif activation_status == False:
             messagebox.showerror('Acount Deactivated', "Your account has been deactivated, please contact the e-Adam administrator.", parent=main_screen)
         else:
@@ -97,7 +97,7 @@ def register_user():
         with open('data/volunteers.csv', 'a', newline='') as file:
             f = writer(file)
             f.writerows(
-                [[u_entry, n_entry, p_hashed,camp,num_entry, mail_entry, medic_entry, activation]])
+                [[u_entry, n_entry, p_hashed, camp, num_entry, mail_entry, medic_entry, activation]])
         register_success_popup()
 
 

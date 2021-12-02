@@ -55,4 +55,4 @@ def volunteer_show(username):
     volunteer_screen.mainloop()
 
 if __name__ == '__main__':
-    volunteer_logged_in()
+    volunteer_show()
