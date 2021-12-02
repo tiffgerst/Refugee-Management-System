@@ -111,6 +111,8 @@ def edit_popup(screen, user):
     vol_email_label.insert(END, row.values[0][4])
     vol_email_label.pack()
 
-    Button(editor_popup, text="Edit Refugee", height="2", width="30", command=edit_volunteer).pack(pady=10)
+    Button(editor_popup, text="Done", height="2", width="30", command=edit_volunteer).pack(pady=10)
+
+  
 
 

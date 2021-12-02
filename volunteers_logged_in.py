@@ -1,7 +1,18 @@
 from tkinter import *
-from tkinter import ttk
+from tkinter import ttk, messagebox
 import volunteers.manage_refugees as mr
 import volunteers.edit_information as ed
+import LoginGUI
+
+def logout():
+    """
+    Allows user to logout
+    """
+    logout_q = messagebox.askquestion('Logout', 'Are you sure you want to log out?')
+
+    if logout_q == 'yes':
+        volunteer_screen.destroy()
+        LoginGUI.main_account_screen()
 
 def volunteer_logged_in(username):
     '''
@@ -31,7 +42,7 @@ def volunteer_logged_in(username):
 
     manage_refugees_tab = Frame(volunteer_hub_notebook, width=600, height= 620, bg='#F2F2F2')
     manage_refugees_tab.pack(fill='both', expand = True)
-
+    Button(volunteer_screen, text="Logout", command=logout).pack()
     # edit_information_tab = Frame(volunteer_hub_notebook, width=500, height= 620, bg='#F2F2F2')
     # edit_information_tab.pack(fill='both', expand= True)
 
