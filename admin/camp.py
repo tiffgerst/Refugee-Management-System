@@ -109,16 +109,21 @@ def edit_camp_shelter(sign):
     except IndexError:
         # No camp selected
         messagebox.showerror('Please Select a Plan', 'Please select a plan you wish to edit.')
+        
 
     global shelter_delta
-    shelter_delta = shelter_delta.get()
-
+    shelter_deltas = shelter_delta.get()
+    try:
+        shelter_deltas = int(shelter_deltas)
+    except:
+        messagebox.showerror('Please enter an integer')
+        return
     # Modify
     df = pd.read_csv('data/camps.csv')
     if sign == "+":
-        df.loc[df['campID'] == selected_camp,'shelter'] += shelter_delta
+        df.loc[df['campID'] == selected_camp,'shelter'] += shelter_deltas
     else:
-        df.loc[df['campID'] == selected_camp,'shelter'] -= shelter_delta
+        df.loc[df['campID'] == selected_camp,'shelter'] -= shelter_deltas
 
     df.to_csv('data/camps.csv',index=False)
     display_all(treeview,'data/camps.csv')
@@ -205,7 +210,7 @@ def main(x):
     # Make a frame to pack +,- and entry for edit shelter
     shelter_frame = LabelFrame(admin_camp_tab)
     global shelter_delta
-    shelter_delta = IntVar()
+    shelter_delta = StringVar()
     Button(shelter_frame, text='+', command=lambda: edit_camp_shelter('+')).pack(side=LEFT)
     Button(shelter_frame, text='-', command=lambda: edit_camp_shelter('-')).pack(side=LEFT)
     Entry(shelter_frame,textvariable=shelter_delta).pack(side=LEFT)
