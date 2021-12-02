@@ -51,7 +51,7 @@ def login_volunteer():
         if verify_password(stored_password, p_entry) and activation_status == True:
             Label(main_screen, text='Login Successful', fg='Green').pack()
             main_screen.destroy()
-            volunteer_logged_in(u_entry)
+            volunteer_show(u_entry)
         elif activation_status == False:
             messagebox.showerror('Acount Deactivated', "Your account has been deactivated, please contact the e-Adam administrator.", parent=main_screen)
         else:

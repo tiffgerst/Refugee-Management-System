@@ -41,7 +41,7 @@ def refugee_edit_window():
     global refugee_first_name
     global num_relatives
     global medical_conditions
-    global camp_id
+    global camp_name
     global on_site
     global default_first_name
 
@@ -59,7 +59,7 @@ def refugee_edit_window():
     # Define some variables to be used as inputs
     refugee_first_name = StringVar()
     refugee_family_name = StringVar()
-    camp_id = StringVar()
+    camp_name = StringVar()
     medical_conditions = StringVar()
     num_relatives = StringVar()
     on_site = BooleanVar()
@@ -70,7 +70,7 @@ def refugee_edit_window():
     # Set the default strings on the form using existing data of event
     default_first_name = refugee_treeview.item(selected_refugee)['values'][0]
     default_family_name = refugee_treeview.item(selected_refugee)['values'][1]
-    default_camp_id = refugee_treeview.item(selected_refugee)['values'][2]
+    default_camp_name = refugee_treeview.item(selected_refugee)['values'][2]
     default_medical_conditions = refugee_treeview.item(selected_refugee)['values'][3]
     default_num_relatives = refugee_treeview.item(selected_refugee)['values'][4]
     default_on_site = refugee_treeview.item(selected_refugee)['values'][5]
@@ -87,9 +87,9 @@ def refugee_edit_window():
     refugee_family_name_label.pack()
 
     Label(editor_popup, text='Camp ID: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
-    camp_id_label = Entry(editor_popup, textvariable=camp_id, width="30", font=("Calibri", 10))
-    camp_id_label.insert(END, default_camp_id)
-    camp_id_label.pack()
+    camp_name_label = Entry(editor_popup, textvariable=camp_name, width="30", font=("Calibri", 10))
+    camp_name_label.insert(END, default_camp_name)
+    camp_name_label.pack()
 
     Label(editor_popup, text='Medical Conditions: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
     medical_conditions = Entry(editor_popup, textvariable=medical_conditions, width="30", font=("Calibri", 10))
@@ -115,15 +115,16 @@ def edit_refugee():
     # Retrieve the variables using .get() - value is str
     refugee_fi = refugee_first_name.get()
     refugee_fa = refugee_family_name.get()
-    refugee_camp = camp_id.get()
+    refugee_camp = camp_name.get()
     refugee_cond = medical_conditions.get()
     refugee_rel = num_relatives.get()
     refugee_on = on_site.get()
 
     # Check for blanks
     res = check_blanks(
+        name=refugee_camp,
         form={
-        'first_name':refugee_fi,'family_name':refugee_fa,'camp_id':refugee_camp,
+        'first_name':refugee_fi,'family_name':refugee_fa,'camp_name':refugee_camp,
         'medical_conditions':refugee_cond,'num_relatives':refugee_rel},
         parent=editor_popup)
     if res == False: return
@@ -152,7 +153,7 @@ def delete_refugee_confirm():
     """
     refugee_fi = refugee_first_name.get()
     refugee_fa = refugee_family_name.get()
-    refugee_camp = camp_id.get()
+    refugee_camp = camp_name.get()
     refugee_cond = medical_conditions.get()
     refugee_rel = num_relatives.get()
     refugee_on = on_site.get()
@@ -208,7 +209,7 @@ def add_refugee():
     global refugee_first_name
     global num_relatives
     global medical_conditions
-    global camp_id
+    global camp_name
     global on_site
 
     add_new_refugee_popup = Toplevel(refugee_tab)
@@ -225,18 +226,15 @@ def add_refugee():
     refugee_first_name = StringVar()
     num_relatives = StringVar()
     medical_conditions = StringVar()
-    camp_id = StringVar()
+    camp_name = StringVar()
 
     Label(add_new_refugee_popup, text="", bg='#F2F2F2').pack()
 
     Label(add_new_refugee_popup, text='First Name: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
     Entry(add_new_refugee_popup, textvariable=refugee_first_name, width='30', font=("Calibri", 10)).pack()
 
-    Label(add_new_refugee_popup, text='Family Type: *', background='#F2F2F2', font=("Calibri", 15)).pack()
+    Label(add_new_refugee_popup, text='Family Name: *', background='#F2F2F2', font=("Calibri", 15)).pack()
     Entry(add_new_refugee_popup, textvariable=refugee_family_name, width="30", font=("Calibri", 10)).pack()
-
-    Label(add_new_refugee_popup, text='Camp ID: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
-    Entry(add_new_refugee_popup, textvariable=camp_id, width="30", font=("Calibri", 10)).pack()
 
     Label(add_new_refugee_popup, text='Medical Conditions: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
     Entry(add_new_refugee_popup, textvariable=medical_conditions, width="30", font=("Calibri", 10)).pack()
@@ -258,21 +256,22 @@ def save_new_refugee():
     # Retrieve the variables using .get() - value is str
     refugee_fi = refugee_first_name.get()
     refugee_fa = refugee_family_name.get()
-    refugee_camp = camp_id.get()
+    refugee_camp = camp_name.get()
     refugee_rel = num_relatives.get()
     refugee_cond = medical_conditions.get()
 
     # Check for blanks
     res = check_blanks(
+        name= refugee_camp,
         form={
-        'first_name':refugee_fi,'family_name':refugee_fa,'camp_id':refugee_camp,
+        'first_name':refugee_fi,'family_name':refugee_fa,'camp_name':refugee_camp,
         'num_relatives':refugee_rel,'medical_conditions':refugee_cond, 'on_site': 'True'},
         parent=add_new_refugee_popup)
     if res == False: return
 
     # Update the CSV file
     new_row = pd.DataFrame({
-        'first_name': [refugee_fi],'family_name': [refugee_fa],'camp_id': [refugee_camp],
+        'first_name': [refugee_fi],'family_name': [refugee_fa],'camp_name': [refugee_camp],
         'num_relatives': [refugee_rel],'medical_conditions': [refugee_cond], 'on_site': 'True'
         })
     df = df.append(new_row, ignore_index=True)

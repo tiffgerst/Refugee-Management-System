@@ -14,7 +14,7 @@ def logout():
         volunteer_screen.destroy()
         LoginGUI.main_account_screen()
 
-def volunteer_logged_in(username):
+def volunteer_show(username):
     '''
     Displays admin hub as well has the various
     tabs for the different actions an admin can do
