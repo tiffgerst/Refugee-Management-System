@@ -16,26 +16,25 @@ def edit_volunteer():
     # Retrieve the variables using .get() - value is str
     vol_user = vol_username.get()
     vol_pass = vol_password.get()
-    vol_camp = camp_id.get()
+    vol_camp = camp_name.get()
     vol_phone = vol_phonenumber.get()
     vol_em = vol_email.get()
 
-    # Hashing
-    
-
     # Check for blanks
     res = check_blanks(
+        name= vol_camp,
         form={
-        'username':vol_user,'password':vol_pass,'camp_id':vol_camp,
+        'username':vol_user, 'password':vol_pass,'camp_name':vol_camp,
         'phone_number':vol_phone,'mail':vol_em},
         parent=editor_popup)
     if res == False: return
 
     # Open csv -> change the volunteer attributes -> save csv
     df = pd.read_csv('data/volunteers.csv')
-    vol_medic = df.loc[df['username'] == username].values[0][5]
-    vol_avail = df.loc[df['username'] == username].values[0][6]
-    updated_row = [vol_user, hash_password(vol_pass), vol_camp, vol_phone, vol_em, vol_medic, vol_avail]
+    vol_name = df.loc[df['username'] == username].values[0][1]
+    vol_medic = df.loc[df['username'] == username].values[0][6]
+    vol_avail = df.loc[df['username'] == username].values[0][7]
+    updated_row = [vol_user, vol_name, hash_password(vol_pass), vol_camp, vol_phone, vol_em, vol_medic, vol_avail]
     df.loc[df['username'] == username] = [updated_row]
     df.to_csv('data/volunteers.csv',index=False)
 
@@ -52,13 +51,13 @@ def edit_popup(screen, user):
     global username
     global vol_username
     global vol_password
-    global camp_id
+    global camp_name
     global vol_phonenumber
     global vol_email
 
 
     df = pd.read_csv("./data/camps.csv")
-    all_camps = df["campID"]
+    all_camps = df["camp_name"]
     all_camps = list(all_camps)
     
 
@@ -77,13 +76,13 @@ def edit_popup(screen, user):
     vol_password = StringVar()
     vol_email = StringVar()
     vol_phonenumber = StringVar()
-    camp_id = StringVar()
+    camp_name = StringVar()
 
     username = user
     df = pd.read_csv('data/volunteers.csv')
     row = df.loc[df['username'] == username]
 
-    camp_id.set(all_camps[0])
+    camp_name.set(all_camps[0])
 
     Label(editor_popup, text="", bg='#F2F2F2').pack()
     
@@ -97,18 +96,18 @@ def edit_popup(screen, user):
     vol_password_label.pack()
     
     Label(editor_popup, text='Camp ID: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
-    options = OptionMenu(editor_popup, camp_id , *all_camps)
+    options = OptionMenu(editor_popup, camp_name , *all_camps)
     options.pack()
 
     
     Label(editor_popup, text='Phone Number *', bg='#F2F2F2', font=("Calibri", 15)).pack()
     vol_phonenumber_label = Entry(editor_popup, textvariable=vol_phonenumber, width="30", font=("Calibri", 10))
-    vol_phonenumber_label.insert(END, row.values[0][3])
+    vol_phonenumber_label.insert(END, row.values[0][4])
     vol_phonenumber_label.pack()
     
     Label(editor_popup, text='Email: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
     vol_email_label = Entry(editor_popup, textvariable=vol_email, width="30", font=("Calibri", 10))
-    vol_email_label.insert(END, row.values[0][4])
+    vol_email_label.insert(END, row.values[0][5])
     vol_email_label.pack()
 
     Button(editor_popup, text="Done", height="2", width="30", command=edit_volunteer).pack(pady=10)

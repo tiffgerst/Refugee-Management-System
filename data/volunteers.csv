@@ -1,1 +1,2 @@
-username,full_name,password,camp_id,phone_number,email,medic,activation
+username,full_name,password,camp_name,phone_number,email,medic,activation
+user,Ewan,bc7a86ea36cecf1b7bc5407196780148d68c455c5b3da4b2538c21a9111736adb1e957904e9ef5df9fc2035ef44803f3b80f3a54c7df8391c42d7ff9d9d32ea556e7ab8f1af598f48d693b14f656e34ff33d387ff43804ba5a9d1abe1eef0582,Miron's house,12345,esafewf,False,True
