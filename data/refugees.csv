@@ -1,1 +1,2 @@
-family_name,first_name,num_relatives,medical_conditions,camp_id
+first_name,family_name,camp_id,medical_conditions,num_relatives,on_site
+Steve,Kiselev,0,PTSD,2,True

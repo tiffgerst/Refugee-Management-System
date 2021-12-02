@@ -18,7 +18,7 @@ def logout():
 
 def admin_logged_in():
     '''
-    Displays admin hub as well has the various 
+    Displays admin hub as well has the various
     tabs for the different actions an admin can do
     '''
 
@@ -26,7 +26,7 @@ def admin_logged_in():
     global manage_volunteer_tab
     global admin_screen
     global admin_camp_tab
-    
+
     admin_screen = Tk()
     admin_screen.title("Admin Hub")
     admin_screen.geometry('820x620')
@@ -61,7 +61,8 @@ def admin_logged_in():
     ac.main(admin_camp_tab)
     ap.main(emergencyplan_tab)
     av.main(manage_volunteer_tab)
-    
+    ac.show_camp(admin_camp_tab)
+
     admin_screen.mainloop()
 
 if __name__ == '__main__':

@@ -3,9 +3,6 @@ from tkinter import ttk
 
 
 def volunteer_logged_in():
-    """
-    creates a new window for voluneer dashboard
-    """
 
     volunteer_screen = Tk()
     volunteer_screen.title("Volunteer Homescreen")

@@ -1,41 +1,12 @@
-from os import name
-import os
 from tkinter import *
 from tkinter import messagebox, ttk
 from csv import writer
 import pandas as pd
-from volunteer_hub import *
+from volunteers_logged_in import *
 from admin.plan import *
 import admin_logged_in as ad
-import hashlib
-import binascii
+from utilities import hash_password, verify_password
 
-
-def hash_password(password):
-    """
-    Hash a password for storing
-    returns hex string
-    """
-    salt = hashlib.sha256(os.urandom(60)).hexdigest().encode('ascii')
-    pwdhash = hashlib.pbkdf2_hmac('sha512', password.encode('utf-8'),
-                                  salt, 100000)
-    pwdhash = binascii.hexlify(pwdhash)
-    return (salt + pwdhash).decode('ascii')
-
-
-def verify_password(stored_password, provided_password):
-    """
-    Verify a stored hashed password against one provided by user
-    returns boolean value
-    """
-    salt = stored_password[:64]
-    stored_password = stored_password[64:]
-    pwdhash = hashlib.pbkdf2_hmac('sha512',
-                                  provided_password.encode('utf-8'),
-                                  salt.encode('ascii'),
-                                  100000)
-    pwdhash = binascii.hexlify(pwdhash).decode('ascii')
-    return pwdhash == stored_password
 
 def login_admin():
     """
@@ -54,7 +25,7 @@ def login_admin():
     else:
         messagebox.showerror('Invalid Username or Password',
         "This sign in screen is made for admins only. \nIf you are a volunteer please either sign in or register under"
-        " the volunteer sign in tab thank you.", 
+        " the volunteer sign in tab thank you.",
         parent=main_screen)
 
 def login_volunteer():
@@ -80,7 +51,7 @@ def login_volunteer():
         if verify_password(stored_password, p_entry) and activation_status == True:
             Label(main_screen, text='Login Successful', fg='Green').pack()
             main_screen.destroy()
-            volunteer_logged_in()
+            volunteer_logged_in(u_entry)
         elif activation_status == False:
             messagebox.showerror('Acount Deactivated', "Your account has been deactivated, please contact the e-Adam administrator.", parent=main_screen)
         else:
@@ -91,7 +62,7 @@ def login_volunteer():
 
 
 def register_user():
-    """ 
+    """
     Actually adds the user to the database
     Does form validation with appropriate error messages
     (checks if any field was emtpy/already in the database
@@ -130,7 +101,7 @@ def register_user():
 
 
 def register_success_popup():
-    """ 
+    """
     Creates pop-up to show successful registration
     """
     global register_success
@@ -196,8 +167,9 @@ def sign_up_volunteer():
     Label(sign_up_screen, text='Phone Number: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
     Entry(sign_up_screen, textvariable=phonenumber_entry, width="30", font=("Calibri", 10)).pack()
 
-    Label(sign_up_screen, text='Password: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
+    Label(sign_up_screen, text='New Password: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
     Entry(sign_up_screen, textvariable=password_entry, show='*', width="30", font=("Calibri", 10)).pack()
+    
     Label(sign_up_screen, text='Camp: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
     options = OptionMenu(sign_up_screen, camp_id , *all_camps)
     options.pack()
@@ -260,8 +232,8 @@ def admin_signin_tab():
 
     global name_var_ad
     global passw_var_ad
-        
-    
+
+
     # empty text label for formatting
     Label(admin_sign_in_tab, text="", bg='#F2F2F2').pack()
     Label(admin_sign_in_tab, text="", bg='#F2F2F2').pack()
@@ -320,7 +292,7 @@ def main_account_screen():
 
     admin_sign_in_tab = Frame(account_screen_notebook, width=600, height= 500, bg='#F2F2F2')
     admin_sign_in_tab.pack(fill='both', expand=True)
-    
+
     # adds those frames when the tab is clicked
     account_screen_notebook.add(volunteer_sign_in_tab, text='Volunteer Sign in')
     account_screen_notebook.add(admin_sign_in_tab, text='Admin Sign In')
