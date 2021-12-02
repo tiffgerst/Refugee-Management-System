@@ -1,91 +1,21 @@
-from os import name
 from tkinter import *
 from tkinter import ttk, messagebox
+from numpy import string_
 import pandas as pd
-from utilities import check_blanks, delete_popups
-from csv import writer
+import sys
+sys.path.append("../")
+from utilities import check_blanks, delete_popups, display_all
 
 
-def clear_treeview():
-    """
-      Clears the table so that it can be reloaded 
-    """
-
-    camp_treeview.delete(*camp_treeview.get_children())
-
-
-def update_treeview():
-    """
-    Tree view logic for viewing emergency plan csv
-    """
-
-    #opens csv using pandas and converts columns to list
-    #also makes the first columns headings
-    df = pd.read_csv('data/camps.csv')
-    camp_treeview["column"] = list(df.columns)
-    camp_treeview["show"] = "headings"
-
-    for column in camp_treeview["column"]:
-        camp_treeview.heading(column, text=column)
-
-    #retrieves rows and displays them
-    for _,row in df.iterrows():
-        camp_treeview.insert("", "end", values=list(row.values))
-
-
-
-def camp_sucess_pop_up():
-    register_success = Toplevel(add_new_camp_popup)
-    register_success.title("Success")
-    Label(register_success, text="Camp creation was successful", fg='green').pack()
-    clear_treeview()
-    update_treeview()
-    Button(register_success, text="OK",command=lambda: delete_popups([register_success,add_new_camp_popup])).pack()
-
-def save_camp():
-    camps_df = pd.read_csv("./data/camps.csv")
-    emergency_plan = camp_plan.get()
-    shelter = camp_shelter.get()
-    food_rations = camp_food_rations.get()
-    name = camp_name.get()
-    other_camps = list(camps_df["campID"])
-    
-    if len(name) == 0:
-        messagebox.showerror(title="Invalid Camp Name", message= "The camp name cannot be left blank")
-    if name in other_camps:
-        messagebox.showerror(title="Invalid Camp Name", message= "The camp name is already taken")
-    elif len(shelter) == 0:
-        messagebox.showerror(title="Invalid Number of Beds", message= "The number of beds cannot be left blank")
-    elif len(food_rations) == 0:
-        messagebox.showerror(title="Invalid Number of Food Rations", message= "The number of food rations cannot be left blank")
-    try:
-        shelter = int(shelter)
-    except ValueError:
-        messagebox.showerror(title="Invalid Number of Beds", message= "The number of beds has to be an integer")
-    try:
-        food_rations = int(food_rations)
-    except ValueError:
-        messagebox.showerror(title="Invalid Number of Food Rations", message= "The number of food rations has to be an integer")
-        
-    if type(shelter) == int and type(food_rations) == int and name not in other_camps:
-        new_row = pd.DataFrame({
-            'emergency_plan_name': [emergency_plan],'campID': [name],'food_rations': [food_rations],
-            'shelter': [shelter]
-            })
-        camps_df = camps_df.append(new_row, ignore_index=True)
-        camps_df.to_csv('data/camps.csv',index=False)
-        camp_sucess_pop_up()
-        
-    
-    
-
-def add_camp():
+def add_camp_window(**kwargs):
+    default = kwargs.get('default',None)
     
     global camp_plan
     global camp_shelter
-    global camp_food_rations
     global camp_name 
     global add_new_camp_popup
+    global camp_country
+    global camp_city
     
     add_new_camp_popup = Toplevel(admin_camp_tab)
     add_new_camp_popup.geometry('600x500')
@@ -105,26 +35,104 @@ def add_camp():
     camp_name = StringVar()
     camp_plan = StringVar()
     camp_shelter = StringVar()
-    camp_food_rations = StringVar()
-
-    camp_plan.set(emergency_plans[0])
-   
+    camp_country = StringVar()
+    camp_city = StringVar()
     
+    
+    if default:
+        camp_plan.set(default)
+    else:
+        camp_plan.set(emergency_plans[0])
+   
     Label(add_new_camp_popup, text="", bg='#F2F2F2').pack()
 
     Label(add_new_camp_popup, text='Camp Name: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
     Entry(add_new_camp_popup, textvariable=camp_name, width='30', font=("Calibri", 10)).pack()
     Label(add_new_camp_popup, text='Emergency Plan: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
-    options = OptionMenu(add_new_camp_popup, camp_plan , *emergency_plans)
-    options.pack()
+    OptionMenu(add_new_camp_popup, camp_plan , *emergency_plans).pack()
+    Label(add_new_camp_popup, text='Country: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
+    Entry(add_new_camp_popup, textvariable=camp_country, width='30', font=("Calibri", 10)).pack()
+    Label(add_new_camp_popup, text='City: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
+    Entry(add_new_camp_popup, textvariable=camp_city, width='30', font=("Calibri", 10)).pack()
     Label(add_new_camp_popup, text='Number of Beds: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
     Entry(add_new_camp_popup, textvariable=camp_shelter, width='30', font=("Calibri", 10)).pack()
-    Label(add_new_camp_popup, text='Number of Food Rations: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
-    Entry(add_new_camp_popup, textvariable=camp_food_rations, width='30', font=("Calibri", 10)).pack()
-    Button(add_new_camp_popup, text="Add Camp", height="2", width="30", command=save_camp).pack(pady=10)
+    Button(add_new_camp_popup, text="Add Camp", height="2", width="30", command=add_camp).pack(pady=10)
     
+
+def add_camp():
+    camps_df = pd.read_csv("./data/camps.csv")
+    emergency_plan = camp_plan.get()
+    shelter = camp_shelter.get()
+    name = camp_name.get()
+    country = camp_country.get()
+    city = camp_city.get()
     
+    # Validation
+    if name in list(camps_df["camp_name"]):
+        messagebox.showerror(title="Invalid Camp Name", message= "The camp name is already taken",
+        parent=add_new_camp_popup)
+        return
     
+    blank_res = check_blanks(
+        name="Camp",
+        form={
+        'Name':name,'Beds':shelter, 'Country': country, 'City': city},
+        parent=add_new_camp_popup)
+    if blank_res == False: return
+    
+    try:
+        shelter = int(shelter)
+    except ValueError:
+        messagebox.showerror(title="Invalid Number of Beds", message= "The number of beds has to be an integer",
+        parent=add_new_camp_popup)
+        return
+    
+    # Everything is OK -> save
+    new_row = pd.DataFrame({
+        'camp_name': [name], 'emergency_plan_name': [emergency_plan], 'country':[country], 'city':[city], 'capacity': [shelter]
+        })
+    camps_df = camps_df.append(new_row, ignore_index=True)
+    camps_df.to_csv('data/camps.csv',index=False)
+    
+    display_all(treeview,'data/camps.csv')
+    
+    success_popup = Toplevel(add_new_camp_popup)
+    success_popup.title("Success")
+    Label(success_popup, text="Camp creation was successful", fg='green').pack()
+    Button(success_popup, text="OK",command=lambda: delete_popups([success_popup,add_new_camp_popup])).pack()
+
+
+def edit_camp_shelter(sign):
+    selected_camp = treeview.focus()
+    
+    try:
+        # Try and index the selected camp
+        selected_camp = treeview.item(selected_camp)['values'][0]
+    except IndexError:
+        # No camp selected
+        messagebox.showerror('Please Select a Plan', 'Please select a plan you wish to edit.')
+        
+
+    global shelter_delta
+    shelter_deltas = shelter_delta.get()
+    if shelter_deltas == "":
+        shelter_deltas = 1
+    try:
+        shelter_deltas = int(shelter_deltas)
+    except:
+        messagebox.showerror('Please enter an integer')
+        return
+    # Modify
+    df = pd.read_csv('data/camps.csv')
+    if sign == "+":
+        df.loc[df['camp_name'] == selected_camp,'capacity'] += shelter_deltas
+    else:
+        df.loc[df['camp_name'] == selected_camp,'capacity'] -= shelter_deltas
+
+    df.to_csv('data/camps.csv',index=False)
+    display_all(treeview,'data/camps.csv')
+    return
+
 def search_camp_name(e):
     """
     search logic for camp name
@@ -133,39 +141,45 @@ def search_camp_name(e):
     value = search_entry.get()
 
     if value == '':
-        clear_treeview()
-        update_treeview()
+        display_all(treeview,'data/camps.csv')
     else:
-        clear_treeview()
-        df = pd.read_csv('data/camps.csv')
-        camp_treeview["column"] = list(df.columns)
-        camp_treeview["show"] = "headings"
-        for column in camp_treeview["column"]:
-            camp_treeview.heading(column, text=column)
-
-        res = df.loc[df['name'].str.lower().str.contains(value.lower())]
-        if len(res) == 0:
-            camp_treeview.insert("", "end", values=['No results found'])
-        else:
-            camp_treeview.insert("", "end", values=res.values[0].tolist())
-
-  
+        display_all(treeview,'data/camps.csv',search=('camp_name',value))
 
 
-def show_camp(x):
+def delete_camp():
+    """
+    Asks user if they are sure they want to delete an camp, then deletes it.
+    Execpts Index Error if user tries to delete a plan without first selecting one.
+    """
+    
+    selected_camp = treeview.focus()
+    try:
+        selected_camp = treeview.item(selected_camp)['values'][0]
+    except IndexError:
+        messagebox.showerror('Please Select a Camp', 'Please select a camp you wish to delete.')
+    else:
+        delete_confirmation = messagebox.askquestion('Delete Camp' ,
+        'You are about to delete a camp do you wish to continue?')
+        if delete_confirmation == 'yes':
+            # Remove the row
+            df = pd.read_csv('data/camps.csv')
+            df = df.loc[df['camp_name'] != selected_camp]
+            df.to_csv('data/camps.csv',index=False)
+            display_all(treeview,'data/camps.csv')
+
+
+def main(x):
     '''
     displays camp in a frame
     also displays a search bar that searches by camp name
     '''
 
-    global camp_treeview
+    global treeview
     global search_bar
     global search_entry
     global admin_camp_tab
     
     admin_camp_tab = x
-
-  
 
     Label(admin_camp_tab, text='Here are all your Camps:',
         width='50', font=('Calibri', 10)).pack()
@@ -173,14 +187,14 @@ def show_camp(x):
     #creates a frame within the emergency plan tab frame to display the csv
     camp_viewer = LabelFrame(admin_camp_tab, width=600, height=300, text='Current Camps', bg='#F2F2F2')
     camp_viewer.pack()
-    camp_treeview = ttk.Treeview(camp_viewer)
+    treeview = ttk.Treeview(camp_viewer)
 
     #displays the scroll bars for horizontal and vertical scrolling
-    treescrolly = Scrollbar(camp_viewer, orient='vertical', command=camp_treeview.yview)
+    treescrolly = Scrollbar(camp_viewer, orient='vertical', command=treeview.yview)
     treescrolly.pack(side='right', fill='y')
-    treescrollx = Scrollbar(camp_viewer, orient='horizontal', command=camp_treeview.xview)
+    treescrollx = Scrollbar(camp_viewer, orient='horizontal', command=treeview.xview)
     treescrollx.pack(side='bottom', fill='x')
-    camp_treeview.configure(xscrollcommand=treescrollx.set, yscrollcommand=treescrolly.set)
+    treeview.configure(xscrollcommand=treescrollx.set, yscrollcommand=treescrolly.set)
 
     #displays the search bar
     search_entry = StringVar()
@@ -190,9 +204,18 @@ def show_camp(x):
     #i.e when soemone types something
     search_bar.bind("<KeyRelease>", search_camp_name)
 
-    update_treeview()
-    camp_treeview.pack()
+    display_all(treeview,'data/camps.csv')
+    treeview.pack()
     
-    camp_treeview.bind('<ButtonRelease-1>')
-    Button(admin_camp_tab, text='Add a new camp', command=add_camp).pack()
+    treeview.bind('<ButtonRelease-1>')
+    Button(admin_camp_tab, text='Add a new camp', command=add_camp_window).pack()
+    Button(admin_camp_tab, text='Delete camp', command=delete_camp).pack()
     
+    # Make a frame to pack +,- and entry for edit shelter
+    shelter_frame = LabelFrame(admin_camp_tab)
+    global shelter_delta
+    shelter_delta = StringVar()
+    Button(shelter_frame, text='+', command=lambda: edit_camp_shelter('+')).pack(side=LEFT)
+    Button(shelter_frame, text='-', command=lambda: edit_camp_shelter('-')).pack(side=LEFT)
+    Entry(shelter_frame,textvariable=shelter_delta).pack(side=LEFT)
+    shelter_frame.pack()

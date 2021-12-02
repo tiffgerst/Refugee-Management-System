@@ -1,2 +1,1 @@
-emergency_plan_name,campID,food_rations,shelter
-Tsunami,Miron's Focusing Camp,300,10
+camp_name,emergency_plan_name,country,city,capacity
