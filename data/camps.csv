@@ -1,2 +1,1 @@
-campID,emergency_plan_name, country, city, capacity
-
+camp_name,emergency_plan_name,country,city,capacity
