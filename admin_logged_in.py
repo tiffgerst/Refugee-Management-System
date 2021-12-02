@@ -6,7 +6,7 @@ import admin.volunteer as av
 import LoginGUI
 
 
-def logout():
+def logout():   
     """
     Allows user to logout
     """
