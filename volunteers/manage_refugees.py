@@ -151,15 +151,16 @@ def delete_refugee_confirm():
     Asks user if they are sure they want to delete refugee, then deletes it.
     Excepts Index Error if user tries to delete a refugee without first selecting one.
     """
-    refugee_fi = refugee_first_name.get()
-    refugee_fa = refugee_family_name.get()
-    refugee_camp = camp_name.get()
-    refugee_cond = medical_conditions.get()
-    refugee_rel = num_relatives.get()
-    refugee_on = on_site.get()
+    
+    dfv = pd.read_csv('data/volunteers.csv')
+    refugee_camp = dfv.loc[dfv['username'] == user].values[0][3]
 
     selected_refugee = refugee_treeview.focus()
     default_first_name = refugee_treeview.item(selected_refugee)['values'][0]
+    default_fam_name = refugee_treeview.item(selected_refugee)['values'][1]
+    default_cond = refugee_treeview.item(selected_refugee)['values'][2]
+    default_rel = refugee_treeview.item(selected_refugee)['values'][3]
+
     try:
         selected_refugee = refugee_treeview.item(selected_refugee)['values'][0]
         print(selected_refugee)
@@ -167,12 +168,16 @@ def delete_refugee_confirm():
         messagebox.showerror('Please Select a Refugee', 'Please select a Refugee you wish to mark as departed.')
     else:
         delete_confirmation = messagebox.askquestion('Mark Refugee as Departed' ,
-        'You are about to mark a refugee as departed - do you wish to continue?')
+        'You are about to toggle a refugee\'s status - do you wish to continue?')
         if delete_confirmation == 'yes':
             # Remove the row
             df = pd.read_csv('data/refugees.csv')
-            # df = df.loc[df['on_site'] != selected_refugee]
-            updated_row = [refugee_fi, refugee_fa, refugee_camp, refugee_cond, refugee_rel, 'False']
+
+            if df.loc[df['first_name'] == default_first_name].values[0][5] == 'True':
+                updated_row = [default_first_name, default_fam_name, refugee_camp, default_cond, default_rel, 'False']
+            else: 
+                updated_row = [default_first_name, default_fam_name, refugee_camp, default_cond, default_rel, 'True']
+
             df.loc[df['first_name'] == default_first_name] = updated_row
             df.to_csv('data/refugees.csv',index=False)
             clear_treeview()
@@ -209,7 +214,6 @@ def add_refugee():
     global refugee_first_name
     global num_relatives
     global medical_conditions
-    global camp_name
     global on_site
 
     add_new_refugee_popup = Toplevel(refugee_tab)
@@ -226,7 +230,6 @@ def add_refugee():
     refugee_first_name = StringVar()
     num_relatives = StringVar()
     medical_conditions = StringVar()
-    camp_name = StringVar()
 
     Label(add_new_refugee_popup, text="", bg='#F2F2F2').pack()
 
@@ -256,9 +259,11 @@ def save_new_refugee():
     # Retrieve the variables using .get() - value is str
     refugee_fi = refugee_first_name.get()
     refugee_fa = refugee_family_name.get()
-    refugee_camp = camp_name.get()
     refugee_rel = num_relatives.get()
     refugee_cond = medical_conditions.get()
+
+    dfv = pd.read_csv('data/volunteers.csv')
+    refugee_camp = dfv.loc[dfv['username'] == user].values[0][3]
 
     # Check for blanks
     res = check_blanks(
@@ -331,7 +336,7 @@ def search_refugee_name(e):
             refugee_treeview.insert("", "end", values=res.values[0].tolist())
 
 
-def show_refugee(x):
+def show_refugee(x, username):
     '''
     displays the  refugee in a frame
     also displays a search bar that searches by refugee name
@@ -341,7 +346,9 @@ def show_refugee(x):
     global search_bar
     global search_entry
     global refugee_tab
+    global user
 
+    user = username
     refugee_tab = x
 
     #creates a frame within the  refugee tab frame to display the csv
