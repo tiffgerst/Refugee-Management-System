@@ -39,7 +39,7 @@ def login_volunteer():
     u_entry = name_var_vol.get()
     p_entry = passw_var_vol.get()
 
-    user_name_list = df["username"].tolist()
+    user_name_list = df['username'].tolist()
     if u_entry in user_name_list:
         idx = user_name_list.index(u_entry)
         stored_password = str(df['password'].tolist()[idx])
@@ -73,12 +73,13 @@ def register_user():
     # retrieving the varibale called username_entry with .get() method
     u_entry = username_entry.get()
     p_entry = password_entry.get()
+    n_entry = name_entry.get()
     p_hashed = hash_password(p_entry)
     num_entry = phonenumber_entry.get()
     mail_entry = email_entry.get()
     medic_entry = medic_var.get()
     activation = True
-    camp = camp_id.get()
+    camp = camp_name.get()
 
 
     if u_entry == '':
@@ -96,7 +97,7 @@ def register_user():
         with open('data/volunteers.csv', 'a', newline='') as file:
             f = writer(file)
             f.writerows(
-                [[u_entry, p_hashed,camp,num_entry, mail_entry, medic_entry, activation]])
+                [[u_entry, n_entry, p_hashed,camp,num_entry, mail_entry, medic_entry, activation]])
         register_success_popup()
 
 
@@ -125,11 +126,12 @@ def sign_up_volunteer():
     """
     global sign_up_screen
     global username_entry
+    global name_entry
     global phonenumber_entry
     global email_entry
     global password_entry
     global medic_var
-    global camp_id
+    global camp_name
 
     # Toplevel makes the signupscreen be a child of the main screen
     # this means if you close the main screen the signupscreen will also close
@@ -139,7 +141,7 @@ def sign_up_volunteer():
     sign_up_screen.configure(bg='#F2F2F2')
     
     df = pd.read_csv("./data/camps.csv")
-    all_camps = df["campID"]
+    all_camps = df["camp_name"]
     all_camps = list(all_camps)
 
     Label(sign_up_screen, text="Please enter the following details:",
@@ -148,18 +150,22 @@ def sign_up_volunteer():
           bg='grey', fg='white').pack()
 
     username_entry = StringVar()
+    name_entry = StringVar()
     phonenumber_entry = StringVar()
     email_entry = StringVar()
     password_entry = StringVar()
     medic_var = BooleanVar()
-    camp_id = StringVar()
+    camp_name = StringVar()
     
-    camp_id.set(all_camps[0])
+    camp_name.set(all_camps[0])
 
     Label(sign_up_screen, text="", bg='#F2F2F2').pack()
 
     Label(sign_up_screen, text='Username: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
     Entry(sign_up_screen, textvariable=username_entry, width='30', font=("Calibri", 10)).pack()
+
+    Label(sign_up_screen, text='Full name: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
+    Entry(sign_up_screen, textvariable=name_entry, width='30', font=("Calibri", 10)).pack()
 
     Label(sign_up_screen, text='Email: *', background='#F2F2F2', font=("Calibri", 15)).pack()
     Entry(sign_up_screen, textvariable=email_entry, width="30", font=("Calibri", 10)).pack()
@@ -171,7 +177,7 @@ def sign_up_volunteer():
     Entry(sign_up_screen, textvariable=password_entry, show='*', width="30", font=("Calibri", 10)).pack()
     
     Label(sign_up_screen, text='Camp: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
-    options = OptionMenu(sign_up_screen, camp_id , *all_camps)
+    options = OptionMenu(sign_up_screen, camp_name , *all_camps)
     options.pack()
     Label(sign_up_screen, text="", bg='#F2F2F2').pack()
 
