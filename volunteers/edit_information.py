@@ -30,7 +30,7 @@ def edit_volunteer():
     if res == False: return
 
     # Open csv -> change the volunteer attributes -> save csv
-    df = pd.read_csv('data/volunteers.csv')
+    df = pd.read_csv('data/volunteers.csv',converters={'phone_number': lambda x: str(x)})
     vol_name = df.loc[df['username'] == username].values[0][1]
     current_pass = df.loc[df['username'] == username].values[0][2]
     vol_medic = df.loc[df['username'] == username].values[0][6]
@@ -84,7 +84,7 @@ def edit_popup(screen, user):
     camp_name = StringVar()
 
     username = user
-    df = pd.read_csv('data/volunteers.csv')
+    df = pd.read_csv('data/volunteers.csv', converters={'phone_number': lambda x: str(x)})
     row = df.loc[df['username'] == username]
 
     camp_name.set(all_camps[0])
@@ -103,7 +103,7 @@ def edit_popup(screen, user):
     vol_phonenumber_label = Entry(editor_popup, textvariable=vol_phonenumber, width="30", font=("Calibri", 10))
     vol_phonenumber_label.insert(END, row.values[0][4])
     vol_phonenumber_label.pack()
-    
+
     Label(editor_popup, text='Email: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
     vol_email_label = Entry(editor_popup, textvariable=vol_email, width="30", font=("Calibri", 10))
     vol_email_label.insert(END, row.values[0][5])

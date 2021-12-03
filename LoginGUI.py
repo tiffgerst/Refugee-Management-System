@@ -68,7 +68,8 @@ def register_user():
     (checks if any field was emtpy/already in the database
     - if so, aks user to re-enter details)
     """
-    df = pd.read_csv('data/volunteers.csv')
+    df = pd.read_csv('data/volunteers.csv',converters={'phone_number': lambda x: str(x)}
+)
 
     # retrieving the varibale called username_entry with .get() method
     u_entry = username_entry.get()
