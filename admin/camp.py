@@ -132,10 +132,10 @@ def view_timetable():
         user_row_string = user_row_string[:-1]
         with open('data/camp_timetable.csv', 'a') as file:
             file.write(user_row_string + '\n')
-    timetable_pop_up = top= Toplevel(admin_camp_tab)
+    timetable_pop_up = Toplevel(admin_camp_tab)
     timetable_pop_up.title("Timetable for " + selected_camp)
     
-    timetable_viewer = LabelFrame(timetable_pop_up, width=820, height=620, text='Current Timetable for ' +selected_camp , bg='#F2F2F2')
+    timetable_viewer = LabelFrame(timetable_pop_up, width=600, height=600, text='Current Timetable for ' +selected_camp , bg='#F2F2F2')
     timetable_viewer.pack()
     treeview2 = ttk.Treeview(timetable_viewer)
     treescrolly = Scrollbar(timetable_viewer, orient='vertical', command=treeview.yview)
@@ -145,22 +145,7 @@ def view_timetable():
     treeview2.configure(xscrollcommand=treescrollx.set, yscrollcommand=treescrolly.set)
     treeview2.pack()
     display_all(treeview2,'data/camp_timetable.csv')
-        
-        
-        
             
-
-        
-        
-        
-        
-                
-            
-            
-        
-    
-    
-
 def edit_camp_shelter(sign):
 
     global shelter_delta
