@@ -141,8 +141,19 @@ def sign_up_volunteer():
     sign_up_screen.configure(bg='#F2F2F2')
     
     df = pd.read_csv("./data/camps.csv")
+    df2 = pd.read_csv("./data/emergency_plans.csv")
+    
     all_camps = df["camp_name"]
-    all_camps = list(all_camps)
+    all_camps_list = list(all_camps)
+    all_camps = []
+    for camp in all_camps_list:
+        camp_plan = df.loc[df['camp_name'] == camp, 'emergency_plan_name'].values.item()
+        plan_location = df2.loc[df2['name'] == camp_plan, 'location'].values.item()
+        plan_location = str(plan_location)
+        all_camps.append(camp + " - " + plan_location)  
+    
+    print(all_camps)
+  
 
     Label(sign_up_screen, text="Please enter the following details:",
           width="300", height="3",
