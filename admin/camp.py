@@ -131,6 +131,9 @@ def edit_camp_shelter(sign):
     if sign == "+":
         df.loc[df['camp_name'] == selected_camp,'capacity'] += shelter_deltas
     else:
+        if shelter_deltas > int(df.loc[df['camp_name'] == selected_camp,'capacity']):
+            messagebox.showerror('Unable to Remove Shelter', 'Ammount of shelter at the camp cannot be below 0!')
+            return 
         df.loc[df['camp_name'] == selected_camp,'capacity'] -= shelter_deltas
 
     df.to_csv('data/camps.csv',index=False)
