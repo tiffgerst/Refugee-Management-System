@@ -49,10 +49,10 @@ def volunteer_show(username):
     # volunteer_hub_notebook.add(edit_information_tab, text='Edit Details')
     volunteer_hub_notebook.add(manage_refugees_tab, text='Manage Refugees')
 
-    mr.show_refugee(manage_refugees_tab)
+    mr.show_refugee(manage_refugees_tab, username)
     # ed.plan_edit_window(edit_information_tab)
 
     volunteer_screen.mainloop()
 
 if __name__ == '__main__':
-    volunteer_logged_in()
+    volunteer_show()

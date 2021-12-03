@@ -2,7 +2,6 @@ from tkinter import *
 from tkinter import ttk
 import pandas as pd
 from utilities import check_blanks, delete_popups, hash_password
-import LoginGUI
 
 
 def edit_volunteer():
@@ -14,7 +13,6 @@ def edit_volunteer():
     global edit_success_popup
 
     # Retrieve the variables using .get() - value is str
-    vol_user = vol_username.get()
     vol_pass = vol_password.get()
     vol_camp = camp_name.get()
     vol_phone = vol_phonenumber.get()
@@ -24,17 +22,25 @@ def edit_volunteer():
     res = check_blanks(
         name= vol_camp,
         form={
-        'username':vol_user, 'password':vol_pass,'camp_name':vol_camp,
-        'phone_number':vol_phone,'mail':vol_em},
+            'camp_name':vol_camp,
+            'phone_number':vol_phone,
+            'email':vol_em
+        },
         parent=editor_popup)
     if res == False: return
 
     # Open csv -> change the volunteer attributes -> save csv
-    df = pd.read_csv('data/volunteers.csv')
+    df = pd.read_csv('data/volunteers.csv',converters={'phone_number': lambda a: str(a)})
     vol_name = df.loc[df['username'] == username].values[0][1]
+    current_pass = df.loc[df['username'] == username].values[0][2]
     vol_medic = df.loc[df['username'] == username].values[0][6]
     vol_avail = df.loc[df['username'] == username].values[0][7]
-    updated_row = [vol_user, vol_name, hash_password(vol_pass), vol_camp, vol_phone, vol_em, vol_medic, vol_avail]
+
+    if vol_pass == '':
+        updated_row = [username, vol_name, current_pass, vol_camp, vol_phone, vol_em, vol_medic, vol_avail]
+    else:
+        updated_row = [username, vol_name, hash_password(vol_pass), vol_camp, vol_phone, vol_em, vol_medic, vol_avail]
+
     df.loc[df['username'] == username] = [updated_row]
     df.to_csv('data/volunteers.csv',index=False)
 
@@ -72,39 +78,32 @@ def edit_popup(screen, user):
         font=("Calibri bold", 25),
         bg='grey', fg='white').pack()
 
-    vol_username = StringVar()
     vol_password = StringVar()
     vol_email = StringVar()
     vol_phonenumber = StringVar()
     camp_name = StringVar()
 
     username = user
-    df = pd.read_csv('data/volunteers.csv')
+    df = pd.read_csv('data/volunteers.csv', converters={'phone_number': lambda a: str(a)})
     row = df.loc[df['username'] == username]
 
     camp_name.set(all_camps[0])
 
     Label(editor_popup, text="", bg='#F2F2F2').pack()
     
-    Label(editor_popup, text='Username: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
-    vol_username_label = Entry(editor_popup, textvariable=vol_username, width='30', font=("Calibri", 10))
-    vol_username_label.insert(END, row.values[0][0])
-    vol_username_label.pack()
-    
-    Label(editor_popup, text='Password: *', background='#F2F2F2', font=("Calibri", 15)).pack()
+    Label(editor_popup, text='Password: * (Leave blank if no change)', background='#F2F2F2', font=("Calibri", 15)).pack()
     vol_password_label = Entry(editor_popup, show='*', textvariable=vol_password, width="30", font=("Calibri", 10))
     vol_password_label.pack()
     
     Label(editor_popup, text='Camp ID: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
     options = OptionMenu(editor_popup, camp_name , *all_camps)
     options.pack()
-
     
-    Label(editor_popup, text='Phone Number *', bg='#F2F2F2', font=("Calibri", 15)).pack()
+    Label(editor_popup, text='Phone Number: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
     vol_phonenumber_label = Entry(editor_popup, textvariable=vol_phonenumber, width="30", font=("Calibri", 10))
     vol_phonenumber_label.insert(END, row.values[0][4])
     vol_phonenumber_label.pack()
-    
+
     Label(editor_popup, text='Email: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
     vol_email_label = Entry(editor_popup, textvariable=vol_email, width="30", font=("Calibri", 10))
     vol_email_label.insert(END, row.values[0][5])
