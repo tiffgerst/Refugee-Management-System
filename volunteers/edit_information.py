@@ -30,7 +30,7 @@ def edit_volunteer():
     if res == False: return
 
     # Open csv -> change the volunteer attributes -> save csv
-    df = pd.read_csv('data/volunteers.csv',converters={'phone_number': lambda x: str(x)})
+    df = pd.read_csv('data/volunteers.csv',converters={'phone_number': lambda a: str(a)})
     vol_name = df.loc[df['username'] == username].values[0][1]
     current_pass = df.loc[df['username'] == username].values[0][2]
     vol_medic = df.loc[df['username'] == username].values[0][6]
@@ -84,7 +84,7 @@ def edit_popup(screen, user):
     camp_name = StringVar()
 
     username = user
-    df = pd.read_csv('data/volunteers.csv', converters={'phone_number': lambda x: str(x)})
+    df = pd.read_csv('data/volunteers.csv', converters={'phone_number': lambda a: str(a)})
     row = df.loc[df['username'] == username]
 
     camp_name.set(all_camps[0])
