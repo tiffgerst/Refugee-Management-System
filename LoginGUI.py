@@ -80,6 +80,19 @@ def register_user():
     medic_entry = medic_var.get()
     activation = True
     camp = camp_name.get()
+    monday_avail = availability["Monday"].get()
+    tuesday_avail = availability["Tuesday"].get()
+    wednesday_avail = availability["Wednesday"].get()
+    thursday_avail = availability["Thursday"].get()
+    friday_avail = availability["Friday"].get()
+    satruday_avail = availability["Saturday"].get()
+    sunday_avail = availability["Sunday"].get()
+    
+    
+    
+    
+    
+    
 
 
     if u_entry == '':
@@ -98,6 +111,10 @@ def register_user():
             f = writer(file)
             f.writerows(
                 [[u_entry, n_entry, p_hashed, camp, num_entry, mail_entry, medic_entry, activation]])
+        with open('data/availability.csv', 'a', newline='') as file:
+            f = writer(file)
+            f.writerows(
+                [[u_entry, monday_avail, tuesday_avail, wednesday_avail, thursday_avail, friday_avail, satruday_avail, sunday_avail]])
         register_success_popup()
 
 
@@ -132,13 +149,17 @@ def sign_up_volunteer():
     global password_entry
     global medic_var
     global camp_name
+    global availability
 
     # Toplevel makes the signupscreen be a child of the main screen
     # this means if you close the main screen the signupscreen will also close
     # it is also displayed 'on top of' the main screen
     sign_up_screen = Toplevel(main_screen)
-    sign_up_screen.geometry('500x620')
+    sign_up_screen.geometry('500x820')
     sign_up_screen.configure(bg='#F2F2F2')
+    
+    days_of_the_week = ["Monday", 'Tuesday', "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    availability = {day : "TRUE" for day in days_of_the_week}
     
     df = pd.read_csv("./data/camps.csv")
     df2 = pd.read_csv("./data/emergency_plans.csv")
@@ -152,7 +173,6 @@ def sign_up_volunteer():
         plan_location = str(plan_location)
         all_camps.append(camp + " - " + plan_location)  
     
-    print(all_camps)
   
 
     Label(sign_up_screen, text="Please enter the following details:",
@@ -186,6 +206,13 @@ def sign_up_volunteer():
 
     Label(sign_up_screen, text='New Password: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
     Entry(sign_up_screen, textvariable=password_entry, show='*', width="30", font=("Calibri", 10)).pack()
+    
+    Label(sign_up_screen, text='Availability: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
+    
+    for day in days_of_the_week:
+        availability[day] = BooleanVar()
+        l = Checkbutton(sign_up_screen, text=day, variable=availability[day])
+        l.pack()
     
     Label(sign_up_screen, text='Camp: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
     options = OptionMenu(sign_up_screen, camp_name , *all_camps)
