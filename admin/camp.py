@@ -223,6 +223,8 @@ def main(x):
     shelter_frame = LabelFrame(admin_camp_tab)
     
     shelter_delta = StringVar()
+    Label(admin_camp_tab, text='Increase or Decrease Camp Capacity:',
+        width='50', font=('Calibri', 10)).pack()
     Button(shelter_frame, text='+', command=lambda: edit_camp_shelter('+')).pack(side=LEFT)
     Button(shelter_frame, text='-', command=lambda: edit_camp_shelter('-')).pack(side=LEFT)
     Entry(shelter_frame,textvariable=shelter_delta).pack(side=LEFT)
