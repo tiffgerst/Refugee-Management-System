@@ -6,6 +6,8 @@ import volunteers_logged_in
 from admin.plan import *
 import admin_logged_in as ad
 from utilities import hash_password, verify_password
+from utilities import verify_username, verify_name, verify_email, verify_phone_number, verify_pass
+import re 
 
 
 def login_admin():
@@ -73,6 +75,7 @@ def register_user():
     # retrieving the varibale called username_entry with .get() method
     u_entry = username_entry.get()
     p_entry = password_entry.get()
+    rpt_entry = repeat_password.get()
     n_entry = name_entry.get()
     p_hashed = hash_password(p_entry)
     num_entry = phonenumber_entry.get()
@@ -88,24 +91,43 @@ def register_user():
     satruday_avail = availability["Saturday"].get()
     sunday_avail = availability["Sunday"].get()
     
-    
-    
-    
-    
-    
-
-
+ 
     if u_entry == '':
         # displays message box of showerror type and its a child of the sign_up_screen window
        messagebox.showerror('Invalid Username','Please do not leave the username entry blank.', parent=sign_up_screen)
     elif u_entry in df['username'].tolist():
-        messagebox.showerror('Invalid Username','This username has already been taken', parent=sign_up_screen)
-    elif p_entry == '':
-        messagebox.showerror('Invalid Password','Please do not leave the password entry blank.', parent=sign_up_screen)
-    elif num_entry == '':
-        messagebox.showerror('Invalid Phone Number','Please do not leave the phone number entry blank.', parent=sign_up_screen)
+        messagebox.showerror('Invalid Username','This username has already been taken.', parent=sign_up_screen)
+    elif verify_username(u_entry) == False: 
+        messagebox.showerror('Invalid Username','Please make sure you enter a valid username. This should be between 6-20 characters long. No _ or . are allowed at the beginning or end of username.', parent=sign_up_screen)
+        
+    elif n_entry == '':
+        messagebox.showerror('Invalid Name Entry','Please do not leave the name entry blank.', parent=sign_up_screen)
+    elif verify_name(n_entry) == False:
+        messagebox.showerror('Invalid Name Entry','Please make sure you enter your first and last names. No numbers or special characters allowed.', parent=sign_up_screen)
+        
     elif mail_entry == '':
         messagebox.showerror('Invalid E-Mail','Please do not leave the email entry blank.', parent=sign_up_screen)
+    elif verify_email(mail_entry) == False:
+        messagebox.showerror('Invalid E-Mail','Please make sure you enter a valid email.', parent=sign_up_screen)
+        
+    elif num_entry == '':
+        messagebox.showerror('Invalid Phone Number','Please do not leave the phone number entry blank.', parent=sign_up_screen)
+    elif verify_phone_number(num_entry) == False: 
+        messagebox.showerror('Invalid Phone Number Entry','Please make sure you enter a valid phone number.', parent=sign_up_screen)
+        
+    elif p_entry == '':
+        messagebox.showerror('Invalid Password','Please do not leave the password entry blank.', parent=sign_up_screen)
+    elif verify_pass(p_entry) == False: 
+        messagebox.showerror('Invalid Password','Please make sure you enter a valid password. It should have a minimum of 6 characters. No spaces allowed.', parent=sign_up_screen)
+        
+    elif rpt_entry == '':
+        messagebox.showerror('Invalid Password','Please do not leave the repeat password entry blank.', parent=sign_up_screen)
+    elif rpt_entry != p_entry:
+        messagebox.showerror('Invalid Password','Please make sure the passwords match.', parent=sign_up_screen)
+    
+        
+        
+        
     else:
         with open('data/volunteers.csv', 'a', newline='') as file:
             f = writer(file)
@@ -147,6 +169,7 @@ def sign_up_volunteer():
     global phonenumber_entry
     global email_entry
     global password_entry
+    global repeat_password
     global medic_var
     global camp_name
     global availability
@@ -155,7 +178,7 @@ def sign_up_volunteer():
     # this means if you close the main screen the signupscreen will also close
     # it is also displayed 'on top of' the main screen
     sign_up_screen = Toplevel(main_screen)
-    sign_up_screen.geometry('500x820')
+    sign_up_screen.geometry('550x950')
     sign_up_screen.configure(bg='#F2F2F2')
     
     days_of_the_week = ["Monday", 'Tuesday', "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
@@ -185,6 +208,7 @@ def sign_up_volunteer():
     phonenumber_entry = StringVar()
     email_entry = StringVar()
     password_entry = StringVar()
+    repeat_password = StringVar()
     medic_var = BooleanVar()
     camp_name = StringVar()
     
@@ -204,9 +228,12 @@ def sign_up_volunteer():
     Label(sign_up_screen, text='Phone Number: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
     Entry(sign_up_screen, textvariable=phonenumber_entry, width="30", font=("Calibri", 10)).pack()
 
-    Label(sign_up_screen, text='New Password: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
+    Label(sign_up_screen, text='Password: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
     Entry(sign_up_screen, textvariable=password_entry, show='*', width="30", font=("Calibri", 10)).pack()
-    
+
+    Label(sign_up_screen, text='Repeat Password: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
+    Entry(sign_up_screen, textvariable=repeat_password, show='*', width="30", font=("Calibri", 10)).pack()
+
     Label(sign_up_screen, text='Availability: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
     
     for day in days_of_the_week:

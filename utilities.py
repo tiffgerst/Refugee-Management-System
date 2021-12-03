@@ -4,6 +4,7 @@ import pandas as pd
 import hashlib
 import binascii
 import os
+import re
 
 
 def check_blanks(name,form,parent):
@@ -132,3 +133,35 @@ def verify_password(stored_password, provided_password):
                                   100000)
     pwdhash = binascii.hexlify(pwdhash).decode('ascii')
     return pwdhash == stored_password
+
+
+def verify_username(username): # btw 6-20 chars, no _ or . 
+    reg_check = bool(re.fullmatch("^(?=.{6,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$", username))
+    return reg_check
+    
+
+def verify_name(name): # uppercase & lowercase char, no numbers or spec chars, can be 1 or 2 words with single space in the middle, first name and last name btw 2-25 chars each
+    reg_check = bool(re.fullmatch("[A-Za-z]{2,25}\s[A-Za-z]{2,25}", name))
+    return reg_check
+    
+
+def verify_email(email): # valid email structure
+    reg_check = bool(re.fullmatch("(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)", email))
+    return reg_check
+    
+        
+def verify_phone_number(number): # no letters, no comas, only some chars allowed
+    reg_check = bool(re.fullmatch("^\s*(?:\+?(\d{1,3}))?([-. (]*(\d{3})[-. )]*)?((\d{3})[-. ]*(\d{2,4})(?:[-.x ]*(\d+))?)\s*$", number))
+    return reg_check
+
+        
+def verify_pass(password): # min length=6, no white spaces, spec chars allowed
+    reg_check = bool(re.fullmatch("[A-Za-z0-9@#$%^&+=]{6,}", password))
+    return reg_check
+
+
+
+
+
+    
+    
