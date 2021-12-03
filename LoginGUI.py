@@ -80,6 +80,7 @@ def register_user():
     medic_entry = medic_var.get()
     activation = True
     camp = camp_name.get()
+    camp = camp.replace(" - " + plan_location, "")
     monday_avail = availability["Monday"].get()
     tuesday_avail = availability["Tuesday"].get()
     wednesday_avail = availability["Wednesday"].get()
@@ -150,6 +151,7 @@ def sign_up_volunteer():
     global medic_var
     global camp_name
     global availability
+    global plan_location
 
     # Toplevel makes the signupscreen be a child of the main screen
     # this means if you close the main screen the signupscreen will also close
