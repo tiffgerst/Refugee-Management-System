@@ -101,6 +101,65 @@ def add_camp():
     Label(success_popup, text="Camp creation was successful", fg='green').pack()
     Button(success_popup, text="OK",command=lambda: delete_popups([success_popup,add_new_camp_popup])).pack()
 
+def view_timetable():
+    selected_camp = treeview.focus()
+    
+    try:
+        # Try and index the selected camp
+        selected_camp = treeview.item(selected_camp)['values'][0]
+    except IndexError:
+        # No camp selected
+        messagebox.showerror('Please Select a Camp', 'Please select a camp you wish to view the timetable for!')
+    df = pd.read_csv('data/volunteers.csv')
+    users_in_camp = df.loc[df['camp_name'] == selected_camp,'username']
+    users_in_camp = list(users_in_camp)
+    days_of_the_week = "monday,tuesday,wednesday,thursday,friday,saturday,sunday\n"
+    with open('data/camp_timetable.csv', 'w') as file:
+        file.write(days_of_the_week)
+    for user in users_in_camp:
+        df = pd.read_csv('data/availability.csv')
+        user_row = []
+        user_availability = df.loc[df['username'] == user]
+        user_availability = user_availability.values.tolist()
+        for item in user_availability[0][1:]:
+            if item == True:
+                user_row.append(user)
+            else:
+                user_row.append(' ')
+        user_row_string = ""
+        for item in user_row:
+            user_row_string = user_row_string + item +  ','
+        user_row_string = user_row_string[:-1]
+        with open('data/camp_timetable.csv', 'a') as file:
+            file.write(user_row_string + '\n')
+    timetable_pop_up = top= Toplevel(admin_camp_tab)
+    timetable_pop_up.title("Timetable for " + selected_camp)
+    
+    timetable_viewer = LabelFrame(timetable_pop_up, width=820, height=620, text='Current Timetable for ' +selected_camp , bg='#F2F2F2')
+    timetable_viewer.pack()
+    treeview2 = ttk.Treeview(timetable_viewer)
+    treescrolly = Scrollbar(timetable_viewer, orient='vertical', command=treeview.yview)
+    treescrolly.pack(side='right', fill='y')
+    treescrollx = Scrollbar(timetable_viewer, orient='horizontal', command=treeview.xview)
+    treescrollx.pack(side='bottom', fill='x')
+    treeview2.configure(xscrollcommand=treescrollx.set, yscrollcommand=treescrolly.set)
+    treeview2.pack()
+    display_all(treeview2,'data/camp_timetable.csv')
+        
+        
+        
+            
+
+        
+        
+        
+        
+                
+            
+            
+        
+    
+    
 
 def edit_camp_shelter(sign):
 
@@ -218,6 +277,8 @@ def main(x):
     treeview.bind('<ButtonRelease-1>')
     Button(admin_camp_tab, text='Add a new camp', command=add_camp_window).pack()
     Button(admin_camp_tab, text='Delete camp', command=delete_camp).pack()
+    Button(admin_camp_tab, text='View Available Volunteers', command=view_timetable).pack()
+    
     
     # Make a frame to pack +,- and entry for edit shelter
     shelter_frame = LabelFrame(admin_camp_tab)
