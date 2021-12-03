@@ -103,6 +103,10 @@ def add_camp():
 
 
 def edit_camp_shelter(sign):
+
+    global shelter_delta
+
+
     selected_camp = treeview.focus()
     
     try:
@@ -110,10 +114,10 @@ def edit_camp_shelter(sign):
         selected_camp = treeview.item(selected_camp)['values'][0]
     except IndexError:
         # No camp selected
-        messagebox.showerror('Please Select a Plan', 'Please select a plan you wish to edit.')
+        messagebox.showerror('Please Select a Camp', 'Please select a camp you wish to edit.')
         
 
-    global shelter_delta
+    
     shelter_deltas = shelter_delta.get()
     if shelter_deltas == "":
         shelter_deltas = 1
@@ -178,6 +182,7 @@ def main(x):
     global search_bar
     global search_entry
     global admin_camp_tab
+    global shelter_delta
     
     admin_camp_tab = x
 
@@ -213,7 +218,7 @@ def main(x):
     
     # Make a frame to pack +,- and entry for edit shelter
     shelter_frame = LabelFrame(admin_camp_tab)
-    global shelter_delta
+    
     shelter_delta = StringVar()
     Button(shelter_frame, text='+', command=lambda: edit_camp_shelter('+')).pack(side=LEFT)
     Button(shelter_frame, text='-', command=lambda: edit_camp_shelter('-')).pack(side=LEFT)
