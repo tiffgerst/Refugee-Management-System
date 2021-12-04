@@ -111,12 +111,16 @@ def view_timetable():
         # No camp selected
         messagebox.showerror('Please Select a Camp', 'Please select a camp you wish to view the timetable for!')
     df = pd.read_csv('data/volunteers.csv')
-    users_in_camp = df.loc[df['camp_name'] == selected_camp,'username']
+    users_in_camp = df.loc[df['camp_name'] == selected_camp, 'username']
     users_in_camp = list(users_in_camp)
+    activated_volunteers = df.loc[df['activation'] == True, 'username']
+    activated_volunteers = list(activated_volunteers)
     days_of_the_week = "monday,tuesday,wednesday,thursday,friday,saturday,sunday\n"
     with open('data/camp_timetable.csv', 'w') as file:
         file.write(days_of_the_week)
     for user in users_in_camp:
+        if user not in activated_volunteers:
+            continue
         df = pd.read_csv('data/availability.csv')
         user_row = []
         user_availability = df.loc[df['username'] == user]
