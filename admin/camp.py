@@ -142,6 +142,7 @@ def view_timetable():
     except IndexError:
         # No camp selected
         messagebox.showerror('Please Select a Camp', 'Please select a camp you wish to view the timetable for!')
+        return
     df = pd.read_csv('data/volunteers.csv')
     users_in_camp = df.loc[df['camp_name'] == selected_camp, 'username']
     users_in_camp = list(users_in_camp)
@@ -190,8 +191,6 @@ def view_timetable():
     friday =  df.loc[df['friday'] != " ", 'friday'].count()
     saturday = df.loc[df['saturday'] != " ", 'saturday'].count()
     sunday =  df.loc[df['sunday'] != " ", 'sunday'].count()
-    
-    
     
     
     
