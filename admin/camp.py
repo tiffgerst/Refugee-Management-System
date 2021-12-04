@@ -101,7 +101,39 @@ def add_camp():
     Label(success_popup, text="Camp creation was successful", fg='green').pack()
     Button(success_popup, text="OK",command=lambda: delete_popups([success_popup,add_new_camp_popup])).pack()
 
+def view_timetable_summary():
+    timetable_summary_pop_up = Toplevel(timetable_pop_up)
+    timetable_summary_pop_up.title("Summary of Timetable")
+    timetable_summary_pop_up.geometry('600x500')
+    Label(timetable_summary_pop_up,
+        text="Summary:",
+        width="300", height="3",
+        font=("Calibri bold", 25),
+        bg='teal', fg='white').pack()
+    Label(timetable_summary_pop_up, text='Number of Volunteers on Monday: ', font=("Calibri bold", 15)).pack()
+    Label(timetable_summary_pop_up, text= monday, font=("Calibri bold", 15)).pack()
+    Label(timetable_summary_pop_up, text='Number of Volunteers on Tuesday: ', font=("Calibri bold", 15)).pack()
+    Label(timetable_summary_pop_up, text= tuesday, font=("Calibri bold", 15)).pack()
+    Label(timetable_summary_pop_up, text='Number of Volunteers on Wednesday: ', font=("Calibri bold", 15)).pack()
+    Label(timetable_summary_pop_up, text= wednesday, font=("Calibri bold", 15)).pack()
+    Label(timetable_summary_pop_up, text='Number of Volunteers on Thursday: ', font=("Calibri bold", 15)).pack()
+    Label(timetable_summary_pop_up, text= thursday, font=("Calibri bold", 15)).pack()
+    Label(timetable_summary_pop_up, text='Number of Volunteers on Friday: ', font=("Calibri bold", 15)).pack()
+    Label(timetable_summary_pop_up, text= friday, font=("Calibri bold", 15)).pack()
+    Label(timetable_summary_pop_up, text='Number of Volunteers on Saturday: ', font=("Calibri bold", 15)).pack()
+    Label(timetable_summary_pop_up, text= saturday, font=("Calibri bold", 15)).pack()
+    Label(timetable_summary_pop_up, text='Number of Volunteers on Sunday: ', font=("Calibri bold", 15)).pack()
+    Label(timetable_summary_pop_up, text= sunday, font=("Calibri bold", 15)).pack()
+
 def view_timetable():
+    global monday
+    global tuesday
+    global wednesday
+    global thursday
+    global friday
+    global saturday
+    global sunday
+    global timetable_pop_up
     selected_camp = treeview.focus()
     
     try:
@@ -148,7 +180,21 @@ def view_timetable():
     treescrollx.pack(side='bottom', fill='x')
     treeview2.configure(xscrollcommand=treescrollx.set, yscrollcommand=treescrolly.set)
     treeview2.pack()
+    Button(timetable_pop_up, text= 'View Summary', command= view_timetable_summary).pack()
     display_all(treeview2,'data/camp_timetable.csv')
+    df = pd.read_csv('data/camp_timetable.csv')
+    monday = df.loc[df['monday'] != " ", 'monday'].count()
+    tuesday = df.loc[df['tuesday'] != " ", 'tuesday'].count()
+    wednesday = df.loc[df['wednesday'] != " ", 'wednesday'].count()
+    thursday = df.loc[df['thursday'] != " ", 'thursday'].count()
+    friday =  df.loc[df['friday'] != " ", 'friday'].count()
+    saturday = df.loc[df['saturday'] != " ", 'saturday'].count()
+    sunday =  df.loc[df['sunday'] != " ", 'sunday'].count()
+    
+    
+    
+    
+    
             
 def edit_camp_shelter(sign):
 
