@@ -150,13 +150,13 @@ def verify_email(email): # valid email structure
     return reg_check
     
         
-def verify_phone_number(number): # no letters, no comas, only some chars allowed
-    reg_check = bool(re.fullmatch("^\s*(?:\+?(\d{1,3}))?([-. (]*(\d{3})[-. )]*)?((\d{3})[-. ]*(\d{2,4})(?:[-.x ]*(\d+))?)\s*$", number))
+def verify_phone_number(number): # only numbers; limit 6 to 20
+    reg_check = bool(re.fullmatch("[0-9]{6,20}", number))
     return reg_check
 
         
-def verify_pass(password): # min length=6, no white spaces, spec chars allowed
-    reg_check = bool(re.fullmatch("[A-Za-z0-9@#$%^&+=]{6,}", password))
+def verify_pass(password): # min 8 , no white spaces, spec chars allowed
+    reg_check = bool(re.fullmatch("[A-Za-z0-9@#$%^&+=]{8,}", password))
     return reg_check
 
 

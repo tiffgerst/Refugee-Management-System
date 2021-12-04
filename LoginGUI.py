@@ -91,7 +91,6 @@ def register_user():
     satruday_avail = availability["Saturday"].get()
     sunday_avail = availability["Sunday"].get()
     
- 
     if u_entry == '':
         # displays message box of showerror type and its a child of the sign_up_screen window
        messagebox.showerror('Invalid Username','Please do not leave the username entry blank.', parent=sign_up_screen)
@@ -118,7 +117,7 @@ def register_user():
     elif p_entry == '':
         messagebox.showerror('Invalid Password','Please do not leave the password entry blank.', parent=sign_up_screen)
     elif verify_pass(p_entry) == False: 
-        messagebox.showerror('Invalid Password','Please make sure you enter a valid password. It should have a minimum of 6 characters. No spaces allowed.', parent=sign_up_screen)
+        messagebox.showerror('Invalid Password','Please make sure you enter a valid password. It should have a minimum of 8 characters. No spaces allowed.', parent=sign_up_screen)
         
     elif rpt_entry == '':
         messagebox.showerror('Invalid Password','Please do not leave the repeat password entry blank.', parent=sign_up_screen)
