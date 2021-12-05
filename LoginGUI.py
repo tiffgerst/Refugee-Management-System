@@ -96,7 +96,7 @@ def register_user():
     elif u_entry in df['username'].tolist():
         messagebox.showerror('Invalid Username','This username has already been taken.', parent=sign_up_screen)
     elif verify_username(u_entry) == False: 
-        messagebox.showerror('Invalid Username','Please make sure you enter a valid username. This should be between 6-20 characters long. No _ or . are allowed at the beginning or end of username. No commas allowed.', parent=sign_up_screen)
+        messagebox.showerror('Invalid Username','Please make sure you enter a valid username. This should be between 6-20 characters long. No _ or . are allowed at the beginning or end of username. No commas or spaces are allowed.', parent=sign_up_screen)
         
     elif n_entry == '':
         messagebox.showerror('Invalid Name Entry','Please do not leave the name entry blank.', parent=sign_up_screen)
@@ -116,7 +116,7 @@ def register_user():
     elif p_entry == '':
         messagebox.showerror('Invalid Password','Please do not leave the password entry blank.', parent=sign_up_screen)
     elif verify_pass(p_entry) == False: 
-        messagebox.showerror('Invalid Password','Please make sure you enter a valid password. It should have a minimum of 8 characters. No spaces allowed.', parent=sign_up_screen)
+        messagebox.showerror('Invalid Password','Please make sure you enter a valid password. It should have a minimum of 8 characters. No commas _ . or spaces are allowed.', parent=sign_up_screen)
         
     elif rpt_entry == '':
         messagebox.showerror('Invalid Password','Please do not leave the repeat password entry blank.', parent=sign_up_screen)
