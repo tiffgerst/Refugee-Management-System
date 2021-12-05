@@ -1,14 +1,20 @@
 from tkinter import *
-from tkinter import ttk
+from tkinter import messagebox, ttk
 import pandas as pd
 from utilities import check_blanks, delete_popups, hash_password
-
+from utilities import verify_pass, verify_phone_number, verify_email
 
 def edit_volunteer():
     """
     Replaces the values edited by the user and adds them to the csv
     Gives a popup saying it was successful
     """
+    # Open csv -> change the volunteer attributes -> save csv
+    df = pd.read_csv('data/volunteers.csv',converters={'phone_number': lambda a: str(a)})
+    vol_name = df.loc[df['username'] == username].values[0][1]
+    current_pass = df.loc[df['username'] == username].values[0][2]
+    vol_medic = df.loc[df['username'] == username].values[0][6]
+    vol_avail = df.loc[df['username'] == username].values[0][7]
 
     global edit_success_popup
 
@@ -28,27 +34,32 @@ def edit_volunteer():
         },
         parent=editor_popup)
     if res == False: return
-
-    # Open csv -> change the volunteer attributes -> save csv
-    df = pd.read_csv('data/volunteers.csv',converters={'phone_number': lambda a: str(a)})
-    vol_name = df.loc[df['username'] == username].values[0][1]
-    current_pass = df.loc[df['username'] == username].values[0][2]
-    vol_medic = df.loc[df['username'] == username].values[0][6]
-    vol_avail = df.loc[df['username'] == username].values[0][7]
-
-    if vol_pass == '':
+    
+    
+    
+    # validate phone number
+    if verify_phone_number(vol_phone) == False: 
+        messagebox.showerror('Invalid Phone Number Entry','Please make sure you enter a valid phone number.', parent=editor_popup)
+        
+    # validate email
+    elif verify_email(vol_em) == False:
+        messagebox.showerror('Invalid E-Mail','Please make sure you enter a valid email.', parent=editor_popup)  
+        
+    # validate pass
+    elif vol_pass == '':
         updated_row = [username, vol_name, current_pass, vol_camp, vol_phone, vol_em, vol_medic, vol_avail]
+    elif verify_pass(vol_pass) == False: 
+        messagebox.showerror('Invalid Password','Please make sure you enter a valid password. It should have a minimum of 8 characters. No spaces allowed.', parent=editor_popup)
     else:
         updated_row = [username, vol_name, hash_password(vol_pass), vol_camp, vol_phone, vol_em, vol_medic, vol_avail]
-
-    df.loc[df['username'] == username] = [updated_row]
-    df.to_csv('data/volunteers.csv',index=False)
-
-    # Creates a popup that tells user the volunteer edit was successful
-    edit_success_popup = Toplevel(editor_popup)
-    edit_success_popup.title("Success")
-    Label(edit_success_popup, text="Volunteer edit was successful", fg='green').pack()
-    Button(edit_success_popup, text="OK", command=lambda: delete_popups([edit_success_popup,editor_popup])).pack()
+        df.loc[df['username'] == username] = [updated_row]
+        df.to_csv('data/volunteers.csv',index=False)
+        
+        # Creates a popup that tells user the volunteer edit was successful
+        edit_success_popup = Toplevel(editor_popup)
+        edit_success_popup.title("Success")
+        Label(edit_success_popup, text="Volunteer edit was successful", fg='green').pack()
+        Button(edit_success_popup, text="OK", command=lambda: delete_popups([edit_success_popup,editor_popup])).pack()
 
 
 def edit_popup(screen, user):
