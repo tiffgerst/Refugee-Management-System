@@ -7,8 +7,6 @@ from admin.plan import *
 import admin_logged_in as ad
 from utilities import hash_password, verify_password
 from utilities import verify_username, verify_name, verify_email, verify_phone_number, verify_pass
-import re 
-
 
 def login_admin():
     """
@@ -97,7 +95,7 @@ def register_user():
     elif u_entry in df['username'].tolist():
         messagebox.showerror('Invalid Username','This username has already been taken.', parent=sign_up_screen)
     elif verify_username(u_entry) == False: 
-        messagebox.showerror('Invalid Username','Please make sure you enter a valid username. This should be between 6-20 characters long. No _ or . are allowed at the beginning or end of username.', parent=sign_up_screen)
+        messagebox.showerror('Invalid Username','Please make sure you enter a valid username. This should be between 6-20 characters long. No _ or . are allowed at the beginning or end of username. No commas allowed.', parent=sign_up_screen)
         
     elif n_entry == '':
         messagebox.showerror('Invalid Name Entry','Please do not leave the name entry blank.', parent=sign_up_screen)

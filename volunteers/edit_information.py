@@ -3,8 +3,6 @@ from tkinter import messagebox, ttk
 import pandas as pd
 from utilities import check_blanks, delete_popups, hash_password
 from utilities import verify_pass, verify_phone_number, verify_email
-import re 
-
 
 def edit_volunteer():
     """
