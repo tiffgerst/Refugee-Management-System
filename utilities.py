@@ -135,7 +135,7 @@ def verify_password(stored_password, provided_password):
     return pwdhash == stored_password
 
 
-def verify_username(username): # btw 6-20 chars, no _ or . 
+def verify_username(username): # Between 6-20 chars. No , _ or . 
     reg_check = bool(re.fullmatch("^(?=.{6,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$", username))
     return reg_check
     
