@@ -306,6 +306,11 @@ def update_treeview():
     for column in refugee_treeview["column"]:
         refugee_treeview.heading(column, text=column)
 
+    dfv = pd.read_csv('data/volunteers.csv')
+    vol_camp = dfv.loc[dfv['username'] == user].values[0][3]
+    df = df.loc[df['camp_name'] == vol_camp]
+
+        
     #retrieves rows and displays them
     for _,row in df.iterrows():
         refugee_treeview.insert("", "end", values=list(row.values))
@@ -324,18 +329,23 @@ def search_refugee_name(e):
     else:
         clear_treeview()
         df = pd.read_csv('data/refugees.csv')
+        
+        dfv = pd.read_csv('data/volunteers.csv')
+        vol_camp = dfv.loc[dfv['username'] == user].values[0][3]
+        df = df.loc[df['camp_name'] == vol_camp]
+        
+        df = df.loc[df['family_name'].str.lower().str.contains(value.lower())]
+
+
         refugee_treeview["column"] = list(df.columns)
         refugee_treeview["show"] = "headings"
+        
         for column in refugee_treeview["column"]:
             refugee_treeview.heading(column, text=column)
-
-        res = df.loc[df['family_name'].str.lower().str.contains(value.lower())]
-        if len(res) == 0:
-            refugee_treeview.insert("", "end", values=['No results found'])
-        else:
-            refugee_treeview.insert("", "end", values=res.values[0].tolist())
-
-
+        for _,row in df.iterrows():
+            refugee_treeview.insert("", "end", values=list(row.values))
+        
+        
 def show_refugee(x, username):
     '''
     displays the  refugee in a frame
