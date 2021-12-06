@@ -101,29 +101,18 @@ def add_camp():
     Label(success_popup, text="Camp creation was successful", fg='green').pack()
     Button(success_popup, text="OK",command=lambda: delete_popups([success_popup,add_new_camp_popup])).pack()
 
-def view_timetable_summary():
-    timetable_summary_pop_up = Toplevel(timetable_pop_up)
-    timetable_summary_pop_up.title("Summary of Timetable")
-    timetable_summary_pop_up.geometry('600x500')
-    Label(timetable_summary_pop_up,
-        text="Summary:",
-        width="300", height="3",
-        font=("Calibri bold", 25),
-        bg='teal', fg='white').pack()
-    Label(timetable_summary_pop_up, text='Number of Volunteers on Monday: ', font=("Calibri bold", 15)).pack()
-    Label(timetable_summary_pop_up, text= monday, font=("Calibri bold", 15)).pack()
-    Label(timetable_summary_pop_up, text='Number of Volunteers on Tuesday: ', font=("Calibri bold", 15)).pack()
-    Label(timetable_summary_pop_up, text= tuesday, font=("Calibri bold", 15)).pack()
-    Label(timetable_summary_pop_up, text='Number of Volunteers on Wednesday: ', font=("Calibri bold", 15)).pack()
-    Label(timetable_summary_pop_up, text= wednesday, font=("Calibri bold", 15)).pack()
-    Label(timetable_summary_pop_up, text='Number of Volunteers on Thursday: ', font=("Calibri bold", 15)).pack()
-    Label(timetable_summary_pop_up, text= thursday, font=("Calibri bold", 15)).pack()
-    Label(timetable_summary_pop_up, text='Number of Volunteers on Friday: ', font=("Calibri bold", 15)).pack()
-    Label(timetable_summary_pop_up, text= friday, font=("Calibri bold", 15)).pack()
-    Label(timetable_summary_pop_up, text='Number of Volunteers on Saturday: ', font=("Calibri bold", 15)).pack()
-    Label(timetable_summary_pop_up, text= saturday, font=("Calibri bold", 15)).pack()
-    Label(timetable_summary_pop_up, text='Number of Volunteers on Sunday: ', font=("Calibri bold", 15)).pack()
-    Label(timetable_summary_pop_up, text= sunday, font=("Calibri bold", 15)).pack()
+def timetable_summary():
+
+    
+    timetable_labelframe = LabelFrame(timetable_pop_up, width=600, height=600, text='Number of volunteers available on: ')
+    timetable_labelframe.pack()
+
+    vol_days = [monday,tuesday,wednesday,thursday,friday,saturday,sunday]
+    week_days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
+
+    for (i,j) in (zip(week_days, vol_days)):
+        Label(timetable_labelframe, text=i+': ').pack(side= LEFT)
+        Label(timetable_labelframe, text= j).pack(side= LEFT)
 
 def view_timetable():
     global monday
@@ -143,11 +132,16 @@ def view_timetable():
         # No camp selected
         messagebox.showerror('Please Select a Camp', 'Please select a camp you wish to view the timetable for!')
         return
+    
+    timetable_pop_up = Toplevel(admin_camp_tab)
+    timetable_pop_up.title("Timetable for " + selected_camp)
+
     df = pd.read_csv('data/volunteers.csv')
     users_in_camp = df.loc[df['camp_name'] == selected_camp, 'username']
     users_in_camp = list(users_in_camp)
     activated_volunteers = df.loc[df['activation'] == True, 'username']
     activated_volunteers = list(activated_volunteers)
+
     days_of_the_week = "monday,tuesday,wednesday,thursday,friday,saturday,sunday\n"
     with open('data/camp_timetable.csv', 'w') as file:
         file.write(days_of_the_week)
@@ -169,8 +163,7 @@ def view_timetable():
         user_row_string = user_row_string[:-1]
         with open('data/camp_timetable.csv', 'a') as file:
             file.write(user_row_string + '\n')
-    timetable_pop_up = Toplevel(admin_camp_tab)
-    timetable_pop_up.title("Timetable for " + selected_camp)
+
     
     timetable_viewer = LabelFrame(timetable_pop_up, width=600, height=600, text='Current Timetable for ' +selected_camp , bg='#F2F2F2')
     timetable_viewer.pack()
@@ -181,9 +174,9 @@ def view_timetable():
     treescrollx.pack(side='bottom', fill='x')
     treeview2.configure(xscrollcommand=treescrollx.set, yscrollcommand=treescrolly.set)
     treeview2.pack()
-    Button(timetable_pop_up, text= 'View Summary', command= view_timetable_summary).pack()
     display_all(treeview2,'data/camp_timetable.csv')
     df = pd.read_csv('data/camp_timetable.csv')
+    
     monday = df.loc[df['monday'] != " ", 'monday'].count()
     tuesday = df.loc[df['tuesday'] != " ", 'tuesday'].count()
     wednesday = df.loc[df['wednesday'] != " ", 'wednesday'].count()
@@ -191,6 +184,8 @@ def view_timetable():
     friday =  df.loc[df['friday'] != " ", 'friday'].count()
     saturday = df.loc[df['saturday'] != " ", 'saturday'].count()
     sunday =  df.loc[df['sunday'] != " ", 'sunday'].count()
+
+    timetable_summary()
     
     
     
