@@ -377,5 +377,5 @@ def show_refugee(x, username):
     refugee_treeview.bind('<ButtonRelease-1>')
 
     Button(refugee_tab, text='Add new Refugee', command=add_refugee).pack()
-    Button(refugee_tab, text='Edit Refugee', command=refugee_edit_window).pack()
+    Button(refugee_tab, text='Edit Refugee', command=edit_refugee_confirm).pack()
     Button(refugee_tab, text='Mark refugee as departed', command=delete_refugee_confirm).pack()
