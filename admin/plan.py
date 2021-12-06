@@ -60,12 +60,17 @@ def delete_or_close_plan(operation):
         df2 = pd.read_csv('data/camps.csv')
         camps = df2.loc[df2['emergency_plan_name'] == selected_plan, 'camp_name'].values
         for selected_camp in camps:
+            # Remove selected camp from camps
             df = pd.read_csv('data/camps.csv')
             df = df.loc[df['camp_name'] != selected_camp]
             df.to_csv('data/camps.csv',index=False)
+            
+            # For all volunteers in the camp, set camp_name to 'None'
             df = pd.read_csv('data/volunteers.csv')
             df.loc[df['camp_name'] == selected_camp, 'camp_name'] = 'None'
             df.to_csv('data/volunteers.csv', index=False)
+            
+            # For all refugees in the camp, set on_site to 'False'
             df = pd.read_csv('data/refugees.csv')
             df.loc[df['camp_name'] == selected_camp, 'on_site'] = 'False'
             df.to_csv('data/refugees.csv', index=False)
@@ -75,8 +80,6 @@ def delete_or_close_plan(operation):
         display_all(admin.camp.treeview,'data/camps.csv')
         display_all(admin.volunteer.treeview,'data/volunteers.csv', cols_to_hide =['password'])
         
-        
-
 
 def modify_plan_window(add):
     """
@@ -126,6 +129,8 @@ def modify_plan_window(add):
         defaults[-2] = datetime.strftime(pd.to_datetime(defaults[-2]),"%d %b %Y")
 
         title = plan_name+"\nPlease edit the following details:"
+
+        plan_location.set(defaults[-3])
     
     # Display the modify window
     global modify_popup
@@ -138,15 +143,28 @@ def modify_plan_window(add):
 
     Label(modify_popup, text="* = required", bg='#F2F2F2').pack()
 
+    subregions = ['Central Asia','Western Asia','Southern Asia', 'Eastern Asia', 'South-eastern Asia',
+    'Northern America','Central America','South America',
+    'Western Europe','Eastern Europe','Southern Europe','Northern Europe',
+    'Western Africa','Northern Africa','Eastern Africa','Middle Africa','Southern Africa',
+    'Caribbean',
+    'Oceania']
+
+
     for i,(name,textvariable) in enumerate(zip(names,textvariables)):
         # Create label
         Label(modify_popup, text='Plan '+name, bg='#F2F2F2', 
             font=("Calibri", 15)).pack()
         
-        label = Entry(modify_popup, textvariable=textvariable, width='30', font=("Calibri", 10))
-        if add == False:
-            # Insert the corresponding default entry
-            label.insert(END, defaults[i])
+        if textvariable == plan_location:
+            label = OptionMenu(modify_popup,textvariable,*subregions)
+        else:
+            label = Entry(modify_popup, textvariable=textvariable, width='30', font=("Calibri", 10))
+        
+            if add == False:
+                # Insert the corresponding default entry
+                label.insert(END, defaults[i])
+        
         # Save the entry box
         label.pack()
 
