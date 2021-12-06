@@ -23,6 +23,8 @@ def edit_volunteer():
     vol_camp = camp_name.get()
     vol_phone = vol_phonenumber.get()
     vol_em = vol_email.get()
+    
+    updated_row = [] # initiallising
 
     # Check for blanks
     res = check_blanks(
@@ -52,14 +54,14 @@ def edit_volunteer():
         messagebox.showerror('Invalid Password','Please make sure you enter a valid password. It should have a minimum of 8 characters. No spaces allowed.', parent=editor_popup)
     else:
         updated_row = [username, vol_name, hash_password(vol_pass), vol_camp, vol_phone, vol_em, vol_medic, vol_avail]
-        df.loc[df['username'] == username] = [updated_row]
-        df.to_csv('data/volunteers.csv',index=False)
-        
-        # Creates a popup that tells user the volunteer edit was successful
-        edit_success_popup = Toplevel(editor_popup)
-        edit_success_popup.title("Success")
-        Label(edit_success_popup, text="Volunteer edit was successful", fg='green').pack()
-        Button(edit_success_popup, text="OK", command=lambda: delete_popups([edit_success_popup,editor_popup])).pack()
+    df.loc[df['username'] == username] = [updated_row]
+    df.to_csv('data/volunteers.csv',index=False)
+    
+    # Creates a popup that tells user the volunteer edit was successful
+    edit_success_popup = Toplevel(editor_popup)
+    edit_success_popup.title("Success")
+    Label(edit_success_popup, text="Volunteer edit was successful", fg='green').pack()
+    Button(edit_success_popup, text="OK", command=lambda: delete_popups([edit_success_popup,editor_popup])).pack()
 
 
 def edit_popup(screen, user):
