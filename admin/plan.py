@@ -3,7 +3,8 @@ from tkinter import ttk, messagebox
 import pandas as pd
 from utilities import check_blanks,check_date,delete_popups,display_all
 from datetime import datetime
-import admin.camp as camp
+import admin.camp
+import admin.volunteer
 
 
 def edit_plan_confirm():
@@ -49,15 +50,32 @@ def delete_or_close_plan(operation):
     confirmation = messagebox.askquestion(operation.title()+' Emergency Plan' ,
     'You are about to '+operation+' the emergency plan: ' +selected_plan+ '. Do you wish to continue?')
     if confirmation == 'yes':
-        df = pd.read_csv('data/emergency_plans.csv')
+        df1 = pd.read_csv('data/emergency_plans.csv')
         if operation == "delete":
             # Remove the row
-            df = df.loc[df['name'] != selected_plan]
+            df1 = df1.loc[df1['name'] != selected_plan]
         if operation == "close":
             # Add end date (today)
-            df.loc[df['name'] == selected_plan,'end_date'] = datetime.today().strftime('%d %b %Y')
-        df.to_csv('data/emergency_plans.csv',index=False)
+            df1.loc[df1['name'] == selected_plan,'end_date'] = datetime.today().strftime('%d %b %Y')
+        df2 = pd.read_csv('data/camps.csv')
+        camps = df2.loc[df2['emergency_plan_name'] == selected_plan, 'camp_name'].values
+        for selected_camp in camps:
+            df = pd.read_csv('data/camps.csv')
+            df = df.loc[df['camp_name'] != selected_camp]
+            df.to_csv('data/camps.csv',index=False)
+            df = pd.read_csv('data/volunteers.csv')
+            df.loc[df['camp_name'] == selected_camp, 'camp_name'] = 'None'
+            df.to_csv('data/volunteers.csv', index=False)
+            df = pd.read_csv('data/refugees.csv')
+            df.loc[df['camp_name'] == selected_camp, 'on_site'] = 'False'
+            df.to_csv('data/refugees.csv', index=False)
+            
+        df1.to_csv('data/emergency_plans.csv',index=False)
         display_all(treeview,'data/emergency_plans.csv')
+        display_all(admin.camp.treeview,'data/camps.csv')
+        display_all(admin.volunteer.treeview,'data/volunteers.csv', cols_to_hide =['password'])
+        
+        
 
 
 def modify_plan_window(add):
@@ -198,7 +216,7 @@ def modify_table(add):
     
     # If we're adding, when we press OK we want to add a camp also
     # The same is not true for editting
-    if add == True: _ = lambda:delete_popups([success_popup,modify_popup]); camp.add_camp_window(default=plan_na)
+    if add == True: _ = lambda:delete_popups([success_popup,modify_popup]); admin.camp.add_camp_window(default=plan_na)
     else: _ = lambda:delete_popups([success_popup,modify_popup])
     Button(success_popup, text="OK", command=_).pack()
 

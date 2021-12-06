@@ -5,6 +5,7 @@ import pandas as pd
 import sys
 sys.path.append("../")
 from utilities import check_blanks, delete_popups, display_all
+import admin.volunteer 
 
 
 def add_camp_window(**kwargs):
@@ -266,6 +267,15 @@ def delete_camp():
             df = df.loc[df['camp_name'] != selected_camp]
             df.to_csv('data/camps.csv',index=False)
             display_all(treeview,'data/camps.csv')
+            df = pd.read_csv('data/volunteers.csv')
+            df.loc[df['camp_name'] == selected_camp, 'camp_name'] = 'None'
+            df.to_csv('data/volunteers.csv', index=False)
+            df = pd.read_csv('data/refugees.csv')
+            df.loc[df['camp_name'] == selected_camp, 'on_site'] = 'False'
+            df.to_csv('data/refugees.csv', index=False)
+            display_all(admin.volunteer.treeview,'data/volunteers.csv', cols_to_hide =['password'])
+    
+    
 
 
 def main(x):
