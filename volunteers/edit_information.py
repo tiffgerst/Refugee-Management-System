@@ -1,6 +1,7 @@
 from tkinter import *
-from tkinter import messagebox, ttk
+from tkinter import messagebox
 import pandas as pd
+from csv import writer
 from utilities import check_blanks, delete_popups, hash_password
 from utilities import verify_pass, verify_phone_number, verify_email
 
@@ -15,6 +16,14 @@ def edit_volunteer():
     current_pass = df.loc[df['username'] == username].values[0][2]
     vol_medic = df.loc[df['username'] == username].values[0][6]
     vol_avail = df.loc[df['username'] == username].values[0][7]
+
+    monday_avail = availability["Monday"].get()
+    tuesday_avail = availability["Tuesday"].get()
+    wednesday_avail = availability["Wednesday"].get()
+    thursday_avail = availability["Thursday"].get()
+    friday_avail = availability["Friday"].get()
+    saturday_avail = availability["Saturday"].get()
+    sunday_avail = availability["Sunday"].get()
 
     global edit_success_popup
 
@@ -54,8 +63,15 @@ def edit_volunteer():
         messagebox.showerror('Invalid Password','Please make sure you enter a valid password. It should have a minimum of 8 characters. No spaces allowed.', parent=editor_popup)
     else:
         updated_row = [username, vol_name, hash_password(vol_pass), vol_camp, vol_phone, vol_em, vol_medic, vol_avail]
+   
     df.loc[df['username'] == username] = [updated_row]
     df.to_csv('data/volunteers.csv',index=False)
+
+    dfa = pd.read_csv('data/availability.csv')
+    new_row = [username, monday_avail, tuesday_avail, wednesday_avail, thursday_avail, friday_avail, saturday_avail, sunday_avail]
+    dfa.loc[df['username'] == username] = [new_row]
+    dfa.to_csv('data/availability.csv',index=False)
+
     
     # Creates a popup that tells user the volunteer edit was successful
     edit_success_popup = Toplevel(editor_popup)
@@ -73,11 +89,16 @@ def edit_popup(screen, user):
     global camp_name
     global vol_phonenumber
     global vol_email
+    global availability
 
 
     df = pd.read_csv("./data/camps.csv")
     all_camps = df["camp_name"]
     all_camps = list(all_camps)
+
+
+    days_of_the_week = ["Monday", 'Tuesday', "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    availability = {day : "True" for day in days_of_the_week}
     
 
     editor_popup = Toplevel(screen)
@@ -121,6 +142,13 @@ def edit_popup(screen, user):
     vol_email_label = Entry(editor_popup, textvariable=vol_email, width="30", font=("Calibri", 10))
     vol_email_label.insert(END, row.values[0][5])
     vol_email_label.pack()
+
+    Label(editor_popup, text='Availability: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
+    
+    for day in days_of_the_week:
+        availability[day] = BooleanVar()
+        l = Checkbutton(editor_popup, text=day, variable=availability[day])
+        l.pack()
 
     Button(editor_popup, text="Done", height="2", width="30", command=edit_volunteer).pack(pady=10)
 

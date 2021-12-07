@@ -87,7 +87,7 @@ def register_user():
     wednesday_avail = availability["Wednesday"].get()
     thursday_avail = availability["Thursday"].get()
     friday_avail = availability["Friday"].get()
-    satruday_avail = availability["Saturday"].get()
+    saturday_avail = availability["Saturday"].get()
     sunday_avail = availability["Sunday"].get()
     
     if u_entry == '':
@@ -124,8 +124,6 @@ def register_user():
         messagebox.showerror('Invalid Password','Please make sure the passwords match.', parent=sign_up_screen)
     
         
-        
-        
     else:
         with open('data/volunteers.csv', 'a', newline='') as file:
             f = writer(file)
@@ -134,7 +132,7 @@ def register_user():
         with open('data/availability.csv', 'a', newline='') as file:
             f = writer(file)
             f.writerows(
-                [[u_entry, monday_avail, tuesday_avail, wednesday_avail, thursday_avail, friday_avail, satruday_avail, sunday_avail]])
+                [[u_entry, monday_avail, tuesday_avail, wednesday_avail, thursday_avail, friday_avail, saturday_avail, sunday_avail]])
         register_success_popup()
 
 
@@ -346,7 +344,7 @@ def main_account_screen():
     main_screen.configure(bg='#F2F2F2')
 
     # adding a description for the login
-    Label(text="Please Sign in or \n Register as a new volunteer",
+    Label(main_screen, text="Please Sign in or \n Register as a new volunteer",
           width="300", height="3",
           font=("Calibri bold", 25),
           bg='teal', fg='white').pack()
