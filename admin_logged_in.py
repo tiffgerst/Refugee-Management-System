@@ -4,6 +4,7 @@ import admin.camp as ac
 import admin.plan as ap
 import admin.volunteer as av
 import LoginGUI
+import admin.refugees as ar
 
 
 def logout():   
@@ -48,6 +49,9 @@ def admin_logged_in():
 
     manage_volunteer_tab = Frame(admin_hub_notebook, width=500, height= 620, bg='#F2F2F2')
     manage_volunteer_tab.pack(fill='both', expand= True)
+    
+    manage_refugees_tab = Frame(admin_hub_notebook, width=500, height= 620, bg='#F2F2F2')
+    manage_refugees_tab.pack(fill='both', expand= True)
 
     admin_camp_tab = Frame(admin_hub_notebook, width=500, height= 620, bg='#F2F2F2')
     admin_camp_tab.pack(fill='both', expand= True)
@@ -55,12 +59,15 @@ def admin_logged_in():
     admin_hub_notebook.add(emergencyplan_tab, text='Emergency Plan')
     admin_hub_notebook.add(manage_volunteer_tab, text='Manage Volunteers')
     admin_hub_notebook.add(admin_camp_tab, text = "Manage Camps")
+    admin_hub_notebook.add(manage_refugees_tab, text = "Manage Refugees")
+    
     
     Button(admin_screen, text="Logout", command=logout).pack()
 
     ac.main(admin_camp_tab)
     ap.main(emergencyplan_tab)
     av.main(manage_volunteer_tab)
+    ar.main(manage_refugees_tab)
 
     admin_screen.mainloop()
 
