@@ -253,17 +253,26 @@ def save_new_refugee():
     Form validation for the refugee creation
     Once validated the refugee is added to the csv
     """
-
-    df = pd.read_csv('data/refugees.csv')
+    dfv = pd.read_csv('data/volunteers.csv')
+    refugee_camp = dfv.loc[dfv['username'] == user].values[0][3]
+    df_camps = pd.read_csv('data/camps.csv')
+    capacity = df_camps.loc[df_camps['camp_name'] == refugee_camp, 'capacity'].values
+    
+    
 
     # Retrieve the variables using .get() - value is str
     refugee_fi = refugee_first_name.get()
     refugee_fa = refugee_family_name.get()
     refugee_rel = num_relatives.get()
     refugee_cond = medical_conditions.get()
-
-    dfv = pd.read_csv('data/volunteers.csv')
-    refugee_camp = dfv.loc[dfv['username'] == user].values[0][3]
+    refugee_rel = int(refugee_rel)
+    df = pd.read_csv('data/refugees.csv')
+    num_of_refugees = df.loc[df['camp_name']== refugee_camp, 'num_relatives'].values
+    total = 0
+    for refugee_family in num_of_refugees:
+        total += refugee_family
+    
+        
 
     # Check for blanks
     res = check_blanks(
@@ -273,6 +282,12 @@ def save_new_refugee():
         'num_relatives':refugee_rel,'medical_conditions':refugee_cond, 'on_site': 'True'},
         parent=add_new_refugee_popup)
     if res == False: return
+    
+    total += refugee_rel
+    if total > capacity:
+        messagebox.showerror('Camp is Full', 'Unable to add the refugee family as the camp is too full. Please contact admin to intall more shelter.')
+        add_new_refugee_popup.destroy()
+        return
 
     # Update the CSV file
     new_row = pd.DataFrame({

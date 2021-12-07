@@ -107,8 +107,15 @@ def volunteer_show(username):
     df = pd.read_csv('data/volunteers.csv')
     camp = df.loc[df['username'] == username_volunteer, 'camp_name'].values[0]
     camp = str(camp)
-    if camp == 'None':
+    df = pd.read_csv('data/camps.csv')
+    camps = df['camp_name'].values
+    if camp == 'None' and len(camps) > 0:
         select_camp_name()
+    elif camp == 'None' and len(camps) == 0:
+        message = messagebox.showerror('No Camps Available!', 'There are currently no camps available. Please contact the admin or check back later.', parent = volunteer_screen)
+        volunteer_screen.destroy()
+        LoginGUI.main_account_screen()
+        
 
     volunteer_screen.mainloop()
 
