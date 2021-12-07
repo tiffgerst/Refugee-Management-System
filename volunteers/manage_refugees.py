@@ -265,7 +265,15 @@ def save_new_refugee():
     refugee_fa = refugee_family_name.get()
     refugee_rel = num_relatives.get()
     refugee_cond = medical_conditions.get()
-    refugee_rel = int(refugee_rel)
+    try:
+        refugee_rel = int(refugee_rel)
+        if refugee_rel < 0:
+            messagebox.showerror('Invalid Number of Relatives', 'Please enter a positive integer')
+            return
+    except:
+        messagebox.showerror('Invalid Number of Relatives', 'Please enter a positive integer')
+        return
+ 
     df = pd.read_csv('data/refugees.csv')
     num_of_refugees = df.loc[df['camp_name']== refugee_camp, 'num_relatives'].values
     total = 0
@@ -282,11 +290,9 @@ def save_new_refugee():
         'num_relatives':refugee_rel,'medical_conditions':refugee_cond, 'on_site': 'True'},
         parent=add_new_refugee_popup)
     if res == False: return
-    
     total += refugee_rel
     if total > capacity:
         messagebox.showerror('Camp is Full', 'Unable to add the refugee family as the camp is too full. Please contact admin to intall more shelter.')
-        add_new_refugee_popup.destroy()
         return
 
     # Update the CSV file
