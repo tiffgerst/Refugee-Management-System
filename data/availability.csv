@@ -1,4 +1,4 @@
 username,monday,tuesday,wednesday,thursday,friday,saturday,sunday
 miron222,True,True,False,False,True,True,True
 miron333,True,False,True,True,False,True,True
-username,False,False,False,False,False,True,True
+username,True,True,False,False,False,False,False

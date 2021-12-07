@@ -91,15 +91,21 @@ def edit_popup(screen, user):
     global vol_email
     global availability
 
+    username = user
 
     df = pd.read_csv("./data/camps.csv")
     all_camps = df["camp_name"]
     all_camps = list(all_camps)
 
+    df2 = pd.read_csv("./data/availability.csv")
+    user_availability = df2.loc[df2['username'] == username].values[0][1:]
+
 
     days_of_the_week = ["Monday", 'Tuesday', "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-    availability = {day : "True" for day in days_of_the_week}
-    
+    availability = {}
+    for i in range(7):
+        availability[days_of_the_week[i]] = user_availability[i]
+
 
     editor_popup = Toplevel(screen)
     editor_popup.title('Editor')
@@ -117,7 +123,7 @@ def edit_popup(screen, user):
     vol_phonenumber = StringVar()
     camp_name = StringVar()
 
-    username = user
+    
     df = pd.read_csv('data/volunteers.csv', converters={'phone_number': lambda a: str(a)})
     row = df.loc[df['username'] == username]
 
@@ -144,11 +150,17 @@ def edit_popup(screen, user):
     vol_email_label.pack()
 
     Label(editor_popup, text='Availability: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
-    
+    availability_copy = availability.copy()
     for day in days_of_the_week:
         availability[day] = BooleanVar()
+        if availability_copy[day] == True:
+            availability[day].set(True)
+        else:
+            availability[day].set(False)
         l = Checkbutton(editor_popup, text=day, variable=availability[day])
         l.pack()
+        if availability_copy[day] == True:
+            l.select()
 
     Button(editor_popup, text="Done", height="2", width="30", command=edit_volunteer).pack(pady=10)
 
