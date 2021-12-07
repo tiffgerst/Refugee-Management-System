@@ -194,10 +194,10 @@ def view_timetable():
 def edit_camp_shelter(sign):
 
     global shelter_delta
-
-
     selected_camp = treeview.focus()
     
+   
+    # spare_capacity = capacity - total_refugees
     try:
         # Try and index the selected camp
         selected_camp = treeview.item(selected_camp)['values'][0]
@@ -205,23 +205,51 @@ def edit_camp_shelter(sign):
         # No camp selected
         messagebox.showerror('Please Select a Camp', 'Please select a camp you wish to edit.')
         
-
+    # df = pd.read_csv('data/refugees.csv')
+    # num_of_refugees = df.loc[df['camp_name']== selected_camp, 'num_relatives'].values
+    # total_refugees = 0
+    # for refugee_family in num_of_refugees:
+    #     total_refugees += refugee_family
+    # df = pd.read_csv('data/camps.csv')
+    # capacity = df.loc[df['camp_name'] == selected_camp,'capacity'].values[0]
+    # capacity = int(capacity)
+    # spare_capacity = capacity - total_refugees  
     
     shelter_deltas = shelter_delta.get()
+    
+        
     if shelter_deltas == "":
         shelter_deltas = 1
     try:
         shelter_deltas = int(shelter_deltas)
+        if shelter_deltas < 0:
+            messagebox.showerror('Please enter a positive integer', 'Please enter a positive integer') 
+            return    
     except:
-        messagebox.showerror('Please enter an integer')
+        messagebox.showerror('Please enter a positive integer', 'Please enter a positive integer')
         return
     # Modify
     df = pd.read_csv('data/camps.csv')
     if sign == "+":
         df.loc[df['camp_name'] == selected_camp,'capacity'] += shelter_deltas
     else:
-        if shelter_deltas > int(df.loc[df['camp_name'] == selected_camp,'capacity']):
-            messagebox.showerror('Unable to Remove Shelter', 'Ammount of shelter at the camp cannot be below 0!')
+        df = pd.read_csv('data/refugees.csv')
+        num_of_refugees = df.loc[df['camp_name']== selected_camp, 'num_relatives'].values
+        total_refugees = 0
+        for refugee_family in num_of_refugees:
+            total_refugees += refugee_family
+        df = pd.read_csv('data/camps.csv')
+        capacity = df.loc[df['camp_name'] == selected_camp,'capacity'].values[0]
+        capacity = int(capacity)
+        spare_capacity = capacity - total_refugees 
+        if shelter_deltas > spare_capacity:
+            beds_used = shelter_deltas - spare_capacity
+            beds_used = abs(beds_used)
+            beds_used = str(beds_used)
+            if beds_used == '1':
+                messagebox.showerror('Unable to Remove Shelter', 'Unable to remove shelter. The bed you are trying to remove is already in use!')
+                return
+            messagebox.showerror('Unable to Remove Shelter', 'Unable to remove shelter. ' + beds_used + " of the beds you are tring to remove are already in use!")
             return 
         df.loc[df['camp_name'] == selected_camp,'capacity'] -= shelter_deltas
 
