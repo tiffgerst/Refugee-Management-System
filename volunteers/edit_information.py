@@ -103,7 +103,7 @@ def edit_popup(screen, user):
 
     editor_popup = Toplevel(screen)
     editor_popup.title('Editor')
-    editor_popup.geometry('600x500')
+    editor_popup.geometry('600x600')
 
     editor_popup.configure(bg='#F2F2F2')
 
