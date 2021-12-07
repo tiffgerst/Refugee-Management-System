@@ -1,7 +1,6 @@
 from tkinter import *
 from tkinter import messagebox
 import pandas as pd
-from csv import writer
 from utilities import check_blanks, delete_popups, hash_password
 from utilities import verify_pass, verify_phone_number, verify_email
 
@@ -45,7 +44,6 @@ def edit_volunteer():
         },
         parent=editor_popup)
     if res == False: return
-    
     
     
     # validate phone number

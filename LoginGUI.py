@@ -1,6 +1,5 @@
 from tkinter import *
 from tkinter import messagebox, ttk
-from csv import writer
 import pandas as pd
 import volunteers_logged_in
 from admin.plan import *
@@ -126,13 +125,10 @@ def register_user():
         
     else:
         with open('data/volunteers.csv', 'a', newline='') as file:
-            f = writer(file)
-            f.writerows(
-                [[u_entry, n_entry, p_hashed, camp, num_entry, mail_entry, medic_entry, activation]])
+            file.write(f'{u_entry},{n_entry},{p_hashed},{camp},{num_entry},{mail_entry},{medic_entry},{activation}\n')
         with open('data/availability.csv', 'a', newline='') as file:
-            f = writer(file)
-            f.writerows(
-                [[u_entry, monday_avail, tuesday_avail, wednesday_avail, thursday_avail, friday_avail, saturday_avail, sunday_avail]])
+            file.write(f'{u_entry},{monday_avail},{tuesday_avail},{wednesday_avail},{thursday_avail},{friday_avail},{saturday_avail},{sunday_avail}\n')
+        
         register_success_popup()
 
 
