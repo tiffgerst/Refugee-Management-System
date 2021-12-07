@@ -99,9 +99,11 @@ def modify_plan_window(add):
     global plan_location; plan_location = StringVar()
     global plan_start_date; plan_start_date = StringVar()
     global plan_end_date; plan_end_date = StringVar()
+    
+    
 
     # Define two lists that we are going to use to build our input form
-    names = ['Name: *','Type: *','Description: *','Location: *','Start Date: *\n(format: 1 Jul 2019)','End Date\n(format: 1 Jul 2019)']
+    names = ['Name: *','Type: *','Description: *','Continent: *','Start Date: *\n(format: 1 Jul 2019)','End Date\n(format: 1 Jul 2019)']
     textvariables = [plan_name,plan_type,plan_description,plan_location,plan_start_date,plan_end_date]
     
     if add == True:
@@ -149,6 +151,7 @@ def modify_plan_window(add):
     'Western Africa','Northern Africa','Eastern Africa','Middle Africa','Southern Africa',
     'Caribbean',
     'Oceania']
+    plan_location.set(subregions[0])
 
 
     for i,(name,textvariable) in enumerate(zip(names,textvariables)):
