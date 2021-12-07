@@ -87,7 +87,7 @@ def main(x):
         width='30', font=('Calibri', 10)).pack()
 
     # Creates a frame within the volunteer tab frame to display the csv
-    volunteer_viewer = LabelFrame(volunteer_tab, width=600, height=300, text='All Volunteers', bg='#F2F2F2')
+    volunteer_viewer = LabelFrame(volunteer_tab, width=600, height=300, text='All Volunteers:', bg='#F2F2F2')
     volunteer_viewer.pack()
     treeview = ttk.Treeview(volunteer_viewer)
 
@@ -101,6 +101,7 @@ def main(x):
     # Displays the search bar
     search_entry = StringVar()
     search_bar = Entry(volunteer_viewer, textvariable=search_entry)
+    Label(volunteer_viewer, text ='Search by Username:',font=('Calibri', 10) ).pack()
     search_bar.pack()
     # Search bar gets updated everytime a key is released
     # i.e when soemone types something

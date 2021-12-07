@@ -25,7 +25,7 @@ def main(x):
     
     Label(manage_refugees_tab, text='Here are all your refugees:',
         width='50', font=('Calibri', 10)).pack()
-    refugee_viewer = LabelFrame(manage_refugees_tab, width=600, height=500, text='Refugees', bg='#F2F2F2')
+    refugee_viewer = LabelFrame(manage_refugees_tab, width=600, height=500, text='All Refugees:', bg='#F2F2F2')
     refugee_viewer.pack()
     treeview = ttk.Treeview(refugee_viewer)
 

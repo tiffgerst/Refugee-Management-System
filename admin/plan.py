@@ -305,7 +305,7 @@ def main(x):
         width='50', font=('Calibri', 10)).pack()
 
     # Creates a frame within the emergency plan tab frame to display the csv
-    emergencyplan_viewer = LabelFrame(emergencyplan_tab, width=600, height=300, text='Current Emergency Plans', bg='#F2F2F2')
+    emergencyplan_viewer = LabelFrame(emergencyplan_tab, width=600, height=300, text='Emergency Plans:', bg='#F2F2F2')
     emergencyplan_viewer.pack()
     treeview = ttk.Treeview(emergencyplan_viewer)
 
@@ -319,6 +319,7 @@ def main(x):
     # Displays the search bar
     search_entry = StringVar()
     search_bar = Entry(emergencyplan_viewer, textvariable=search_entry)
+    Label(emergencyplan_viewer, text ='Search by Plan Name:',font=('Calibri', 10) ).pack()
     search_bar.pack()
     # Search bar gets updated everytime a key is released
     # i.e when someone types something
