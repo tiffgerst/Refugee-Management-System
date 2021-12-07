@@ -6,6 +6,7 @@ import volunteers.edit_information as ed
 import LoginGUI
 import pandas as pd
 
+
 def logout():
     """
     Allows user to logout
@@ -15,7 +16,8 @@ def logout():
     if logout_q == 'yes':
         volunteer_screen.destroy()
         LoginGUI.main_account_screen()
-        
+
+
 def save_new_camp():
     new_camp = new_camp_name.get()
     df = pd.read_csv('data/volunteers.csv')
@@ -24,13 +26,10 @@ def save_new_camp():
     select_camp_screen.destroy()
 
     
-    
-    
-        
-        
 def on_closing():
-    message = messagebox.showerror('Select a camp', 'Please select a camp before proceeding!', parent = select_camp_screen)
-        
+    messagebox.showerror('Select a camp', 'Please select a camp before proceeding!', parent = select_camp_screen)
+
+
 def select_camp_name():
     global select_camp_screen
     global new_camp_name
@@ -56,11 +55,6 @@ def select_camp_name():
     Button(select_camp_screen, text="Confirm Selection", height="2", width="30", command=save_new_camp).pack()
 
     
-    
-    
-    
-
-
 def volunteer_show(username):
     '''
     Displays admin hub as well has the various
@@ -70,9 +64,6 @@ def volunteer_show(username):
     global manage_refugees_tab
     global volunteer_screen
     global username_volunteer
-    # global edit_information_tab
-    
-  
     
 
     volunteer_screen = Tk()
@@ -94,14 +85,10 @@ def volunteer_show(username):
     manage_refugees_tab = Frame(volunteer_hub_notebook, width=600, height= 620, bg='#F2F2F2')
     manage_refugees_tab.pack(fill='both', expand = True)
     Button(volunteer_screen, text="Logout", command=logout).pack()
-    # edit_information_tab = Frame(volunteer_hub_notebook, width=500, height= 620, bg='#F2F2F2')
-    # edit_information_tab.pack(fill='both', expand= True)
 
-    # volunteer_hub_notebook.add(edit_information_tab, text='Edit Details')
     volunteer_hub_notebook.add(manage_refugees_tab, text='Manage Refugees')
 
     mr.show_refugee(manage_refugees_tab, username)
-    # ed.plan_edit_window(edit_information_tab)
     
     username_volunteer = username
     df = pd.read_csv('data/volunteers.csv')
@@ -112,7 +99,7 @@ def volunteer_show(username):
     if camp == 'None' and len(camps) > 0:
         select_camp_name()
     elif camp == 'None' and len(camps) == 0:
-        message = messagebox.showerror('No Camps Available!', 'There are currently no camps available. Please contact the admin or check back later.', parent = volunteer_screen)
+        messagebox.showerror('No Camps Available!', 'There are currently no camps available. Please contact the admin or check back later.', parent = volunteer_screen)
         volunteer_screen.destroy()
         LoginGUI.main_account_screen()
         
