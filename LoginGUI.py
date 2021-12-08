@@ -352,7 +352,7 @@ def main_account_screen():
 
     # creates a notebook which allows for multiple tabs
     account_screen_notebook = ttk.Notebook(main_screen)
-    account_screen_notebook.pack(expand=True)
+    account_screen_notebook.pack(fill='both', expand=True)
 
     # creates the different frames for each tab
     volunteer_sign_in_tab = Frame(account_screen_notebook, width=600, height= 500, bg='#F2F2F2')
