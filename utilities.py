@@ -84,6 +84,7 @@ def display_all(parent,csv,**kwargs):
     
     cols_to_hide = kwargs.get("cols_to_hide",None)
     search = kwargs.get('search',None)
+    cols_to_sort = kwargs.get('cols_to_sort', None)
     parent.delete(*parent.get_children())
 
     df = pd.read_csv(csv)
@@ -93,6 +94,9 @@ def display_all(parent,csv,**kwargs):
     if search:
         col, term = search
         df = df.loc[df[col].str.lower().str.contains(term.lower())]
+    if cols_to_sort:
+        print('yo')
+        #df = df.sort_values(cols_to_sort)
     
     parent["column"] = df.columns.tolist()
     parent["show"] = "headings"

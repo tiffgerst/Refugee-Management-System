@@ -1,6 +1,5 @@
 from tkinter import *
 from tkinter import messagebox, ttk
-import ttkbootstrap as tkb
 import pandas as pd
 import volunteers_logged_in
 from admin.plan import *
@@ -341,7 +340,6 @@ def main_account_screen():
 
     # setting up the window
     main_screen = Tk()
-    tkb.Style("minty")
     main_screen.geometry("600x500")
     main_screen.title("E-Adam")
     #main_screen.configure(bg='#F2F2F2')

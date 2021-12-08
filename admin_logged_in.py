@@ -1,5 +1,4 @@
 from tkinter import *
-import ttkbootstrap as tkb
 from tkinter import ttk, messagebox
 import admin.camp as ac
 import admin.plan as ap
@@ -68,7 +67,6 @@ def admin_logged_in():
     global admin_camp_tab
 
     admin_screen = Tk()
-    tkb.Style("minty")
     admin_screen.title("Admin Hub")
     admin_screen.geometry('820x600')
     admin_screen.configure(bg='#F2F2F2')
