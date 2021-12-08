@@ -39,7 +39,7 @@ def main(x):
     #displays the search bar
     search_entry = StringVar()
     search_bar = Entry(refugee_viewer, textvariable=search_entry)
-    Label(refugee_viewer, text ='Search by Last Name:',font=('Calibri', 10) ).pack()
+    Label(refugee_viewer, text ='Search by Family Name:',font=('Calibri', 10) ).pack()
     search_bar.pack()
     #search bar gets updated everytime a key is released
     #i.e when soemone types something

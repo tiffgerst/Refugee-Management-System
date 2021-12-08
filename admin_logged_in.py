@@ -9,6 +9,13 @@ from utilities import hash_password
 
 def save_admin_pass():
     admin_pass = new_password.get()
+    admin_pass_confirm = confirm_new_password.get()
+    if len(admin_pass) < 7:
+        messagebox.showerror('Invalid Password', 'Password needs to be at least 7 characters long')
+        return
+    elif admin_pass != admin_pass_confirm:
+        messagebox.showerror('Passwords Do Not Match', 'Your passwords do not match. Please double check!')
+        return
     hashed_pass = hash_password(admin_pass)
     with open('data/admin_password.txt', 'w') as file:
         file.write(hashed_pass)
@@ -18,11 +25,13 @@ def save_admin_pass():
 
 def change_admin_password():
     global new_password
+    global confirm_new_password
     global pop_up
     new_password = StringVar()
+    confirm_new_password = StringVar()
     pop_up = Toplevel(admin_screen)
     pop_up.title('Change Admin Password')
-    pop_up.geometry('400x200')
+    pop_up.geometry('400x300')
     Label(pop_up,
         text="Change Password:",
         width="300", height="3",
@@ -31,6 +40,8 @@ def change_admin_password():
     Label(pop_up, text='').pack()
     Label(pop_up, text='New Password:').pack()
     Entry(pop_up, textvariable=new_password, width="30", font=("Calibri", 10)).pack()
+    Label(pop_up, text='Confirm Password:').pack()
+    Entry(pop_up, textvariable=confirm_new_password, width="30", font=("Calibri", 10)).pack()
     Button(pop_up, text="Confirm", command=save_admin_pass).pack()
     
 
