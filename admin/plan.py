@@ -300,7 +300,7 @@ def main(x):
     #     width='50', font=('Calibri', 10)).pack()
 
     # Creates a frame within the emergency plan tab frame to display the csv
-    emergencyplan_viewer = LabelFrame(emergencyplan_tab, width=600, height=300, text='Emergency Plans:', bg='#F2F2F2')
+    emergencyplan_viewer = LabelFrame(emergencyplan_tab, width=600, height=300, text='Emergency Plans:')
     emergencyplan_viewer.pack()
     treeview = ttk.Treeview(emergencyplan_viewer)
 
@@ -325,13 +325,13 @@ def main(x):
     
     treeview.bind('<ButtonRelease-1>')
 
-    spacing = ' '*6
-    Button(emergencyplan_tab, text='Add a new plan', command=lambda: modify_plan_window(add=True)).pack(side = LEFT)
-    Label(emergencyplan_tab, text = spacing, bg='#F2F2F2').pack(side = LEFT)
-    Button(emergencyplan_tab, text='Edit Plan', command=edit_plan_confirm).pack(side=LEFT)
-    Label(emergencyplan_tab, text = spacing, bg='#F2F2F2').pack(side = LEFT)
-    Button(emergencyplan_tab, text='Close Plan', command=lambda: delete_or_close_plan('close')).pack(side = LEFT)
-    Label(emergencyplan_tab, text = spacing, bg='#F2F2F2').pack(side = LEFT)
-    Button(emergencyplan_tab, text='Delete Plan', command=lambda: delete_or_close_plan('delete')).pack(side=LEFT)
-    Label(emergencyplan_tab, text = spacing, bg='#F2F2F2').pack(side = LEFT)
-    Button(emergencyplan_tab, text='Make Summary', command=lambda: admin.summary.makeSummary(treeview)).pack(side=LEFT)
+
+    Button(emergencyplan_tab, text='Add a new plan', command=lambda: modify_plan_window(add=True)).pack()
+    Label(emergencyplan_tab, text = '').pack()
+    Button(emergencyplan_tab, text='Edit Plan', command=edit_plan_confirm).pack()
+    Label(emergencyplan_tab, text = '').pack()
+    Button(emergencyplan_tab, text='Close Plan', command=lambda: delete_or_close_plan('close')).pack()
+    Label(emergencyplan_tab, text = '').pack()
+    Button(emergencyplan_tab, text='Delete Plan', command=lambda: delete_or_close_plan('delete')).pack()
+    Label(emergencyplan_tab, text = '').pack()
+    Button(emergencyplan_tab, text='Make Summary', command=lambda: admin.summary.makeSummary(treeview)).pack()
