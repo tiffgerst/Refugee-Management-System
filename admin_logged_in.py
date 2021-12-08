@@ -71,6 +71,9 @@ def admin_logged_in():
     admin_screen.geometry('820x720')
     admin_screen.configure(bg='#F2F2F2')
 
+    style = ttk.Style(admin_screen)
+    style.theme_use('clam')
+
     Label(admin_screen,
         text="Admin Hub:",
         width="300", height="3",

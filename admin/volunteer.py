@@ -83,8 +83,8 @@ def main(x):
 
     volunteer_tab = x
 
-    Label(volunteer_tab , text='Here are all your volunteers:',
-        width='30', font=('Calibri', 10)).pack()
+    # Label(volunteer_tab , text='Here are all your volunteers:',
+    #     width='30', font=('Calibri', 10)).pack()
 
     # Creates a frame within the volunteer tab frame to display the csv
     volunteer_viewer = LabelFrame(volunteer_tab, width=600, height=300, text='All Volunteers:', bg='#F2F2F2')
@@ -101,7 +101,7 @@ def main(x):
     # Displays the search bar
     search_entry = StringVar()
     search_bar = Entry(volunteer_viewer, textvariable=search_entry)
-    Label(volunteer_viewer, text ='Search by Username:',font=('Calibri', 10) ).pack()
+    Label(volunteer_viewer, bg='#F2F2F2', text ='Search by Username:',font=('Calibri', 14) ).pack()
     search_bar.pack()
     # Search bar gets updated everytime a key is released
     # i.e when soemone types something

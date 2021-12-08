@@ -397,6 +397,7 @@ def show_refugee(x, username):
     #displays the search bar
     search_entry = StringVar()
     search_bar = Entry(refugee_viewer, textvariable=search_entry)
+    Label(refugee_viewer, bg='#F2F2F2', text ='Search by Family Name:',font=('Calibri', 14) ).pack()
     search_bar.pack()
     #search bar gets updated everytime a key is released
     #i.e when soemone types something

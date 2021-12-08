@@ -71,6 +71,9 @@ def volunteer_show(username):
     volunteer_screen.geometry('820x620')
     volunteer_screen.configure(bg='#F2F2F2')
 
+    style = ttk.Style(volunteer_screen)
+    style.theme_use('clam')
+
     Label(volunteer_screen,
         text="Volunteer Hub:",
         width="300", height="3",

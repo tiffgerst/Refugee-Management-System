@@ -344,6 +344,9 @@ def main_account_screen():
     main_screen.title("E-Adam")
     main_screen.configure(bg='#F2F2F2')
 
+    style = ttk.Style(main_screen)
+    style.theme_use('clam')
+
     # adding a description for the login
     Label(main_screen, text="Please Sign in or \n Register as a new volunteer",
           width="300", height="3",

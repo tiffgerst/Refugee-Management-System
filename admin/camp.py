@@ -342,8 +342,8 @@ def main(x):
     
     admin_camp_tab = x
 
-    Label(admin_camp_tab, text='Here are all your Camps:',
-        width='50', font=('Calibri', 10)).pack()
+    # Label(admin_camp_tab, text='Here are all your Camps:',
+    #     width='50', font=('Calibri', 10)).pack()
 
     #creates a frame within the emergency plan tab frame to display the csv
     camp_viewer = LabelFrame(admin_camp_tab, width=600, height=300, text='Current Camps:', bg='#F2F2F2')
@@ -360,7 +360,7 @@ def main(x):
     #displays the search bar
     search_entry = StringVar()
     search_bar = Entry(camp_viewer, textvariable=search_entry)
-    Label(camp_viewer, text ='Search by Camp Name:',font=('Calibri', 10) ).pack()
+    Label(camp_viewer, bg='#F2F2F2', text ='Search by Camp Name:',font=('Calibri', 14) ).pack()
     search_bar.pack()
     #search bar gets updated everytime a key is released
     #i.e when soemone types something

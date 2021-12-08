@@ -23,8 +23,9 @@ def main(x):
     
     manage_refugees_tab = x
     
-    Label(manage_refugees_tab, text='Here are all your refugees:',
-        width='50', font=('Calibri', 10)).pack()
+    # Label(manage_refugees_tab, text='Here are all your refugees:',
+    #     width='50', font=('Calibri', 10)).pack()
+
     refugee_viewer = LabelFrame(manage_refugees_tab, width=600, height=500, text='All Refugees:', bg='#F2F2F2')
     refugee_viewer.pack()
     treeview = ttk.Treeview(refugee_viewer)
@@ -39,7 +40,7 @@ def main(x):
     #displays the search bar
     search_entry = StringVar()
     search_bar = Entry(refugee_viewer, textvariable=search_entry)
-    Label(refugee_viewer, text ='Search by Family Name:',font=('Calibri', 10) ).pack()
+    Label(refugee_viewer, bg='#F2F2F2', text ='Search by Family Name:',font=('Calibri', 14) ).pack()
     search_bar.pack()
     #search bar gets updated everytime a key is released
     #i.e when soemone types something
