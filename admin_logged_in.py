@@ -68,7 +68,7 @@ def admin_logged_in():
 
     admin_screen = Tk()
     admin_screen.title("Admin Hub")
-    admin_screen.geometry('820x720')
+    admin_screen.geometry('820x600')
     admin_screen.configure(bg='#F2F2F2')
 
     style = ttk.Style(admin_screen)
