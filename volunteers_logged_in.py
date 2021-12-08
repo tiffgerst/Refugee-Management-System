@@ -107,4 +107,4 @@ def volunteer_show(username):
     volunteer_screen.mainloop()
 
 if __name__ == '__main__':
-    volunteer_show('user')
+    volunteer_show('miron222')

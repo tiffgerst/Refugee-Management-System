@@ -56,11 +56,11 @@ def edit_volunteer():
         
     # validate pass
     elif vol_pass == '':
-        updated_row = [username, vol_name, current_pass, vol_camp, vol_phone, vol_em, vol_medic, vol_avail]
+        updated_row = [username, vol_name, current_pass, vol_camp, str(vol_phone), vol_em, vol_medic, vol_avail]
     elif verify_pass(vol_pass) == False: 
         messagebox.showerror('Invalid Password','Please make sure you enter a valid password. It should have a minimum of 8 characters. No spaces allowed.', parent=editor_popup)
     else:
-        updated_row = [username, vol_name, hash_password(vol_pass), vol_camp, vol_phone, vol_em, vol_medic, vol_avail]
+        updated_row = [username, vol_name, hash_password(vol_pass), vol_camp, str(vol_phone), vol_em, vol_medic, vol_avail]
    
     df.loc[df['username'] == username] = [updated_row]
     df.to_csv('data/volunteers.csv',index=False)
