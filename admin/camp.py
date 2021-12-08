@@ -8,7 +8,30 @@ from utilities import check_blanks, delete_popups, display_all
 import admin.volunteer 
 
 
+def update_options(*args):
+    plan = camp_plan.get()
+    df = pd.read_csv('data/emergency_plans.csv')
+    continent = df.loc[df['name'] == plan,'location'].values[0]
+    countries = data[continent]
+    camp_country.set(countries[0])
+    menu = country_options['menu']
+    menu.delete(0, 'end')
+    for country in countries:
+        menu.add_command(label=country, command=lambda nation=country: camp_country.set(nation))
+    
+    
+
 def add_camp_window(**kwargs):
+    global data
+    data = {'Europe': 
+                ['Albania', 'Andorra', 'Armenia', 'Austria', 'Azerbaijan', 'Belarus', 'Belgium', 'Bosnia and Herzegovina', 'Bulgaria', 'Croatia', 'Cyprus', 'Czechia', 'Denmark', 'Estonia', 'Finland', 'France', 'Georgia', 'Germany', 'Greece', 'Hungary', 'Iceland', 'Ireland', 'Italy', 'Kazakhstan', 'Kosovo', 'Latvia', 'Liechtenstein', 'Lithuania', 'Luxembourg', 'Malta', 'Moldova', 'Monaco', 'Montenegro', 'Netherlands', 'North Macedonia', 'Norway', 'Poland', 'Portugal', 'Romania', 'Russia', 'San Marino', 'Serbia', 'Slovakia', 'Slovenia', 'Spain', 'Sweden', 'Switzerland', 'Turkey', 'Ukraine', 'United Kingdom', 'Vatican City'],
+                 'Asia': 
+                ['Afghanistan', 'Armenia', 'Azerbaijan', 'Bahrain', 'Bangladesh', 'Bhutan', 'Brunei', 'Cambodia', 'China', 'Cyprus', 'East Timor', 'Egypt', 'Georgia', 'India', 'Indonesia', 'Iran', 'Iraq', 'Israel', 'Japan', 'Jordan', 'Kazakhstan', 'Kuwait', 'Kyrgyzstan', 'Laos', 'Lebanon', 'Malaysia', 'Maldives', 'Mongolia', 'Myanmar', 'Nepal', 'North Korea', 'Oman', 'Pakistan', 'Palestine', 'Philippines', 'Qatar', 'Russia', 'Saudi Arabia', 'Singapore', 'South Korea', 'Sri Lanka', 'Syria', 'Taiwan', 'Tajikistan', 'Thailand', 'Turkey', 'Turkmenistan', 'United Arab Emirates', 'Uzbekistan', 'Vietnam', 'Yemen'],
+                'Africa':
+                ['Algeria', 'Angola', 'Benin', 'Botswana', 'Burkina Faso', 'Burundi', 'Cabo Verde', 'Cameroon', 'Central African Republic', 'Chad', 'Comoros', 'Congo, Democratic Republic of the', 'Congo, Republic of the', "Cote d'Ivoire", 'Djibouti', 'Egypt', 'Equatorial Guinea', 'Eritrea', 'Eswatini', 'Ethiopia', 'Gabon', 'Gambia', 'Ghana', 'Guinea', 'Guinea-Bissau', 'Kenya', 'Lesotho', 'Liberia', 'Libya', 'Madagascar', 'Malawi', 'Mali', 'Mauritania', 'Mauritius', 'Morocco', 'Mozambique', 'Namibia', 'Niger', 'Nigeria', 'Rwanda', 'Sao Tome and Principe', 'Senegal', 'Seychelles', 'Sierra Leone', 'Somalia', 'South Africa', 'South Sudan', 'Sudan', 'Tanzania', 'Togo', 'Tunisia', 'Uganda', 'Zambia', 'Zimbabwe'],
+                'South America': ['Argentina', 'Bolivia', 'Brazil', 'Chile', 'Colombia', 'Ecuador', 'Guyana', 'Paraguay', 'Peru', 'Suriname', 'Uruguay', 'Venezuela'],
+                'North America': ['Antigua and Barbuda', 'Bahamas', 'Barbados', 'Belize', 'Canada', 'Costa Rica', 'Cuba', 'Dominica', 'Dominican Republic', 'El Salvador', 'Grenada', 'Guatemala', 'Haiti', 'Honduras', 'Jamaica', 'Mexico', 'Nicaragua', 'Panama', 'Saint Kitts and Nevis', 'Saint Lucia', 'Saint Vincent and the Grenadines', 'Trinidad and Tobago', 'United States of America'],
+                'Oceania':['Australia', 'Fiji', 'Kiribati', 'Marshall Islands', 'Micronesia', 'Nauru', 'New Zealand', 'Palau', 'Papua New Guinea', 'Samoa', 'Solomon Islands', 'Tonga', 'Tuvalu', 'Vanuatu']}
     default = kwargs.get('default',None)
     
     global camp_plan
@@ -17,6 +40,7 @@ def add_camp_window(**kwargs):
     global add_new_camp_popup
     global camp_country
     global camp_city
+    global country_options
     
     add_new_camp_popup = Toplevel(admin_camp_tab)
     add_new_camp_popup.geometry('600x500')
@@ -39,12 +63,8 @@ def add_camp_window(**kwargs):
     camp_country = StringVar()
     camp_city = StringVar()
     
-    
-    if default:
-        camp_plan.set(default)
-    else:
-        camp_plan.set(emergency_plans[0])
    
+    
     Label(add_new_camp_popup, text="", bg='#F2F2F2').pack()
 
     Label(add_new_camp_popup, text='Camp Name: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
@@ -52,12 +72,19 @@ def add_camp_window(**kwargs):
     Label(add_new_camp_popup, text='Emergency Plan: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
     OptionMenu(add_new_camp_popup, camp_plan , *emergency_plans).pack()
     Label(add_new_camp_popup, text='Country: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
-    Entry(add_new_camp_popup, textvariable=camp_country, width='30', font=("Calibri", 10)).pack()
+    country_options = OptionMenu(add_new_camp_popup, camp_country, '')
+    country_options.pack()
+    camp_plan.trace('w', update_options)
     Label(add_new_camp_popup, text='City: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
     Entry(add_new_camp_popup, textvariable=camp_city, width='30', font=("Calibri", 10)).pack()
     Label(add_new_camp_popup, text='Number of Beds: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
     Entry(add_new_camp_popup, textvariable=camp_shelter, width='30', font=("Calibri", 10)).pack()
     Button(add_new_camp_popup, text="Add Camp", height="2", width="30", command=add_camp).pack(pady=10)
+    
+    if default:
+            camp_plan.set(default)
+    else:
+        camp_plan.set(emergency_plans[0])
     
 
 def add_camp():

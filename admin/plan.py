@@ -145,12 +145,7 @@ def modify_plan_window(add):
 
     Label(modify_popup, text="* = required", bg='#F2F2F2').pack()
 
-    subregions = ['Central Asia','Western Asia','Southern Asia', 'Eastern Asia', 'South-eastern Asia',
-    'Northern America','Central America','South America',
-    'Western Europe','Eastern Europe','Southern Europe','Northern Europe',
-    'Western Africa','Northern Africa','Eastern Africa','Middle Africa','Southern Africa',
-    'Caribbean',
-    'Oceania']
+    subregions = ['Europe','Oceania', 'North America', 'South America', 'Asia', 'Africa']
     plan_location.set(subregions[0])
 
 
