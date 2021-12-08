@@ -29,33 +29,40 @@ x = camp_name['camp_name'].to_list()
 
 df_ref = pd.read_csv('data/refugees.csv')
 
+labels = []
+on_site = []
+off_site = []
+
+
 for camp in x:
     
+    labels.append(camp)
     y = df_ref.loc[df_ref['camp_name'] == camp]
 
     num_on_site = y[y["on_site"]==True]['first_name'].count()
+    on_site.append(num_on_site)
     num_off_site = y[y["on_site"]==False]['first_name'].count()
+    off_site.append(num_off_site)
+
+def addlabels(x,y):
+    for i in range(len(x)):
+        plt.text(i, y[i], y[i], ha = 'center')
+  
+width = 0.3      # the width of the bars: can also be len(x) sequence
+
+total_num = [x + y for x, y in zip(on_site, off_site)]
 
 
+fig, ax = plt.subplots()
+
+ax.bar(labels, on_site, width,  label='On Site')
+ax.bar(labels, off_site, width, bottom=on_site, label='Off Site')
+
+ax.set_ylabel('Number of Refugees')
+ax.set_title('Total Number of Refugees per Camp')
+ax.legend()
+
+addlabels(labels, total_num)
+plt.show()
 
 
-
-
-# labels = ['G1', 'G2', 'G3', 'G4', 'G5']
-# men_means = [20, 35, 30, 35, 27]
-# women_means = [25, 32, 34, 20, 25]
-# men_std = [2, 3, 4, 1, 2]
-# women_std = [3, 5, 2, 3, 3]
-# width = 0.35       # the width of the bars: can also be len(x) sequence
-
-# fig, ax = plt.subplots()
-
-# ax.bar(labels, men_means, width, yerr=men_std, label='Men')
-# ax.bar(labels, women_means, width, yerr=women_std, bottom=men_means,
-#        label='Women')
-
-# ax.set_ylabel('Scores')
-# ax.set_title('Scores by group and gender')
-# ax.legend()
-
-# plt.show()
