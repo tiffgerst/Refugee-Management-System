@@ -282,6 +282,8 @@ def search_plan_name(e):
     else:
         display_all(treeview,'data/emergency_plans.csv',search=('name',value))
 
+def sorting():
+    print('hello')
 
 def main(x):
     '''
@@ -324,6 +326,7 @@ def main(x):
     treeview.pack()
     
     treeview.bind('<ButtonRelease-1>')
+    treeview.heading('name', command=sorting)
 
 
     Button(emergencyplan_tab, text='Add a new plan', command=lambda: modify_plan_window(add=True)).pack()
