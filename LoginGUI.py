@@ -13,11 +13,16 @@ def login_admin():
     sets isLoggedIn_adm to True if successful
     Displays appropriate messages
     """
-
+    
     ad_u_entry = name_var_ad.get()
     ad_p_entry = passw_var_ad.get()
+    with open('data/admin_password.txt') as file:
+        admin_password = file.read()
+    
+    
+    
 
-    if ad_u_entry == 'Admin' and ad_p_entry == 'root':
+    if ad_u_entry == 'Admin' and verify_password(admin_password, ad_p_entry):
         Label(main_screen, text='Login Successful', fg='Green').pack()
         main_screen.destroy()
         ad.admin_logged_in()
