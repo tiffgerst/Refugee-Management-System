@@ -5,7 +5,7 @@ from utilities import check_blanks,check_date,delete_popups,display_all
 from datetime import datetime
 import admin.camp
 import admin.volunteer
-
+import admin.summary
 
 def edit_plan_confirm():
     """
@@ -325,7 +325,13 @@ def main(x):
     
     treeview.bind('<ButtonRelease-1>')
 
-    Button(emergencyplan_tab, text='Add a new plan', command=lambda: modify_plan_window(add=True)).pack()
-    Button(emergencyplan_tab, text='Edit Plan', command=edit_plan_confirm).pack()
-    Button(emergencyplan_tab, text='Close Plan', command=lambda: delete_or_close_plan('close')).pack()
-    Button(emergencyplan_tab, text='Delete Plan', command=lambda: delete_or_close_plan('delete')).pack()
+    spacing = ' '*6
+    Button(emergencyplan_tab, text='Add a new plan', command=lambda: modify_plan_window(add=True)).pack(side = LEFT)
+    Label(emergencyplan_tab, text = spacing, bg='#F2F2F2').pack(side = LEFT)
+    Button(emergencyplan_tab, text='Edit Plan', command=edit_plan_confirm).pack(side=LEFT)
+    Label(emergencyplan_tab, text = spacing, bg='#F2F2F2').pack(side = LEFT)
+    Button(emergencyplan_tab, text='Close Plan', command=lambda: delete_or_close_plan('close')).pack(side = LEFT)
+    Label(emergencyplan_tab, text = spacing, bg='#F2F2F2').pack(side = LEFT)
+    Button(emergencyplan_tab, text='Delete Plan', command=lambda: delete_or_close_plan('delete')).pack(side=LEFT)
+    Label(emergencyplan_tab, text = spacing, bg='#F2F2F2').pack(side = LEFT)
+    Button(emergencyplan_tab, text='Make Summary', command=lambda: admin.summary.makeSummary(treeview)).pack(side=LEFT)
