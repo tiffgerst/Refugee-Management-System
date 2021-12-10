@@ -26,7 +26,7 @@ def generate_pie(camp, df):
         return int(a)
     
     mylabels = ['Non-Medically Trained','Medically Trained']
-    mycolors = ["#008080", "#800000"]
+    mycolors = ["#008080", "#F89464"]
     plt.pie(y, labels = mylabels, colors = mycolors, autopct=absolute_value)
 
     
@@ -222,7 +222,7 @@ def makeSummary(x):
     <font size ="11"><p><b>Number of Refugees:</b> {stats['num_refs']}</p></font>
     <font size ="11"><p><b>Total Capacity:</b> {stats['capacity']}</p></font>
     <font size="10"><p><b>            Filled Capacity:</b> {stats['filled_capacity']: .0f}%</p> </font>
-    <center><img src="summaries/{camp}.png" width='200'><center>
+    <center><img src="summaries/{camp}.png" width = '190'><center>
     <br>
     <br>
     </section>""")
