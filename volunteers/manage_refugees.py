@@ -125,9 +125,12 @@ def edit_refugee():
         name=refugee_camp,
         form={
         'first_name':refugee_fi,'family_name':refugee_fa,'camp_name':refugee_camp,
-        'medical_conditions':refugee_cond,'num_relatives':refugee_rel},
+        'medical_conditions':refugee_cond},
         parent=editor_popup)
     if res == False: return
+    
+    if refugee_rel == '':
+        refugee_rel = 1
 
     # Open csv -> change the refugee attributes -> save csv
     df = pd.read_csv('data/refugees.csv')
@@ -265,10 +268,13 @@ def save_new_refugee():
     refugee_fa = refugee_family_name.get()
     refugee_rel = num_relatives.get()
     refugee_cond = medical_conditions.get()
+    if refugee_rel ==  "":
+        refugee_rel = 1
+    
     try:
         refugee_rel = int(refugee_rel)
         if refugee_rel < 0:
-            messagebox.showerror('Invalid Number of Relatives', 'Please enter a positive integer')
+            messagebox.showerror('Invalid Number of Relatives', 'Please enter an integer')
             return
     except:
         messagebox.showerror('Invalid Number of Relatives', 'Please enter a positive integer')
