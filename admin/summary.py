@@ -77,10 +77,10 @@ def generate_bar(plan, df_camp, df_ref):
     plt.close()
 
 
-def plan_stats(stat, plan):
-
+def plan_stats(stat, plan, **kwargs):
+    df = kwargs.get('df_camp',None)
     if stat == 'num_ref':
-        df = pd.read_csv('data/camps.csv')
+        
         camp_name = df.loc[df['emergency_plan_name'] == plan]
         camps = camp_name['camp_name'].to_list()
 
@@ -97,9 +97,7 @@ def plan_stats(stat, plan):
 
         return num_refs
     
-    else:
-        
-        df = pd.read_csv('data/camps.csv')
+    elif stat=='num_vol':
         camp_name = df.loc[df['emergency_plan_name'] == plan]
         camps = camp_name['camp_name'].to_list()
 
@@ -115,6 +113,26 @@ def plan_stats(stat, plan):
             num_vols += total_vols
 
         return num_vols
+    
+    elif stat == 'plan_desc':
+
+        plan_desc = {} 
+        df = pd.read_csv('data/emergency_plans.csv')
+
+        plan_index = df.index[df['name'] == plan].tolist()
+        start_date = df.at[plan_index[0], 'start_date']
+        location = df.at[plan_index[0], 'location']
+        description = df.at[plan_index[0], 'description']
+        type = df.at[plan_index[0], 'type']
+
+
+        plan_desc['start_date'] = start_date
+        plan_desc['location'] = location
+        plan_desc['description'] = description
+        plan_desc['type'] = type
+     
+        return plan_desc
+
 
 def camp_stats(camp):
 
@@ -172,12 +190,15 @@ def makeSummary(x):
     pdf = PDF(orientation='P',unit='mm',format='A4')
     pdf.add_page()
 
-    num_refs = plan_stats('num_ref', selected_plan)
-    num_vols = plan_stats('num_vol', selected_plan)
+    num_refs = plan_stats('num_ref', selected_plan, df = df_camp)
+    num_vols = plan_stats('num_vol', selected_plan, df = df_camp)
+    plan_desc = plan_stats('plan_desc', selected_plan)
 
     pdf.write_html(f"""
   <u><h1 align="center">Summary for {selected_plan}</h1></u>
   <section>
+    <p>{selected_plan} began on {plan_desc['start_date']} and is located in {plan_desc['location']}. It was created due to a/an {plan_desc['type']}.
+    Description: {plan_desc['description']}</p>
     <p><b>Number of Camps: </b>{len(camps)}</p>
     <p><b>Number of Refugees: </b>{num_refs}</p>
     <p><b>Number of Volunteers: </b>{num_vols}</p>
