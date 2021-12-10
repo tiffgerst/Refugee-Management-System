@@ -65,8 +65,8 @@ def generate_bar(plan, df_camp, df_ref):
 
     fig, ax = plt.subplots()
 
-    ax.bar(labels, on_site, width,  label='On Site')
-    ax.bar(labels, off_site, width, bottom=on_site, label='Off Site')
+    ax.bar(labels, on_site, width,  label='On Site', color = "#008080")
+    ax.bar(labels, off_site, width, bottom=on_site, label='Off Site', color = "#F89464")
 
     ax.set_ylabel('Number of Refugees')
     ax.set_title('Total Number of Refugees per Camp')
@@ -222,7 +222,7 @@ def makeSummary(x):
     <font size ="11"><p><b>Number of Refugees:</b> {stats['num_refs']}</p></font>
     <font size ="11"><p><b>Total Capacity:</b> {stats['capacity']}</p></font>
     <font size="10"><p><b>            Filled Capacity:</b> {stats['filled_capacity']: .0f}%</p> </font>
-    <center><img src="summaries/{camp}.png" width = '190'><center>
+    <center><img src="summaries/{camp}.png" width='180'><center>
     <br>
     <br>
     </section>""")
