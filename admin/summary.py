@@ -11,21 +11,81 @@ class PDF(FPDF,HTMLMixin):
     pass
 
 
-def generate_figs():
+def generate_pie(camp):
 
+    print(camp)
     df = pd.read_csv("data/volunteers.csv")
+    x = df.loc[df['camp_name'] == camp]
+
+
+    num_of_medic = x[x["medic"]==True]['username'].count()
+    not_medic = x[x["medic"]==False]['username'].count()
+
+
+
+    y = np.array([not_medic, num_of_medic])
     
-    y = np.array([35, 25])
+    def absolute_value(val):
+        a  = np.round(val/100.*y.sum())
+        return int(a)
+
+
     mylabels = ['Non-Medically Trained','Medically Trained']
-    myexplode = [0.2, 0]
     mycolors = ["#008080", "#800000"]
-    plt.pie(y, labels = mylabels, explode = myexplode, shadow = True, colors = mycolors)
-    plt.show() 
+    plt.pie(y, labels = mylabels, colors = mycolors, autopct=absolute_value)
+    plt.savefig(f'summaries/{camp}.png') 
+
+def addlabels(x,y):
+    for i in range(len(x)):
+        plt.text(i, y[i], y[i], ha = 'center')
+
+def generate_bar():
+
+    selected_plan = 'Plan 2 camps'
+    df = pd.read_csv('data/camps.csv')
+    camp_name = df.loc[df['emergency_plan_name'] == selected_plan]
+    x = camp_name['camp_name'].to_list()
+
+    df_ref = pd.read_csv('data/refugees.csv')
+
+    labels = []
+    on_site = []
+    off_site = []
+
+    for camp in x:
+        labels.append(camp)
+        y = df_ref.loc[df_ref['camp_name'] == camp]
+
+        num_on_site = y[y["on_site"]==True]['first_name'].count()
+        on_site.append(num_on_site)
+        num_off_site = y[y["on_site"]==False]['first_name'].count()
+        off_site.append(num_off_site)
+
+
+
+    width = 0.3      # the width of the bars: can also be len(x) sequence
+
+    total_num = [x + y for x, y in zip(on_site, off_site)]
+
+
+    fig, ax = plt.subplots()
+
+    ax.bar(labels, on_site, width,  label='On Site')
+    ax.bar(labels, off_site, width, bottom=on_site, label='Off Site')
+
+    ax.set_ylabel('Number of Refugees')
+    ax.set_title('Total Number of Refugees per Camp')
+    ax.legend()
+
+    addlabels(labels, total_num)
+    # plt.show()
+
 
 
 def makeSummary(x):
 
-    generate_figs()
+    
+    #generate_bar()
 
     # treeview = x
 
@@ -54,8 +114,9 @@ def makeSummary(x):
     <p><b>Number of Volunteers: 5</b></p> 
     <br>
     """)
-    camps = ['camp1', 'camp2']
-    for camp in camps: 
+    camps = ['Empty Camp', 'Camp with Miron']
+    for camp in camps:
+        generate_pie(camp)
         pdf.write_html(f"""
     <h2><b>{camp}:</b></h2> 
     <font size ="11"><p><b>Number of Volunteers:</b> 5</p></font>
@@ -66,11 +127,7 @@ def makeSummary(x):
     </section>""")
 
 
-   
-  
- 
-
     pdf.output(f"{selected_plan} Summary.pdf")
 
 if __name__ == '__main__':
-    makeSummary('testplan')
+    makeSummary('Plan 2 camps')
