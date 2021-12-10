@@ -87,11 +87,51 @@ def generate_bar(plan):
     plt.close()
 
 
+def plan_stats(stat, plan):
+
+    if stat == 'num_ref':
+        df = pd.read_csv('data/camps.csv')
+        camp_name = df.loc[df['emergency_plan_name'] == plan]
+        camps = camp_name['camp_name'].to_list()
+
+        df_ref = pd.read_csv('data/refugees.csv')
+        
+        num_refs = 0
+
+        for camp in camps:
+            
+            y = df_ref.loc[df_ref['camp_name'] == camp]
+
+            total_refs = y['first_name'].count()
+            num_refs += total_refs
+
+        return num_refs
+    
+    else:
+        
+        df = pd.read_csv('data/camps.csv')
+        camp_name = df.loc[df['emergency_plan_name'] == plan]
+        camps = camp_name['camp_name'].to_list()
+
+        df_ref = pd.read_csv('data/volunteers.csv')
+        
+        num_vols = 0
+
+        for camp in camps:
+            
+            y = df_ref.loc[df_ref['camp_name'] == camp]
+
+            total_vols = y['username'].count()
+            num_vols += total_vols
+
+        return num_vols
+
+def camp_stats(stat, camp):
+    pass
 
 def makeSummary(x):
 
-    
-    #generate_bar()
+    selected_plan = x
 
     # treeview = x
 
@@ -104,46 +144,51 @@ def makeSummary(x):
     #     # No plan selected
     #     messagebox.showerror('Please Select a Plan', 'Please select a plan you wish to edit.')
     # else:
+    df = pd.read_csv('data/camps.csv')
+    camp_name = df.loc[df['emergency_plan_name'] == selected_plan]
+    camps = camp_name['camp_name'].to_list()
+    
 
-    selected_plan = x
-
-
+    generate_bar(selected_plan)
 
     pdf = PDF(orientation='P',unit='mm',format='A4')
     pdf.add_page()
 
-    pdf.write_html("""
+    num_refs = plan_stats('num_ref', selected_plan)
+    num_vols = plan_stats('num_vol', selected_plan)
+    print(num_vols)
+
+    pdf.write_html(f"""
   <u><h1 align="center">Summary for Plan</h1></u>
   <section>
-    <p><b>Number of Camps: 5</b></p>
-    <p><b>Number of Refugees: 5</b></p>
-    <p><b>Number of Volunteers: 5</b></p>
+    <p><b>Number of Camps: </b>{len(camps)}</p>
+    <p><b>Number of Refugees: </b>{num_refs}</p>
+    <p><b>Number of Volunteers: </b>{num_vols}</p>
+    <center><img src="summaries/{selected_plan}.png" width='200'><center>
+    <br>
     <br>
     </section>
     """)
-    camps = ['Empty Camp', 'Camp with Miron']
     for camp in camps:
         generate_pie(camp)
         pdf.write_html(f"""
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
     <section>
+
     <h2><b>{camp}:</b></h2> 
     <font size ="11"><p><b>Number of Volunteers:</b> 5</p></font>
     <font size="10"><p><b>            Of which medics:</b> 5</p> </font>
     <font size ="11"><p><b>Number of Refugees:</b> 5</p></font>
     <font size ="11"><p><b>Number of Beds:</b> 5</p></font>
     <font size ="11"><p><b>Number of Food Rations:</b> 5</p></font>
+    <font size ="11"><p><b>Total Capacity:</b> 5</p></font>
+    <font size="10"><p><b>            Spare Capacity:</b> 5</p> </font>
     <center><img src="summaries/{camp}.png" width='200'><center>
+    <br>
     <br>
     </section>""")
 
 
-    pdf.output(f"{selected_plan} Summary.pdf")
+    pdf.output(f"summaries/{selected_plan} Summary.pdf")
 
 if __name__ == '__main__':
     makeSummary('Plan 2 camps')
