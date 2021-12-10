@@ -12,11 +12,8 @@ class PDF(FPDF,HTMLMixin):
     pass
 
 
-def generate_pie(camp):
+def generate_pie(camp, df):
 
-
-
-    df = pd.read_csv("data/volunteers.csv")
     x = df.loc[df['camp_name'] == camp]
 
     num_of_medic = x[x["medic"]==True]['username'].count()
@@ -36,22 +33,16 @@ def generate_pie(camp):
     plt.savefig(f'summaries/{camp}.png', bbox_inches='tight')
     plt.close()
     
-
-
-
-
 def addlabels(x,y):
     for i in range(len(x)):
         plt.text(i, y[i], y[i], ha = 'center')
 
-def generate_bar(plan):
+def generate_bar(plan, df_camp, df_ref):
 
     
-    df = pd.read_csv('data/camps.csv')
-    camp_name = df.loc[df['emergency_plan_name'] == plan]
+    
+    camp_name = df_camp.loc[df_camp['emergency_plan_name'] == plan]
     camps = camp_name['camp_name'].to_list()
-
-    df_ref = pd.read_csv('data/refugees.csv')
 
     labels = []
     on_site = []
@@ -65,7 +56,6 @@ def generate_bar(plan):
         on_site.append(num_on_site)
         num_off_site = y[y["on_site"]==False]['first_name'].count()
         off_site.append(num_off_site)
-
 
 
     width = 0.3      # the width of the bars: can also be len(x) sequence
@@ -126,8 +116,36 @@ def plan_stats(stat, plan):
 
         return num_vols
 
-def camp_stats(stat, camp):
-    pass
+def camp_stats(camp):
+
+    df = pd.read_csv('data/camps.csv')
+    df_ref = pd.read_csv('data/refugees.csv')
+    df_vol = pd.read_csv('data/volunteers.csv')
+
+    stats = {}
+
+    y = df_vol.loc[df_vol['camp_name'] == camp]
+
+    num_vols = y['username'].count()
+    stats['num_vols'] = num_vols
+    num_medics = y[y["medic"]==True]['username'].count()
+    stats['num_medics'] = num_medics
+
+    x = df_ref.loc[df_ref['camp_name'] == camp]
+
+    num_refs = x['num_relatives'].sum()
+    stats['num_refs'] = num_refs
+
+
+    capacity_index = df.index[df['camp_name'] == camp].tolist()
+    capacity = df.at[capacity_index[0], 'capacity']
+    stats['capacity']= capacity
+    
+    filled_capacity = ((num_refs / capacity) * 100)
+    stats['filled_capacity'] = filled_capacity
+    
+    return stats
+    
 
 def makeSummary(x):
 
@@ -144,19 +162,18 @@ def makeSummary(x):
     #     # No plan selected
     #     messagebox.showerror('Please Select a Plan', 'Please select a plan you wish to edit.')
     # else:
-    df = pd.read_csv('data/camps.csv')
-    camp_name = df.loc[df['emergency_plan_name'] == selected_plan]
+    df_camp = pd.read_csv('data/camps.csv')
+    df_ref = pd.read_csv('data/refugees.csv')
+    camp_name = df_camp.loc[df_camp['emergency_plan_name'] == selected_plan]
     camps = camp_name['camp_name'].to_list()
     
-
-    generate_bar(selected_plan)
+    generate_bar(selected_plan, df_camp, df_ref)
 
     pdf = PDF(orientation='P',unit='mm',format='A4')
     pdf.add_page()
 
     num_refs = plan_stats('num_ref', selected_plan)
     num_vols = plan_stats('num_vol', selected_plan)
-    print(num_vols)
 
     pdf.write_html(f"""
   <u><h1 align="center">Summary for Plan</h1></u>
@@ -170,18 +187,18 @@ def makeSummary(x):
     </section>
     """)
     for camp in camps:
-        generate_pie(camp)
+        stats = camp_stats(camp)
+        df = pd.read_csv("data/volunteers.csv")
+        generate_pie(camp, df)
         pdf.write_html(f"""
     <section>
 
     <h2><b>{camp}:</b></h2> 
-    <font size ="11"><p><b>Number of Volunteers:</b> 5</p></font>
-    <font size="10"><p><b>            Of which medics:</b> 5</p> </font>
-    <font size ="11"><p><b>Number of Refugees:</b> 5</p></font>
-    <font size ="11"><p><b>Number of Beds:</b> 5</p></font>
-    <font size ="11"><p><b>Number of Food Rations:</b> 5</p></font>
-    <font size ="11"><p><b>Total Capacity:</b> 5</p></font>
-    <font size="10"><p><b>            Spare Capacity:</b> 5</p> </font>
+    <font size ="11"><p><b>Number of Volunteers:</b> {stats['num_vols']}</p></font>
+    <font size="10"><p><b>            Of which medics:</b> {stats['num_medics']}</p> </font>
+    <font size ="11"><p><b>Number of Refugees:</b> {stats['num_refs']}</p></font>
+    <font size ="11"><p><b>Total Capacity:</b> {stats['capacity']}</p></font>
+    <font size="10"><p><b>            Filled Capacity:</b> {stats['filled_capacity']: .0f}%</p> </font>
     <center><img src="summaries/{camp}.png" width='200'><center>
     <br>
     <br>
