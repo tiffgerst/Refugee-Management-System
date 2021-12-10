@@ -176,7 +176,7 @@ def makeSummary(x):
     num_vols = plan_stats('num_vol', selected_plan)
 
     pdf.write_html(f"""
-  <u><h1 align="center">Summary for Plan</h1></u>
+  <u><h1 align="center">Summary for {selected_plan}</h1></u>
   <section>
     <p><b>Number of Camps: </b>{len(camps)}</p>
     <p><b>Number of Refugees: </b>{num_refs}</p>
