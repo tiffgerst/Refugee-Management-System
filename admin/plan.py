@@ -7,6 +7,13 @@ import admin.camp
 import admin.volunteer
 import admin.summary
 
+def summary_popup():
+    admin.summary.makeSummary(treeview)
+    pass
+
+
+
+
 def edit_plan_confirm():
     """
     Asks user whether they are sure they want to edit an emergency plan
@@ -340,4 +347,4 @@ def main(x):
     Label(emergencyplan_tab, text = '').pack()
     Button(emergencyplan_tab, text='Delete Plan', command=lambda: delete_or_close_plan('delete')).pack()
     Label(emergencyplan_tab, text = '').pack()
-    Button(emergencyplan_tab, text='Make Summary', command=lambda: admin.summary.makeSummary(treeview)).pack()
+    Button(emergencyplan_tab, text='Make Summary', command=summary_popup).pack()
