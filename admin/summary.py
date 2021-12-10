@@ -13,27 +13,30 @@ class PDF(FPDF,HTMLMixin):
 
 def generate_pie(camp):
 
-    print(camp)
+
+
     df = pd.read_csv("data/volunteers.csv")
     x = df.loc[df['camp_name'] == camp]
 
-
     num_of_medic = x[x["medic"]==True]['username'].count()
     not_medic = x[x["medic"]==False]['username'].count()
-
-
 
     y = np.array([not_medic, num_of_medic])
     
     def absolute_value(val):
         a  = np.round(val/100.*y.sum())
         return int(a)
-
-
+    
     mylabels = ['Non-Medically Trained','Medically Trained']
     mycolors = ["#008080", "#800000"]
     plt.pie(y, labels = mylabels, colors = mycolors, autopct=absolute_value)
-    plt.savefig(f'summaries/{camp}.png') 
+
+
+    plt.savefig(f'summaries/{camp}.png')
+    plt.close()
+
+
+
 
 def addlabels(x,y):
     for i in range(len(x)):
