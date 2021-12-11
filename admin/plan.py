@@ -1,18 +1,51 @@
 from tkinter import *
-from tkinter import ttk, messagebox
+from tkinter import ttk, messagebox, filedialog
+from matplotlib.pyplot import title
 import pandas as pd
 from utilities import check_blanks,check_date,delete_popups,display_all
 from datetime import datetime
 import admin.camp
 import admin.volunteer
 import admin.summary
+from tkPDFViewer import tkPDFViewer as pdf
+from shutil import copy2
 
 def summary_popup():
+    selected_plan = treeview.focus()
+    
+    try:
+        # Try and index the selected_plan
+        selected_plan = treeview.item(selected_plan)['values'][0]
+    except IndexError:
+        # No plan selected
+        messagebox.showerror('Please Select a Plan', 'Please select a plan you wish to edit.')
+    else:
+        summary_messagebox = Toplevel(emergencyplan_tab)
+        Label(summary_messagebox, text='Would you like to view or download')
+        Button(summary_messagebox, text='View', command = lambda: view(selected_plan)).pack(side=LEFT)
+        Button(summary_messagebox, text = 'Download',command= lambda: download(selected_plan)).pack(side=LEFT)
+       
+
+def view(selected_plan):
+    
     admin.summary.makeSummary(treeview)
-    pass
+    summary_popup = Toplevel(emergencyplan_tab)
 
+    location = f'summaries/{selected_plan} Summary.pdf'
+    v1 = pdf.ShowPdf()
+    v2 = v1.pdf_view(summary_popup,
+        pdf_location = location,
+        width = 80, height = 100)
+    v2.pack()
 
+def download(selected_plan):
+    admin.summary.makeSummary(treeview)
+    init_path = f"summaries/{selected_plan} Summary.pdf"
+    #pdf_file = filedialog.asksaveasfilename(defaultextension=".pdf",defaultdir = f"summaries/{selected_plan} Summaries",title="Save File",filetypes=(("All Files", "*.*")))
+    target = filedialog.askdirectory(initialdir="/", title="Select target directory")
+    copy2(init_path,target,follow_symlinks=True)
 
+        
 
 def edit_plan_confirm():
     """
@@ -340,11 +373,11 @@ def main(x):
 
 
     Button(emergencyplan_tab, text='Add a new plan', command=lambda: modify_plan_window(add=True)).pack()
-    Label(emergencyplan_tab, text = '').pack()
+ 
     Button(emergencyplan_tab, text='Edit Plan', command=edit_plan_confirm).pack()
-    Label(emergencyplan_tab, text = '').pack()
+ 
     Button(emergencyplan_tab, text='Close Plan', command=lambda: delete_or_close_plan('close')).pack()
-    Label(emergencyplan_tab, text = '').pack()
+
     Button(emergencyplan_tab, text='Delete Plan', command=lambda: delete_or_close_plan('delete')).pack()
-    Label(emergencyplan_tab, text = '').pack()
-    Button(emergencyplan_tab, text='Make Summary', command=summary_popup).pack()
+
+    Button(emergencyplan_tab, text='Summary', command=summary_popup).pack()

@@ -4,8 +4,6 @@ import pandas as pd
 from fpdf import FPDF, HTMLMixin
 import matplotlib.pyplot as plt
 import numpy as np
-import PIL
-
 
 
 class PDF(FPDF,HTMLMixin):
@@ -195,37 +193,37 @@ def makeSummary(x):
         plan_desc = plan_stats('plan_desc', selected_plan)
 
         pdf.write_html(f"""
-    <u><h1 align="center">Summary for {selected_plan}</h1></u>
+    <font size ="20"><u><h1 align="center">Summary for {selected_plan}</h1></u></font>
     <section>
-        <p>{selected_plan} began on {plan_desc['start_date']} and is located in {plan_desc['location']}. It was created due to a/an {plan_desc['type']}.
-        Description: {plan_desc['description']}</p>
-        <p><b>Number of Camps: </b>{len(camps)}</p>
-        <p><b>Number of Refugees: </b>{num_refs}</p>
-        <p><b>Number of Volunteers: </b>{num_vols}</p>
-        <center><img src="summaries/{selected_plan}.png" width='200'><center>
+        <font size ="16"><p>{selected_plan} began on {plan_desc['start_date']} and is located in {plan_desc['location']}.</p><p> It was created due to a/an {plan_desc['type']}.
+        </p><p>Description: {plan_desc['description']}</p></font>
+        <font size ="16"><p><b>Number of Camps: </b>{len(camps)}</p></font>
+        <font size ="16"><p><b>Number of Refugees: </b>{num_refs}</p></font>
+        <font size ="16"><p><b>Number of Volunteers: </b>{num_vols}</p></font>
+        <font size ="16"><center><img src="summaries/{selected_plan}.png" width='500'><center></font>
         <br>
         <br>
+        <hr>
         </section>
         """)
         for camp in camps:
             stats = camp_stats(camp)
             df = pd.read_csv("data/volunteers.csv")
             generate_pie(camp, df)
+            pdf.add_page()
             pdf.write_html(f"""
         <section>
 
-        <h2><b>{camp}:</b></h2> 
-        <font size ="11"><p><b>Number of Volunteers:</b> {stats['num_vols']}</p></font>
-        <font size="10"><p><b>            Of which medics:</b> {stats['num_medics']}</p> </font>
-        <font size ="11"><p><b>Number of Refugees:</b> {stats['num_refs']}</p></font>
-        <font size ="11"><p><b>Total Capacity:</b> {stats['capacity']}</p></font>
-        <font size="10"><p><b>            Filled Capacity:</b> {stats['filled_capacity']: .0f}%</p> </font>
-        <center><img src="summaries/{camp}.png" width='180'><center>
+        <font size = "18"><h2><b>{camp}:</b></h2></font>
+        <font size ="16"><p><b>Number of Volunteers:</b> {stats['num_vols']}</p></font>
+        <font size="15"><p><b>            Of which medics:</b> {stats['num_medics']}</p> </font>
+        <font size ="16"><p><b>Number of Refugees:</b> {stats['num_refs']}</p></font>
+        <font size ="16"><p><b>Total Capacity:</b> {stats['capacity']}</p></font>
+        <font size="15"><p><b>            Filled Capacity:</b> {stats['filled_capacity']: .0f}%</p> </font>
+        <center><img src="summaries/{camp}.png" width='500'><center>
         <br>
         <br>
         </section>""")
-
-
         pdf.output(f"summaries/{selected_plan} Summary.pdf")
 
 if __name__ == '__main__':
