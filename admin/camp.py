@@ -231,16 +231,7 @@ def edit_camp_shelter(sign):
     except IndexError:
         # No camp selected
         messagebox.showerror('Please Select a Camp', 'Please select a camp you wish to edit.')
-        
-    # df = pd.read_csv('data/refugees.csv')
-    # num_of_refugees = df.loc[df['camp_name']== selected_camp, 'num_relatives'].values
-    # total_refugees = 0
-    # for refugee_family in num_of_refugees:
-    #     total_refugees += refugee_family
-    # df = pd.read_csv('data/camps.csv')
-    # capacity = df.loc[df['camp_name'] == selected_camp,'capacity'].values[0]
-    # capacity = int(capacity)
-    # spare_capacity = capacity - total_refugees  
+    
     
     shelter_deltas = shelter_delta.get()
     
@@ -259,7 +250,9 @@ def edit_camp_shelter(sign):
     df = pd.read_csv('data/camps.csv')
     if sign == "+":
         df.loc[df['camp_name'] == selected_camp,'capacity'] += shelter_deltas
+        camp_shelter_entry.delete(0, 'end')
     else:
+        camp_shelter_entry.delete(0, 'end')
         df = pd.read_csv('data/refugees.csv')
         num_of_refugees = df.loc[df['camp_name']== selected_camp, 'num_relatives'].values
         total_refugees = 0
@@ -339,6 +332,7 @@ def main(x):
     global search_entry
     global admin_camp_tab
     global shelter_delta
+    global camp_shelter_entry
     
     admin_camp_tab = x
 
@@ -383,5 +377,6 @@ def main(x):
         width='50', font=('Calibri', 10)).pack()
     Button(shelter_frame, text='+', command=lambda: edit_camp_shelter('+')).pack(side=LEFT)
     Button(shelter_frame, text='-', command=lambda: edit_camp_shelter('-')).pack(side=LEFT)
-    Entry(shelter_frame,textvariable=shelter_delta).pack(side=LEFT)
+    camp_shelter_entry = Entry(shelter_frame,textvariable=shelter_delta)
+    camp_shelter_entry.pack(side=LEFT)
     shelter_frame.pack()

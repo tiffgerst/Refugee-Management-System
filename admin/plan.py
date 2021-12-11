@@ -1,6 +1,6 @@
 from tkinter import *
 from tkinter import ttk, messagebox, filedialog
-from matplotlib.pyplot import title
+from matplotlib.pyplot import fill, title
 import pandas as pd
 from utilities import check_blanks,check_date,delete_popups,display_all
 from datetime import datetime
@@ -11,6 +11,8 @@ from tkPDFViewer import tkPDFViewer as pdf
 from shutil import copy2
 
 def summary_popup():
+    global summary_messagebox
+
     selected_plan = treeview.focus()
     
     try:
@@ -21,7 +23,7 @@ def summary_popup():
         messagebox.showerror('Please Select a Plan', 'Please select a plan you wish to edit.')
     else:
         summary_messagebox = Toplevel(emergencyplan_tab)
-        Label(summary_messagebox, text='Would you like to view or download')
+        Label(summary_messagebox, text=f"Would you like to view or \n download {selected_plan}'s summary").pack()
         Button(summary_messagebox, text='View', command = lambda: view(selected_plan)).pack(side=LEFT)
         Button(summary_messagebox, text = 'Download',command= lambda: download(selected_plan)).pack(side=LEFT)
        
@@ -29,6 +31,7 @@ def summary_popup():
 def view(selected_plan):
     
     admin.summary.makeSummary(treeview)
+    summary_messagebox.destroy()
     summary_popup = Toplevel(emergencyplan_tab)
 
     location = f'summaries/{selected_plan} Summary.pdf'
@@ -36,12 +39,13 @@ def view(selected_plan):
     v2 = v1.pdf_view(summary_popup,
         pdf_location = location,
         width = 80, height = 100)
-    v2.pack()
+    v2.pack(expand=True, fill='both')
 
 def download(selected_plan):
+
     admin.summary.makeSummary(treeview)
+    summary_messagebox.destroy()
     init_path = f"summaries/{selected_plan} Summary.pdf"
-    #pdf_file = filedialog.asksaveasfilename(defaultextension=".pdf",defaultdir = f"summaries/{selected_plan} Summaries",title="Save File",filetypes=(("All Files", "*.*")))
     target = filedialog.askdirectory(initialdir="/", title="Select target directory")
     copy2(init_path,target,follow_symlinks=True)
 
