@@ -7,20 +7,21 @@ from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from tkinter import *
 from tkinter import ttk, messagebox
+from utilities import *
 from utilities import check_blanks,check_date,delete_popups,display_all
 import pandas as pd
 import sys
 import os.path
 sys.path.append(
     os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)))
+import volunteers_logged_in
 
 
-# If modifying these scopes, delete the file token.json.
-SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
 
-global emergency_logic
-# Emailing!-------------------------------------------------------------------------------------------------------------
+# ---------------------------------------Emailing!-------------------------------------------------------------------------------------------------------------
 def emergency_logic():
+    # If modifying these scopes, delete the file token.json.
+    SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
     """Shows basic usage of the Gmail API.
     Lists the user's Gmail labels.
     """
@@ -46,12 +47,17 @@ def emergency_logic():
      
 
     gmail_user = 'eadam0066@gmail.com'
-    gmail_password = 'CourseWork0066'
-
+    gmail_password = 'CourseWork0066'    
+      
+    # df = pd.read_csv('data/volunteers.csv')
+    # emails = df.loc[df['medic'] == True, 'email' ]
     sent_from = gmail_user
+    
+    # to = emails
     to = ['aneliakg1@gmail.com']
+    
     subject = 'EMERGENCY!'
-    body = "A refugee needs URGENT attention! Please attend to your e-Adam ASAP!"
+    body = "A refugee needs URGENT attention! Please attend to your e-Adam account ASAP!"
 
     email_text = """\
     From: %s
@@ -71,58 +77,10 @@ def emergency_logic():
         print ('Email sent!')
     except:
         print ('Something went wrong...')
-        
+    
     
 # -------------------------------------------------------------------------------------------------------------
-
-
-def search_refugee_name(e):
-    """
-    search logic for family name
-    """
-    
-    value = search_entry.get()
-
-    if value == '':
-        display_all(treeview,'data/emergency_refugees.csv')
-    else:
-        display_all(treeview,'data/emergency_refugees.csv',search=('family_name',value))
-
-def main(x):
-    global treeview
-    global search_bar
-    global search_entry
-    global emerg_ref_tab
-    
-    emerg_ref_tab = x
-    
-    # Label(manage_refugees_tab, text='Here are all your refugees:',
-    #     width='50', font=('Calibri', 10)).pack()
-
-    refugee_viewer = LabelFrame(emerg_ref_tab, width=600, height=500, text='EMERGENCIES', bg='#F2F2F2')
-    refugee_viewer.pack()
-    treeview = ttk.Treeview(refugee_viewer)
-
-    #displays the scroll bars for horizontal and vertical scrolling
-    treescrolly = Scrollbar(refugee_viewer, orient='vertical', command=treeview.yview)
-    treescrolly.pack(side='right', fill='y')
-    treescrollx = Scrollbar(refugee_viewer, orient='horizontal', command=treeview.xview)
-    treescrollx.pack(side='bottom', fill='x')
-    treeview.configure(xscrollcommand=treescrollx.set, yscrollcommand=treescrolly.set)
-
-    #displays the search bar
-    search_entry = StringVar()
-    search_bar = Entry(refugee_viewer, textvariable=search_entry)
-    Label(refugee_viewer, bg='#F2F2F2', text ='Search by Family Name:',font=('Calibri', 14) ).pack()
-    search_bar.pack()
-    #search bar gets updated everytime a key is released
-    #i.e when soemone types something
-    search_bar.bind("<KeyRelease>", search_refugee_name)
-
-    display_all(treeview,'data/emergency_refugees.csv')
-    treeview.pack()
-
-    
+ 
     
     
 '''Make this one select a refugee and delete from emergency csv; once deleted this should change the Emergency to False (meaning resolved)'''

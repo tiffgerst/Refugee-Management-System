@@ -5,7 +5,10 @@ import volunteers.manage_refugees as mr
 import volunteers.edit_information as ed
 import LoginGUI
 import pandas as pd
-import emergencies as emg
+import emergencies_tab as emg
+from emergencies_tab import * 
+from emergencies_tab import emerg_display
+
 
 
 def logout():
@@ -116,7 +119,7 @@ def volunteer_show(username):
         emerg_ref_tab = Frame(volunteer_hub_notebook, width=600, height= 620, bg='#F2F2F2')
         emerg_ref_tab.pack(fill='both', expand = True)
         volunteer_hub_notebook.add(emerg_ref_tab, text='EMERGENCIES')
-        emg.main(emerg_ref_tab)
+        emg.emerg_display(emerg_ref_tab)
 #----------------------------------------------------
         
     volunteer_screen.mainloop()
