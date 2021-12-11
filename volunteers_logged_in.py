@@ -5,6 +5,7 @@ import volunteers.manage_refugees as mr
 import volunteers.edit_information as ed
 import LoginGUI
 import pandas as pd
+import emergencies as emg
 
 
 def logout():
@@ -90,7 +91,8 @@ def volunteer_show(username):
     Button(volunteer_screen, text="Logout", command=logout).pack()
 
     volunteer_hub_notebook.add(manage_refugees_tab, text='Manage Refugees')
-
+    
+    
     mr.show_refugee(manage_refugees_tab, username)
     
     username_volunteer = username
@@ -106,7 +108,17 @@ def volunteer_show(username):
         volunteer_screen.destroy()
         LoginGUI.main_account_screen()
         
-
+#---------------------------------------------------------
+# read the CSV file
+    df = pd.read_csv('data/volunteers.csv',converters={'phone_number': lambda a: str(a)})
+    vol_medic = df.loc[df['username'] == username].values[0][6]
+    if vol_medic == True:
+        emerg_ref_tab = Frame(volunteer_hub_notebook, width=600, height= 620, bg='#F2F2F2')
+        emerg_ref_tab.pack(fill='both', expand = True)
+        volunteer_hub_notebook.add(emerg_ref_tab, text='EMERGENCIES')
+        emg.main(emerg_ref_tab)
+#----------------------------------------------------
+        
     volunteer_screen.mainloop()
 
 if __name__ == '__main__':
