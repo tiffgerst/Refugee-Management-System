@@ -6,16 +6,12 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from tkinter import *
-from tkinter import ttk, messagebox
 from utilities import *
 from utilities import check_blanks,check_date,delete_popups,display_all
-import pandas as pd
 import sys
 import os.path
 sys.path.append(
     os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)))
-import volunteers_logged_in
-
 
 
 # --------------------------------------- THIS FILE EMAILS MEDIC VOLUNTEERS IN CASE OF EMERGENCY -------------------------------------------------------------------------------------------------------------
