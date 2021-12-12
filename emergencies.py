@@ -18,20 +18,15 @@ import volunteers_logged_in
 
 
 
-# ---------------------------------------Emailing!-------------------------------------------------------------------------------------------------------------
+# --------------------------------------- THIS FILE EMAILS MEDIC VOLUNTEERS IN CASE OF EMERGENCY -------------------------------------------------------------------------------------------------------------
 def emergency_logic():
-    # If modifying these scopes, delete the file token.json.
+    # Setting up connection to the server via the already generated files: credentials.json and token.json
     SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
-    """Shows basic usage of the Gmail API.
-    Lists the user's Gmail labels.
-    """
     creds = None
-    # The file token.json stores the user's access and refresh tokens, and is
-    # created automatically when the authorization flow completes for the first
-    # time.
+
     if os.path.exists('token.json'):
         creds = Credentials.from_authorized_user_file('token.json', SCOPES)
-    # If there are no (valid) credentials available, let the user log in.
+    # If there are no (valid) credentials available, sends user to log in to their provider. 
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
@@ -45,14 +40,16 @@ def emergency_logic():
 
         service = build('gmail', 'v1', credentials=creds)
      
-
+     
+    # Email and password to authorise sending from this email
     gmail_user = 'eadam0066@gmail.com'
     gmail_password = 'CourseWork0066'    
-      
-    # df = pd.read_csv('data/volunteers.csv')
-    # emails = df.loc[df['medic'] == True, 'email' ]
+    
+    # Setting up the actual email  
     sent_from = gmail_user
     
+    # df = pd.read_csv('data/volunteers.csv')
+    # emails = df.loc[df['medic'] == True, 'email' ]
     # to = emails
     to = ['aneliakg1@gmail.com']
     
@@ -79,46 +76,3 @@ def emergency_logic():
         print ('Something went wrong...')
     
     
-# -------------------------------------------------------------------------------------------------------------
- 
-    
-    
-'''Make this one select a refugee and delete from emergency csv; once deleted this should change the Emergency to False (meaning resolved)'''
-# def delete_refugee_confirm():
-#     """
-#     Asks user if they are sure they want to delete refugee, then deletes it.
-#     Excepts Index Error if user tries to delete a refugee without first selecting one.
-#     """
-    
-#     dfv = pd.read_csv('data/volunteers.csv')
-#     refugee_camp = dfv.loc[dfv['username'] == user].values[0][3]
-
-#     selected_refugee = refugee_treeview.focus()
-#     default_first_name = refugee_treeview.item(selected_refugee)['values'][0]
-#     default_fam_name = refugee_treeview.item(selected_refugee)['values'][1]
-#     default_cond = refugee_treeview.item(selected_refugee)['values'][2]
-#     default_rel = refugee_treeview.item(selected_refugee)['values'][3]
-
-#     try:
-#         selected_refugee = refugee_treeview.item(selected_refugee)['values'][0]
-#         print(selected_refugee)
-#     except IndexError:
-#         messagebox.showerror('Please Select a Refugee', 'Please select a Refugee you wish to mark as departed.')
-#     else:
-#         delete_confirmation = messagebox.askquestion('Mark Refugee as Departed' ,
-#         'You are about to toggle a refugee\'s status - do you wish to continue?')
-#         if delete_confirmation == 'yes':
-#             # Remove the row
-#             df = pd.read_csv('data/refugees.csv')
-
-#             if df.loc[df['first_name'] == default_first_name].values[0][5] == 'True':
-#                 updated_row = [default_first_name, default_fam_name, refugee_camp, default_cond, default_rel, 'False']
-#             else: 
-#                 updated_row = [default_first_name, default_fam_name, refugee_camp, default_cond, default_rel, 'True']
-
-#             df.loc[df['first_name'] == default_first_name] = updated_row
-#             df.to_csv('data/refugees.csv',index=False)
-#             clear_treeview()
-#             update_treeview()
-
-

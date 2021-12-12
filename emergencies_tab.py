@@ -50,3 +50,40 @@ def emerg_display(x):
 
     display_all(treeview,'data/emergency_refugees.csv')
     treeview.pack()
+    
+    
+
+def update_treeview_emerg():
+    """
+    Tree view logic for viewing  refugee csv
+    """
+
+    #opens csv using pandas and converts columns to list
+    #also makes the first columns headings
+    df = pd.read_csv('data/emergency_refugees.csv')
+    treeview["column"] = list(df.columns)
+    treeview["show"] = "headings"
+
+    for column in treeview["column"]:
+        treeview.heading(column, text=column)
+ 
+    #retrieves rows and displays them
+    for _,row in df.iterrows():
+        treeview.insert("", "end", values=list(row.values))
+        
+def clear_treeview_emerg():
+    """
+      Clears the table so that it can be reloaded
+    """
+
+    treeview.delete(*treeview.get_children())
+    
+    
+    
+def delete_false_emerg():
+    clear_treeview_emerg()
+    update_treeview_emerg()
+    df = pd.read_csv('data/emergency_refugees.csv')
+    df.drop(df[df['emergency'] != True].index, inplace=True)
+    df.to_csv('data/emergency_refugees.csv',index=False)
+    print('Delete function has cleared out any False emergencies from the Emergency Tab.')
