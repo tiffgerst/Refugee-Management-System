@@ -24,9 +24,6 @@ def emerg_display(x):
     global emerg_ref_tab
     
     emerg_ref_tab = x
-    
-    # Label(manage_refugees_tab, text='Here are all your refugees:',
-    #     width='50', font=('Calibri', 10)).pack()
 
     refugee_viewer = LabelFrame(emerg_ref_tab, width=600, height=500, text='EMERGENCIES', bg='#F2F2F2')
     refugee_viewer.pack()

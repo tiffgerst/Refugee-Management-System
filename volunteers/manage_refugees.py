@@ -395,9 +395,9 @@ def save_new_refugee():
         clear_treeview_emerg()
         update_treeview_emerg()
         # If emergency -> confirm and tell medic volunteers will be informed
-        Label(edit_success_popup, text="\nIMPORTANT NOTICE!\n All volunteers with medical training will be informed of the emergency!", fg='red').pack()
-        # email medic volunteers
-        em.emergency_logic()  
+        Label(add_new_refugee_popup, text="\nIMPORTANT NOTICE!\n All volunteers with medical training will be informed of the emergency!", fg='red').pack()
+        # # email medic volunteers
+        # em.emergency_logic()  
         
     elif refugee_emer == False:
         print("Input received was False for emergency")

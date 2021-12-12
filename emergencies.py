@@ -46,33 +46,36 @@ def emergency_logic():
     gmail_password = 'CourseWork0066'    
     
     # Setting up the actual email  
-    sent_from = gmail_user
+    sender = gmail_user
     
+    
+    # Uncomment these lines to use medic volunteers emails as receiver. instead of the current email
     # df = pd.read_csv('data/volunteers.csv')
     # emails = df.loc[df['medic'] == True, 'email' ]
     # to = emails
     to = ['aneliakg1@gmail.com']
     
+    
     subject = 'EMERGENCY!'
-    body = "A refugee needs URGENT attention! Please attend to your e-Adam account ASAP!"
+    message = "A refugee needs URGENT attention! Please attend to your e-Adam account ASAP!"
 
-    email_text = """\
-    From: %s
-    To: %s
-    Subject: %s
-
-    %s
-    """ % (sent_from, ", ".join(to), subject, body)
+    email_text = """
+        From: %s
+        To: %s \n
+        Subject: %s \n
+        %s
+        """ %(sender, ", ".join(to), subject, message)
+    
+    
 
     try:
         server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
         server.ehlo()
         server.login(gmail_user, gmail_password)
-        server.sendmail(sent_from, to, email_text)
+        server.sendmail(sender, to, email_text)
         server.close()
 
         print ('Email sent!')
     except:
         print ('Something went wrong...')
-    
     

@@ -6,6 +6,7 @@ from admin.plan import *
 import admin_logged_in as ad
 from utilities import hash_password, verify_password
 from utilities import verify_username, verify_name, verify_email, verify_phone_number, verify_pass
+from contact_admin import *
 
 def login_admin():
     """
@@ -292,7 +293,11 @@ def volunteer_signin_tab():
 
     # 'command = ' makes the button execute the function called 'sign_up_volunteer'
     Button(volunteer_sign_in_tab, text="Register", height="2", width="30", command=sign_up_volunteer).pack()
-
+    
+    Label(volunteer_sign_in_tab, text="", bg='#F2F2F2').pack()
+    # Contact Admin
+    Button(volunteer_sign_in_tab, text="Contact Admin", height="2", width="30", command=contact_admin).pack()
+    Label(volunteer_sign_in_tab, text="", bg='#F2F2F2').pack()
 
 def admin_signin_tab():
     """
