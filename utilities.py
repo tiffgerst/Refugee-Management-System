@@ -95,8 +95,8 @@ def display_all(parent,csv,**kwargs):
         col, term = search
         df = df.loc[df[col].str.lower().str.contains(term.lower())]
     if cols_to_sort:
-        print('yo')
-        #df = df.sort_values(cols_to_sort)
+        df = df.sort_values(by= f'{cols_to_sort}', ascending=True)
+        
     
     parent["column"] = df.columns.tolist()
     parent["show"] = "headings"
@@ -107,6 +107,7 @@ def display_all(parent,csv,**kwargs):
     for _,row in df.iterrows():
         parent.insert("", "end", values=list(row))
 
+    return
 
 def clear_treeview(treeview):
     treeview.delete(*treeview.get_children())
