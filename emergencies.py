@@ -14,7 +14,7 @@ sys.path.append(
     os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)))
 
 
-# --------------------------------------- THIS FILE EMAILS MEDIC VOLUNTEERS IN CASE OF EMERGENCY -------------------------------------------------------------------------------------------------------------
+# --------------------------------------- THIS FILE EMAILS MEDIC VOLUNTEERS IN CASE OF AN EMERGENCY -------------------------------------------------------------------------------------------------------------
 def emergency_logic():
     # Setting up connection to the server via the already generated files: credentials.json and token.json
     SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
@@ -63,7 +63,6 @@ def emergency_logic():
         """ %(sender, ", ".join(to), subject, message)
     
     
-
     try:
         server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
         server.ehlo()

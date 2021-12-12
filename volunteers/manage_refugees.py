@@ -19,7 +19,6 @@ def edit_refugee_confirm():
     Asks user whether they are sure they want to edit a refugee
     Excepts Index Error if a user does not select a refugee before trying to edit
     """
-
     selected_refugee = refugee_treeview.focus()
 
     try:
@@ -70,7 +69,6 @@ def refugee_edit_window():
     camp_name = StringVar()
     medical_conditions = StringVar()
     num_relatives = StringVar()
-    # on_site = BooleanVar()
     emergency = StringVar()
 
     # Event selected -> get the dictionary of values of the event
@@ -127,7 +125,6 @@ def edit_refugee():
     """
 
     global edit_success_popup
-    # global refugee_emer
 
     # Retrieve the variables using .get() - value is str
     refugee_fi = refugee_first_name.get()
@@ -167,6 +164,7 @@ def edit_refugee():
     Label(edit_success_popup, text="Refugee edit was successful", fg='green').pack()
     Button(edit_success_popup, text="OK", command=lambda: delete_popups([edit_success_popup,editor_popup])).pack()
     
+    # Updates emergencies file too -> initialisation
     df = pd.read_csv('data/emergency_refugees.csv')
     updated_row = [refugee_fi, refugee_fa, refugee_camp, refugee_cond, refugee_rel, refugee_on, refugee_emg]
     df.loc[df['first_name'] == default_first_name] = [updated_row]
@@ -174,33 +172,36 @@ def edit_refugee():
     clear_treeview_emerg()
     update_treeview_emerg()
 
-    # Updates edited refugee to emergencies csv too
-    if refugee_emg == 'True':
-            
+    # If emergency is True, update csv, refresh and display in EMERGENCIES tab
+    if refugee_emg == 'True':  
         df = pd.read_csv('data/refugees.csv')
         updated_row = [refugee_fi, refugee_fa, refugee_camp, refugee_cond, refugee_rel, refugee_on, refugee_emg]
         df.loc[df['first_name'] == default_first_name] = [updated_row]
         df.to_csv('data/emergency_refugees.csv',index=False)
+        
+        # making sure no False emergencies are present in EMERGENCIES tab; clear csv
         delete_false_emerg()
         clear_treeview_emerg()
         update_treeview_emerg()
 
-        # df = pd.read_csv('data/emergency_refugees.csv')
-        # df = df.append(updated_row, ignore_index=True)
-        # df.to_csv('data/emergency_refugees.csv',index=False)
-        
         print("Input received was True for emergency. Refugee was added.")
         # If emergency -> confirm and tell medic volunteers will be informed
         Label(edit_success_popup, text="\nIMPORTANT NOTICE!\n All volunteers with medical training will be informed of the emergency!", fg='red').pack()
-        # email medic volunteers
+        
+        # email all medic volunteers
         em.emergency_logic()
-    # Else    
+        
+    # If emergency is False, delete the refugee from EMERGENCIES tab; update csv
     elif refugee_emg == 'False':
         print("Input received was False for emergency")
         delete_false_emerg()
         clear_treeview_emerg()
         update_treeview_emerg()
-        print("all 3 functions are done, so this should be deleted!")
+        print("EMERGENCIES tab cleared. No False emergencies present!")
+    
+        
+    else: 
+        print("Not found. Input not recognised as True or False.")
             
 
 def delete_refugee_confirm():
@@ -260,6 +261,7 @@ def register_success_popup():
     if refugee_emer == False:
         Label(register_success, text="Refugee creation was successful", fg='green').pack()
         Button(register_success, text="OK",command=lambda: delete_popups([register_success,add_new_refugee_popup])).pack()
+        
     # If emergency -> confirm and tell volunteer medics will be informed; then go to email them
     else:
         Label(register_success, text="Refugee creation was successful.\n All volunteers with medical training will be informed of the emergency!", fg='green').pack()
@@ -359,7 +361,6 @@ def save_new_refugee():
         total += refugee_family
     
         
-
     # Check for blanks
     res = check_blanks(
         name= refugee_camp,
@@ -382,23 +383,24 @@ def save_new_refugee():
     df.to_csv('data/refugees.csv',index=False)
     
     
-    # Update Emergencies csv too
+    # Updates emergencies file too -> initialisation
     df = pd.read_csv('data/emergency_refugees.csv')
     df = df.append(new_row, ignore_index=True)
     df.to_csv('data/emergency_refugees.csv',index=False)
     clear_treeview_emerg()
     update_treeview_emerg()
 
+    # If emergency is True, update csv, refresh and display in EMERGENCIES tab
     if refugee_emer == True:
         print("Input received True for emergency.")
+        # making sure no False emergencies are present in EMERGENCIES tab; clear csv
         delete_false_emerg()
         clear_treeview_emerg()
         update_treeview_emerg()
         # If emergency -> confirm and tell medic volunteers will be informed
         Label(add_new_refugee_popup, text="\nIMPORTANT NOTICE!\n All volunteers with medical training will be informed of the emergency!", fg='red').pack()
-        # # email medic volunteers
-        # em.emergency_logic()  
         
+    # If emergency is False, delete the refugee from EMERGENCIES tab; update csv   
     elif refugee_emer == False:
         print("Input received was False for emergency")
         delete_false_emerg()

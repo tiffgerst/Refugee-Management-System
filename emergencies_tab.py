@@ -1,15 +1,12 @@
 from utilities import *
 from utilities import check_blanks,check_date,delete_popups,display_all
 from tkinter import *
-from tkinter import ttk, messagebox
-
-
+from tkinter import ttk
 
 def search_refugee_name(e):
     """
     search logic for family name
     """
-    
     value = search_entry.get()
 
     if value == '':
@@ -49,7 +46,6 @@ def emerg_display(x):
     treeview.pack()
     
     
-
 def update_treeview_emerg():
     """
     Tree view logic for viewing  refugee csv
@@ -76,11 +72,11 @@ def clear_treeview_emerg():
     treeview.delete(*treeview.get_children())
     
     
-    
+# Deletes refugees from EMERGENCIES tab (and emergency_refugees.csv) which have emergency set as False
 def delete_false_emerg():
     clear_treeview_emerg()
     update_treeview_emerg()
     df = pd.read_csv('data/emergency_refugees.csv')
     df.drop(df[df['emergency'] != True].index, inplace=True)
     df.to_csv('data/emergency_refugees.csv',index=False)
-    print('Delete function has cleared out any False emergencies from the Emergency Tab.')
+    print('Delete function has cleared out any False emergencies from the Emergency Tab and csv.')

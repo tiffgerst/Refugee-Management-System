@@ -128,6 +128,3 @@ def contact_admin():
     #pass CourseWork0066
 
     '''
-    
-if __name__ == '__main__':
-    contact_admin()   

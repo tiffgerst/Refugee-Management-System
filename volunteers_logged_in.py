@@ -1,4 +1,3 @@
-from hashlib import new
 from tkinter import *
 from tkinter import ttk, messagebox
 import volunteers.manage_refugees as mr
@@ -8,7 +7,6 @@ import pandas as pd
 import emergencies_tab as emg
 from emergencies_tab import * 
 from emergencies_tab import emerg_display
-
 
 
 def logout():
@@ -111,8 +109,7 @@ def volunteer_show(username):
         volunteer_screen.destroy()
         LoginGUI.main_account_screen()
         
-#---------------------------------------------------------
-# read the CSV file
+# If a volunteer is a medic, show EMERGENCIES tab
     df = pd.read_csv('data/volunteers.csv',converters={'phone_number': lambda a: str(a)})
     vol_medic = df.loc[df['username'] == username].values[0][6]
     if vol_medic == True:
@@ -120,7 +117,6 @@ def volunteer_show(username):
         emerg_ref_tab.pack(fill='both', expand = True)
         volunteer_hub_notebook.add(emerg_ref_tab, text='EMERGENCIES')
         emg.emerg_display(emerg_ref_tab)
-#----------------------------------------------------
         
     volunteer_screen.mainloop()
 
