@@ -159,9 +159,3 @@ def verify_pass(password): # min 8 , no white spaces, spec chars allowed
     reg_check = bool(re.fullmatch("[A-Za-z0-9@#$%^&+=]{8,}", password))
     return reg_check
 
-
-
-
-
-    
-    

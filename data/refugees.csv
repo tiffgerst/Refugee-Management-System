@@ -1,3 +1,21 @@
-first_name,family_name,camp_name,medical_conditions,num_relatives,on_site
-Ewan,Smith,Camp with Miron,Autism,5,False
-Steve,Kiselev,Empty Camp,Loats,2,True
+first_name,family_name,camp_name,medical_conditions,num_relatives,on_site,emergency
+John,Williams,Easy Camp,Bruises,0,True,False
+Rob,Bond,Easy Camp,Mental Health,0,True,False
+Lili,Franklin,Easy Camp,Healthy,0,True,False
+Mia,Johnson,Easy Camp,Concussion,0,True,False
+David,Miller,Easy Camp,Chest pain,0,True,False
+John,Williams,Easy Camp,Bruises,0,True,False
+Emma,Travis,Easy Camp,Anxiety,0,True,True
+Lia,Jones,Easy Camp,Arm pain,0,True,True
+Christian,Flamenco,Easy Camp,Tooth ache,0,True,True
+Jonathan,Leroy,Easy Camp,Head pain,0,True,False
+Molly,Calm,Easy Camp,Stressed,0,True,True
+Lorain,Nicolas,Easy Camp,Not known,0,True,False
+Mariah,Rolley,Easy Camp,Cold,0,True,False
+Ron,Connoly,Easy Camp,Asthma,0,True,True
+Samuel,Jackson,Easy Camp,Cancer,0,True,False
+Michael,Conner,Easy Camp,Ear pain,0,True,False
+Richard,Morrisons,Easy Camp,High blood pressure,0,True,False
+Jeremy,Garcia,Easy Camp,Broken arm,0,True,False
+Joseph,Casanova,Easy Camp,Red skin,3,True,True
+Lilian,Gerald,Easy Camp,Skin rash,2,True,False
