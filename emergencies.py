@@ -71,6 +71,6 @@ def emergency_logic():
         server.close()
 
         print ('Email sent!')
-    except:
-        print ('Something went wrong...')
+    except Exception as e:
+        print ('Something went wrong...', e)
     

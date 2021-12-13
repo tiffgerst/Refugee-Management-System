@@ -54,14 +54,18 @@ def contact_admin():
             self.create_widgets()
     
         def btn_clicked(self):
-            login = "eadam0066@gmail.com"
-            password = "CourseWork0066"
+            gmail_user = 'eadam0066@gmail.com'
+            gmail_password = 'CourseWork0066'  
+            
+            
             
             to = ["eadam0066@gmail.com"]
+            
+            
+            subject = 'New E-Adam Message'
             sender = self.sender_box_entry.get()
             message = self.mess_box_entry.get('1.0', 'end')
             
-            subject = 'New E-Adam Message'
             
             email_text = """
             From: %s
@@ -75,12 +79,12 @@ def contact_admin():
                 server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
                 server.ehlo()
                 # server.starttls()
-                server.login(login, password)
+                server.login(gmail_user, gmail_password)
                 server.sendmail(sender, to, email_text)
                 # server.quit()
                 server.close()
                 print ('Email to Admin sent!')
-                statement_1 = "EMAIL HAS BEEN SENT!"
+                statement_1 = "EMAIL HAS BEEN SENT! Please close this window."
                 return statement_1
     
             except Exception as e:
