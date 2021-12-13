@@ -166,7 +166,6 @@ def delete_refugee_confirm():
 
     try:
         selected_refugee = refugee_treeview.item(selected_refugee)['values'][0]
-        print(selected_refugee)
     except IndexError:
         messagebox.showerror('Please Select a Refugee', 'Please select a Refugee you wish to mark as departed.')
     else:
@@ -176,7 +175,7 @@ def delete_refugee_confirm():
             # Remove the row
             df = pd.read_csv('data/refugees.csv')
 
-            if df.loc[df['first_name'] == default_first_name].values[0][5] == 'True':
+            if df.loc[df['first_name'] == default_first_name].values[0][5] == True:
                 updated_row = [default_first_name, default_fam_name, refugee_camp, default_cond, default_rel, 'False']
             else: 
                 updated_row = [default_first_name, default_fam_name, refugee_camp, default_cond, default_rel, 'True']
@@ -414,6 +413,6 @@ def show_refugee(x, username):
 
     refugee_treeview.bind('<ButtonRelease-1>')
 
-    Button(refugee_tab, text='Add new Refugee', command=add_refugee).pack()
+    Button(refugee_tab, text='Add New Refugee', command=add_refugee).pack()
     Button(refugee_tab, text='Edit Refugee', command=edit_refugee_confirm).pack()
-    Button(refugee_tab, text='Mark refugee as departed', command=delete_refugee_confirm).pack()
+    Button(refugee_tab, text='Toggle Refugee Departed Status', command=delete_refugee_confirm).pack()
