@@ -44,6 +44,7 @@ def add_camp_window(**kwargs):
     
     add_new_camp_popup = Toplevel(admin_camp_tab)
     add_new_camp_popup.geometry('600x500')
+    add_new_camp_popup.title('Add New Camp')
     
     df = pd.read_csv("./data/emergency_plans.csv")
     emergency_plans = df["name"]

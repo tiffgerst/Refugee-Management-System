@@ -340,12 +340,14 @@ def admin_signin_tab():
 
 def expire_plan():
     
-    df1 = pd.read_csv('data/emergency_plans.csv')
+    df1 = pd.read_csv('data/emergency_plans.csv', keep_default_na=False)
     plan_dates_str = df1['end_date'].values
     expired_plans = []
     
     
     for plan_expiration in plan_dates_str:
+        if plan_expiration == '':
+            continue
         plan_expiration_object = datetime.strptime(plan_expiration, '%d %b %Y')
         if plan_expiration_object <= datetime.today():
             expired_plans.append(plan_expiration)
@@ -353,6 +355,8 @@ def expire_plan():
    
     
     for plan_expiration in expired_plans:
+        if plan_expiration == '':
+            continue
         plan_name = df1.loc[df1['end_date'] == plan_expiration, 'name'].values[0]
         df2 = pd.read_csv('data/camps.csv')
         camps = df2.loc[df2['emergency_plan_name'] == plan_name, 'camp_name'].values
