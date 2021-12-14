@@ -7,6 +7,7 @@ import admin_logged_in as ad
 from utilities import hash_password, verify_password
 from utilities import verify_username, verify_name, verify_email, verify_phone_number, verify_pass
 from contact_admin import *
+import datetime as datetime
 
 def login_admin():
     """
@@ -341,16 +342,16 @@ def admin_signin_tab():
 def expire_plan():
     
     df1 = pd.read_csv('data/emergency_plans.csv', keep_default_na=False)
-    plan_dates_str = df1['end_date'].values
     expired_plans = []
-    
-    
-    for plan_expiration in plan_dates_str:
-        if plan_expiration == '':
+    rows = df1.values
+    for row in rows:
+        expiration_string = row[5]
+        name = row[0]
+        if expiration_string == '':
             continue
-        plan_expiration_object = datetime.strptime(plan_expiration, '%d %b %Y')
-        if plan_expiration_object <= datetime.today():
-            expired_plans.append(plan_expiration)
+        expiration_object = datetime.strptime(expiration_string, '%d %b %Y')
+        if expiration_object > datetime.today():
+            expired_plans.append(name)
     
    
     

@@ -1,11 +1,12 @@
 from tkinter import *
 from tkinter import ttk, messagebox
-from numpy import string_
+from numpy import append, string_
 import pandas as pd
 import sys
 sys.path.append("../")
 from utilities import check_blanks, delete_popups, display_all
 import admin.volunteer 
+import datetime
 
 
 def update_options(*args):
@@ -46,10 +47,19 @@ def add_camp_window(**kwargs):
     add_new_camp_popup.geometry('600x500')
     add_new_camp_popup.title('Add New Camp')
     
-    df = pd.read_csv("./data/emergency_plans.csv")
-    emergency_plans = df["name"]
-    emergency_plans = list(emergency_plans)
-    
+    df = pd.read_csv("./data/emergency_plans.csv", keep_default_na=False)
+    emergency_plans = []
+    rows = df.values
+    for row in rows:
+        expiration_string = row[5]
+        name = row[0]
+        if expiration_string == '':
+            emergency_plans.append(name)
+            continue
+        expiration_object = datetime.datetime.strptime(expiration_string, '%d %b %Y')
+        if expiration_object > datetime.datetime.today():
+            emergency_plans.append(name)
+
 
     add_new_camp_popup.configure(bg='#F2F2F2')
 

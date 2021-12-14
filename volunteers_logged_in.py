@@ -37,9 +37,9 @@ def select_camp_name():
     global new_camp_name
     
     new_camp_name = StringVar()
-    df = pd.read_csv("./data/camps.csv")
-    all_camps = df["camp_name"]
-    all_camps_list = list(all_camps)
+    df = pd.read_csv("data/camps.csv")
+    all_camps_list = df["camp_name"].values
+    print(all_camps_list)
     new_camp_name.set(all_camps_list[0])
     
     select_camp_screen = Toplevel(volunteer_screen)
@@ -115,7 +115,7 @@ def volunteer_show(username):
     if vol_medic == True:
         emerg_ref_tab = Frame(volunteer_hub_notebook, width=600, height= 620, bg='#F2F2F2')
         emerg_ref_tab.pack(fill='both', expand = True)
-        volunteer_hub_notebook.add(emerg_ref_tab, text='EMERGENCIES')
+        volunteer_hub_notebook.add(emerg_ref_tab, text='Medical Emergencies')
         emg.emerg_display(emerg_ref_tab)
         
     volunteer_screen.mainloop()

@@ -247,6 +247,8 @@ def register_success_popup():
     Updates the tree view
     """
     global register_success
+    refugee_tab.destroy()
+    
     #this updates the tree view with the new entry
     clear_treeview()
     update_treeview()
