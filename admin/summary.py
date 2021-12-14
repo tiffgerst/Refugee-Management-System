@@ -36,11 +36,10 @@ def addlabels(x,y):
         plt.text(i, y[i], y[i], ha = 'center')
 
 def generate_bar(plan, df_camp, df_ref):
-
-    
-    
+    df_ref = pd.read_csv('data/refugees.csv')
     camp_name = df_camp.loc[df_camp['emergency_plan_name'] == plan]
     camps = camp_name['camp_name'].to_list()
+
 
     labels = []
     on_site = []
@@ -48,13 +47,13 @@ def generate_bar(plan, df_camp, df_ref):
 
     for camp in camps:
         labels.append(camp)
-        y = df_ref.loc[df_ref['camp_name'] == camp]
-
-        num_on_site = y[y["on_site"]==True]['first_name'].count()
-        on_site.append(num_on_site)
-        num_off_site = y[y["on_site"]==False]['first_name'].count()
-        off_site.append(num_off_site)
-
+        x = df_ref.loc[df_ref['camp_name'] == camp]
+        subset_x = x[x['on_site'] == True]
+        offsite = x[x['on_site'] == False]
+        num_refs_onsite = subset_x['num_relatives'].sum()
+        on_site.append(num_refs_onsite)
+        num_refs_offsite = offsite['num_relatives'].sum()
+        off_site.append(num_refs_offsite)
 
     width = 0.3      # the width of the bars: can also be len(x) sequence
 
@@ -86,15 +85,31 @@ def plan_stats(stat, plan):
         df_ref = pd.read_csv('data/refugees.csv')
         
         num_refs = 0
-
+        
         for camp in camps:
-            
-            y = df_ref.loc[df_ref['camp_name'] == camp]
-
-            total_refs = y['first_name'].count()
-            num_refs += total_refs
+            x = df_ref.loc[df_ref['camp_name'] == camp]
+            subset_x = x[x['on_site'] == True]
+            num_refs_onsite = subset_x['num_relatives'].sum()
+            num_refs += num_refs_onsite
 
         return num_refs
+    
+    elif stat == 'num_ref_departed': 
+
+        df = pd.read_csv('data/camps.csv')
+        camp_name = df.loc[df['emergency_plan_name'] == plan]
+        camps = camp_name['camp_name'].to_list()
+
+        df_ref = pd.read_csv('data/refugees.csv')
+        
+        departed = 0
+        for camp in camps:
+            x = df_ref.loc[df_ref['camp_name'] == camp]
+            off_site = x[x['on_site'] == False]
+            num_refs_departed = off_site['num_relatives'].sum()
+            departed+=num_refs_departed
+
+        return departed
     
     elif stat=='num_vol':
         df = pd.read_csv('data/camps.csv')
@@ -151,9 +166,11 @@ def camp_stats(camp):
 
     x = df_ref.loc[df_ref['camp_name'] == camp]
     subset_x = x[x['on_site'] == True]
+    departed = x[x['on_site'] == False]
     num_refs_onsite = subset_x['num_relatives'].sum()
+    num_refs_departed = departed['num_relatives'].sum()
     stats['num_refs'] = num_refs_onsite
-
+    stats['num_refs_departed'] = num_refs_departed
 
     capacity_index = df.index[df['camp_name'] == camp].tolist()
     capacity = df.at[capacity_index[0], 'capacity']
@@ -161,6 +178,8 @@ def camp_stats(camp):
     
     filled_capacity = ((num_refs_onsite / capacity) * 100)
     stats['filled_capacity'] = filled_capacity
+
+   
     
     return stats
     
@@ -192,6 +211,7 @@ def makeSummary(x):
         num_refs = plan_stats('num_ref', selected_plan)
         num_vols = plan_stats('num_vol', selected_plan)
         plan_desc = plan_stats('plan_desc', selected_plan)
+        num_refs_departed = plan_stats('num_ref_departed',selected_plan)
 
         pdf.write_html(f"""
     <font size ="20"><u><h1 align="center">Summary for {selected_plan}</h1></u></font>
@@ -200,6 +220,7 @@ def makeSummary(x):
         </p><p>Description: {plan_desc['description']}</p></font>
         <font size ="16"><p><b>Number of Camps: </b>{len(camps)}</p></font>
         <font size ="16"><p><b>Number of Refugees: </b>{num_refs}</p></font>
+        <font size ="16"><p><b>Number of Refugees Departed: </b>{num_refs_departed}</p></font>
         <font size ="16"><p><b>Number of Volunteers: </b>{num_vols}</p></font>
         <font size ="16"><center><img src="summaries/{selected_plan}.png" width='500'><center></font>
         <br>
@@ -219,6 +240,7 @@ def makeSummary(x):
         <font size ="16"><p><b>Number of Volunteers:</b> {stats['num_vols']}</p></font>
         <font size="15"><p><b>            Of which medics:</b> {stats['num_medics']}</p> </font>
         <font size ="16"><p><b>Number of Refugees (onsite):</b> {stats['num_refs']}</p></font>
+        <font size ="16"><p><b>Number of Refugees departed:</b> {stats['num_refs_departed']}</p></font>
         <font size ="16"><p><b>Total Capacity:</b> {stats['capacity']}</p></font>
         <font size="15"><p><b>            Filled Capacity:</b> {stats['filled_capacity']: .0f}%</p> </font>
         <center><img src="summaries/{camp}.png" width='500'><center>
