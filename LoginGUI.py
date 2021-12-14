@@ -331,6 +331,41 @@ def admin_signin_tab():
 
     Label(admin_sign_in_tab, text="", bg='#F2F2F2').pack()
 
+def expire_plan():
+    
+    df1 = pd.read_csv('data/emergency_plans.csv')
+    plan_dates_str = df1['end_date'].values
+    expired_plans = []
+    
+    
+    for plan_expiration in plan_dates_str:
+        plan_expiration_object = datetime.strptime(plan_expiration, '%d %b %Y')
+        if plan_expiration_object <= datetime.today():
+            expired_plans.append(plan_expiration)
+    
+   
+    
+    for plan_expiration in expired_plans:
+        plan_name = df1.loc[df1['end_date'] == plan_expiration, 'name'].values[0]
+        df2 = pd.read_csv('data/camps.csv')
+        camps = df2.loc[df2['emergency_plan_name'] == plan_name, 'camp_name'].values
+        for selected_camp in camps:
+            # Remove selected camp from camps
+            df = pd.read_csv('data/camps.csv')
+            df = df.loc[df['camp_name'] != selected_camp]
+            df.to_csv('data/camps.csv',index=False)
+            
+            # For all volunteers in the camp, set camp_name to 'None'
+            df = pd.read_csv('data/volunteers.csv')
+            df.loc[df['camp_name'] == selected_camp, 'camp_name'] = 'None'
+            df.to_csv('data/volunteers.csv', index=False)
+            
+            # For all refugees in the camp, set on_site to 'False'
+            df = pd.read_csv('data/refugees.csv')
+            df.loc[df['camp_name'] == selected_camp, 'on_site'] = 'False'
+            df.to_csv('data/refugees.csv', index=False)
+            
+        df1.to_csv('data/emergency_plans.csv',index=False)
 
 def main_account_screen():
     """
@@ -339,6 +374,8 @@ def main_account_screen():
     global main_screen
     global volunteer_sign_in_tab
     global admin_sign_in_tab
+    
+    expire_plan()
 
     # setting up the window
     main_screen = Tk()
