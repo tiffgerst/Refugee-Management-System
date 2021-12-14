@@ -86,8 +86,10 @@ def display_all(parent,csv,**kwargs):
     search = kwargs.get('search',None)
     cols_to_sort = kwargs.get('cols_to_sort', None)
     parent.delete(*parent.get_children())
-
-    df = pd.read_csv(csv)
+    if csv == "data/volunteers.csv":
+        df = pd.read_csv('data/volunteers.csv', converters={'phone_number': lambda a: str(a)})
+    else:
+        df = pd.read_csv(csv)
     
     if cols_to_hide:
         df = df.loc[:,[col for col in df.columns if col not in cols_to_hide]]
