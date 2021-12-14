@@ -84,15 +84,21 @@ def display_all(parent,csv,**kwargs):
     
     cols_to_hide = kwargs.get("cols_to_hide",None)
     search = kwargs.get('search',None)
+    cols_to_sort = kwargs.get('cols_to_sort', None)
     parent.delete(*parent.get_children())
-
-    df = pd.read_csv(csv)
+    if csv == "data/volunteers.csv":
+        df = pd.read_csv('data/volunteers.csv', converters={'phone_number': lambda a: str(a)})
+    else:
+        df = pd.read_csv(csv)
     
     if cols_to_hide:
         df = df.loc[:,[col for col in df.columns if col not in cols_to_hide]]
     if search:
         col, term = search
         df = df.loc[df[col].str.lower().str.contains(term.lower())]
+    if cols_to_sort:
+        df = df.sort_values(by= f'{cols_to_sort}', ascending=True)
+        
     
     parent["column"] = df.columns.tolist()
     parent["show"] = "headings"
@@ -103,6 +109,7 @@ def display_all(parent,csv,**kwargs):
     for _,row in df.iterrows():
         parent.insert("", "end", values=list(row))
 
+    return
 
 def clear_treeview(treeview):
     treeview.delete(*treeview.get_children())

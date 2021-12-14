@@ -1,2 +1,11 @@
-first_name,family_name,camp_name,medical_conditions,num_relatives,on_site,emergency
+first_name,family_name,camp_name,medical_conditions,num_relatives,on_site
+Ewan,Smith,Camp with Miron,Autism,5,True
+e,Smith,Camp with Miron,Autism,5,False
+rew,Smith,Camp with Miron,Autism,5,False
+Ewqan,Smith,Camp with Miron,Autism,5,True
+gf,ki,Empty Camp,all,0,True
+mifron,ki,Empty Camp,all,0,True
+mirvon,ki,Empty Camp,all,0,True
+mirvwon,ki,Empty Camp,all,0,False
+mireron,ki,Empty Camp,all,0,False
 

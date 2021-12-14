@@ -392,7 +392,7 @@ def main_account_screen():
     main_screen = Tk()
     main_screen.geometry("600x500")
     main_screen.title("E-Adam")
-    main_screen.configure(bg='#F2F2F2')
+    #main_screen.configure(bg='#F2F2F2')
 
     style = ttk.Style(main_screen)
     style.theme_use('clam')
@@ -400,19 +400,18 @@ def main_account_screen():
     # adding a description for the login
     Label(main_screen, text="Please Sign in or \n Register as a new volunteer",
           width="300", height="3",
-          font=("Calibri bold", 25),
-          bg='teal', fg='white').pack()
+          font=("Calibri bold", 25)).pack()
 
     # creates a notebook which allows for multiple tabs
     account_screen_notebook = ttk.Notebook(main_screen)
     account_screen_notebook.pack(fill='both', expand=True)
 
     # creates the different frames for each tab
-    volunteer_sign_in_tab = Frame(account_screen_notebook, width=600, height= 500, bg='#F2F2F2')
+    volunteer_sign_in_tab = Frame(account_screen_notebook, width=600, height= 500,)
     volunteer_sign_in_tab.pack(fill='both', expand=True)
     volunteer_sign_in_tab.pack_propagate(False)
 
-    admin_sign_in_tab = Frame(account_screen_notebook, width=600, height= 500, bg='#F2F2F2')
+    admin_sign_in_tab = Frame(account_screen_notebook, width=600, height= 500,)
     admin_sign_in_tab.pack(fill='both', expand=True)
 
     # adds those frames when the tab is clicked

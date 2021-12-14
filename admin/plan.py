@@ -1,11 +1,55 @@
 from tkinter import *
-from tkinter import ttk, messagebox
+from tkinter import ttk, messagebox, filedialog
+from matplotlib.pyplot import fill, title
 import pandas as pd
-from utilities import check_blanks,check_date,delete_popups,display_all
+from utilities import check_blanks,check_date, clear_treeview,delete_popups,display_all
 from datetime import datetime
 import admin.camp
 import admin.volunteer
+import admin.summary
+from tkPDFViewer import tkPDFViewer as pdf
+from shutil import copy2
 
+def summary_popup():
+    global summary_messagebox
+
+    selected_plan = treeview.focus()
+    
+    try:
+        # Try and index the selected_plan
+        selected_plan = treeview.item(selected_plan)['values'][0]
+    except IndexError:
+        # No plan selected
+        messagebox.showerror('Please Select a Plan', 'Please select a plan you wish to edit.')
+    else:
+        summary_messagebox = Toplevel(emergencyplan_tab)
+        Label(summary_messagebox, text=f"Would you like to view or \n download {selected_plan}'s summary").pack()
+        Button(summary_messagebox, text='View', command = lambda: view(selected_plan)).pack(side=LEFT)
+        Button(summary_messagebox, text = 'Download',command= lambda: download(selected_plan)).pack(side=LEFT)
+       
+
+def view(selected_plan):
+    pdf.ShowPdf.img_object_li.clear()
+    admin.summary.makeSummary(treeview)
+    summary_messagebox.destroy()
+    summary_popup = Toplevel(emergencyplan_tab)
+
+    location = f'summaries/{selected_plan} Summary.pdf'
+    v1 = pdf.ShowPdf()
+    v2 = v1.pdf_view(summary_popup,
+        pdf_location = location,
+        width = 80, height = 100)
+    v2.pack(expand=True, fill='both')
+
+def download(selected_plan):
+
+    admin.summary.makeSummary(treeview)
+    summary_messagebox.destroy()
+    init_path = f"summaries/{selected_plan} Summary.pdf"
+    target = filedialog.askdirectory(initialdir="/", title="Select target directory")
+    copy2(init_path,target,follow_symlinks=True)
+
+        
 
 def edit_plan_confirm():
     """
@@ -14,7 +58,7 @@ def edit_plan_confirm():
     """
 
     selected_plan = treeview.focus()
-    
+
     try:
         # Try and index the selected_plan
         selected_plan = treeview.item(selected_plan)['values'][0]
@@ -286,6 +330,7 @@ def search_plan_name(e):
     else:
         display_all(treeview,'data/emergency_plans.csv',search=('name',value))
 
+ 
 
 def main(x):
     '''
@@ -304,7 +349,7 @@ def main(x):
     #     width='50', font=('Calibri', 10)).pack()
 
     # Creates a frame within the emergency plan tab frame to display the csv
-    emergencyplan_viewer = LabelFrame(emergencyplan_tab, width=600, height=300, text='Emergency Plans:', bg='#F2F2F2')
+    emergencyplan_viewer = LabelFrame(emergencyplan_tab, width=600, height=300, text='Emergency Plans:')
     emergencyplan_viewer.pack()
     treeview = ttk.Treeview(emergencyplan_viewer)
 
@@ -330,6 +375,11 @@ def main(x):
     treeview.bind('<ButtonRelease-1>')
 
     Button(emergencyplan_tab, text='Add a new plan', command=lambda: modify_plan_window(add=True)).pack()
+ 
     Button(emergencyplan_tab, text='Edit Plan', command=edit_plan_confirm).pack()
+ 
     Button(emergencyplan_tab, text='Close Plan', command=lambda: delete_or_close_plan('close')).pack()
+
     Button(emergencyplan_tab, text='Delete Plan', command=lambda: delete_or_close_plan('delete')).pack()
+
+    Button(emergencyplan_tab, text='Summary', command=summary_popup).pack()
