@@ -186,6 +186,7 @@ def makeSummary(x):
         generate_bar(selected_plan, df_camp, df_ref)
 
         pdf = PDF(orientation='P',unit='mm',format='A4')
+        pdf.set_auto_page_break(1)
         pdf.add_page()
     
 
@@ -204,7 +205,6 @@ def makeSummary(x):
         <font size ="16"><center><img src="summaries/{selected_plan}.png" width='500'><center></font>
         <br>
         <br>
-        <hr>
         </section>
         """)
 
@@ -212,8 +212,7 @@ def makeSummary(x):
             stats = camp_stats(camp)
             df = pd.read_csv("data/volunteers.csv")
             pdf.add_page()
-            generate_pie(camp, df)
-            
+            generate_pie(camp, df) 
             pdf.write_html(f"""
         <section>
 
