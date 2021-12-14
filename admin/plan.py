@@ -267,18 +267,22 @@ def modify_table(add):
     df.to_csv('data/emergency_plans.csv',index=False)
     display_all(treeview,'data/emergency_plans.csv')
     
+    modify_popup.destroy()
+    if add == True: admin.camp.add_camp_window(default=plan_na)
     # Display a success popup
-    success_popup = Toplevel(modify_popup)   
-    success_popup.title("Success")
-    if add == True: text = "creation"
-    else: text = "edit"
-    Label(success_popup, text="Plan "+text+" was successful. Please add a camp for this plan!", fg='green').pack()
+    # success_popup = Toplevel(modify_popup)   
+    # success_popup.title("Success")
+    # if add == True: text = "creation"
+    # else: text = "edit"
+    # Label(success_popup, text="Plan "+text+" was successful. Please add a camp for this plan!", fg='green').pack()
     
-    # If we're adding, when we press OK we want to add a camp also
-    # The same is not true for editting
-    if add == True: _ = lambda:delete_popups([success_popup,modify_popup]); admin.camp.add_camp_window(default=plan_na)
-    else: _ = lambda:delete_popups([success_popup,modify_popup])
-    Button(success_popup, text="OK", command=_).pack()
+    
+    
+    # # If we're adding, when we press OK we want to add a camp also
+    # # The same is not true for editting
+    # #  _ = lambda:delete_popups([success_popup,modify_popup]); admin.camp.add_camp_window(default=plan_na)
+    # # else: _ = lambda:delete_popups([success_popup,modify_popup])
+    # # Button(success_popup, text="OK", command=_).pack()
 
 
 def is_valid_plan(parent,plan_na,plan_ty,plan_loc,plan_desc,plan_start,plan_end):

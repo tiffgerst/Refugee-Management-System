@@ -20,8 +20,6 @@ def save_admin_pass():
     with open('data/admin_password.txt', 'w') as file:
         file.write(hashed_pass)
     pop_up.destroy()
-    
-    
 
 def change_admin_password():
     global new_password
@@ -79,8 +77,6 @@ def admin_logged_in():
         width="300", height="3",
         font=("Calibri bold", 25)).pack()
     
-    
-
     admin_hub_notebook = ttk.Notebook(admin_screen)
     admin_hub_notebook.pack(expand=True)
 

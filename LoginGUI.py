@@ -6,6 +6,7 @@ from admin.plan import *
 import admin_logged_in as ad
 from utilities import hash_password, verify_password
 from utilities import verify_username, verify_name, verify_email, verify_phone_number, verify_pass
+from contact_admin import *
 
 def login_admin():
     """
@@ -19,9 +20,6 @@ def login_admin():
     with open('data/admin_password.txt') as file:
         admin_password = file.read()
     
-    
-    
-
     if ad_u_entry == 'Admin' and verify_password(admin_password, ad_p_entry):
         Label(main_screen, text='Login Successful', fg='Green').pack()
         main_screen.destroy()
@@ -171,6 +169,7 @@ def sign_up_volunteer():
     global camp_name
     global availability
     global plan_location
+    
 
     # Toplevel makes the signupscreen be a child of the main screen
     # this means if you close the main screen the signupscreen will also close
@@ -187,6 +186,12 @@ def sign_up_volunteer():
     
     all_camps = df["camp_name"]
     all_camps_list = list(all_camps)
+    if all_camps_list == []:
+        sign_up_screen.destroy()
+        messagebox.showerror('Contact Admin', 'There are currently no camps available. Please contact the admin or check back later!')
+        return
+        
+        
     all_camps = []
     for camp in all_camps_list:
         camp_plan = df.loc[df['camp_name'] == camp, 'emergency_plan_name'].values.item()
@@ -292,7 +297,11 @@ def volunteer_signin_tab():
 
     # 'command = ' makes the button execute the function called 'sign_up_volunteer'
     Button(volunteer_sign_in_tab, text="Register", height="2", width="30", command=sign_up_volunteer).pack()
-
+    
+    Label(volunteer_sign_in_tab, text="", bg='#F2F2F2').pack()
+    # Contact Admin
+    Button(volunteer_sign_in_tab, text="Contact Admin", height="2", width="30", command=contact_admin).pack()
+    Label(volunteer_sign_in_tab, text="", bg='#F2F2F2').pack()
 
 def admin_signin_tab():
     """
@@ -329,6 +338,45 @@ def admin_signin_tab():
 
     Label(admin_sign_in_tab, text="", bg='#F2F2F2').pack()
 
+def expire_plan():
+    
+    df1 = pd.read_csv('data/emergency_plans.csv', keep_default_na=False)
+    plan_dates_str = df1['end_date'].values
+    expired_plans = []
+    
+    
+    for plan_expiration in plan_dates_str:
+        if plan_expiration == '':
+            continue
+        plan_expiration_object = datetime.strptime(plan_expiration, '%d %b %Y')
+        if plan_expiration_object <= datetime.today():
+            expired_plans.append(plan_expiration)
+    
+   
+    
+    for plan_expiration in expired_plans:
+        if plan_expiration == '':
+            continue
+        plan_name = df1.loc[df1['end_date'] == plan_expiration, 'name'].values[0]
+        df2 = pd.read_csv('data/camps.csv')
+        camps = df2.loc[df2['emergency_plan_name'] == plan_name, 'camp_name'].values
+        for selected_camp in camps:
+            # Remove selected camp from camps
+            df = pd.read_csv('data/camps.csv')
+            df = df.loc[df['camp_name'] != selected_camp]
+            df.to_csv('data/camps.csv',index=False)
+            
+            # For all volunteers in the camp, set camp_name to 'None'
+            df = pd.read_csv('data/volunteers.csv')
+            df.loc[df['camp_name'] == selected_camp, 'camp_name'] = 'None'
+            df.to_csv('data/volunteers.csv', index=False)
+            
+            # For all refugees in the camp, set on_site to 'False'
+            df = pd.read_csv('data/refugees.csv')
+            df.loc[df['camp_name'] == selected_camp, 'on_site'] = 'False'
+            df.to_csv('data/refugees.csv', index=False)
+            
+        df1.to_csv('data/emergency_plans.csv',index=False)
 
 def main_account_screen():
     """
@@ -337,6 +385,8 @@ def main_account_screen():
     global main_screen
     global volunteer_sign_in_tab
     global admin_sign_in_tab
+    
+    expire_plan()
 
     # setting up the window
     main_screen = Tk()

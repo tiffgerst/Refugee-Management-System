@@ -161,7 +161,3 @@ def edit_popup(screen, user):
             l.select()
 
     Button(editor_popup, text="Done", height="2", width="30", command=edit_volunteer).pack(pady=10)
-
-  
-
-
