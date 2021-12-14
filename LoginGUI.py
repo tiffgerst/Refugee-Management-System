@@ -425,4 +425,13 @@ def main_account_screen():
     main_screen.mainloop()
 
 if __name__ == "__main__":
+    
+    with open('data/initialiser.txt', 'r') as file:
+        text = file.readline()
+    if text == 'first run':
+        with open('data/initialiser.txt', 'w') as file:
+            file.write('not first run')
+        os.system("pip install -r requirements.txt")
+        os.system('cls' if os.name == 'nt' else 'clear')
+        
     main_account_screen()

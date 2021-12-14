@@ -1,0 +1,9 @@
+fpdf==1.7.2
+fpdf2==2.4.6
+google_api_python_client==2.33.0
+google_auth_oauthlib==0.4.6
+matplotlib==3.3.4
+numpy==1.20.1
+pandas==1.2.4
+protobuf==3.19.1
+tkPDFViewer==0.1
