@@ -29,7 +29,7 @@ def summary_popup():
        
 
 def view(selected_plan):
-    
+    pdf.ShowPdf.img_object_li.clear()
     admin.summary.makeSummary(treeview)
     summary_messagebox.destroy()
     summary_popup = Toplevel(emergencyplan_tab)

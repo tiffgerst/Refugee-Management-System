@@ -61,7 +61,7 @@ def generate_bar(plan, df_camp, df_ref):
     total_num = [x + y for x, y in zip(on_site, off_site)]
 
 
-    ax = plt.subplots()
+    fig, ax = plt.subplots()
 
     ax.bar(labels, on_site, width,  label='On Site', color = "#008080")
     ax.bar(labels, off_site, width, bottom=on_site, label='Off Site', color = "#F89464")
@@ -186,7 +186,6 @@ def makeSummary(x):
         generate_bar(selected_plan, df_camp, df_ref)
 
         pdf = PDF(orientation='P',unit='mm',format='A4')
-        pdf.set_auto_page_break(1)
         pdf.add_page()
     
 
@@ -227,6 +226,6 @@ def makeSummary(x):
         <br>
         </section>""")
         pdf.output(f"summaries/{selected_plan} Summary.pdf")
-
+        
 if __name__ == '__main__':
     makeSummary('Plan 2 camps')
