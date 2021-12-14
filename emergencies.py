@@ -70,7 +70,6 @@ def emergency_logic():
         server.sendmail(sender, to, email_text)
         server.close()
 
-        print ('Email sent!')
     except Exception as e:
-        print ('Something went wrong...', e)
+        pass
     

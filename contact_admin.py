@@ -83,13 +83,10 @@ def contact_admin():
                 server.sendmail(sender, to, email_text)
                 # server.quit()
                 server.close()
-                print ('Email to Admin sent!')
                 statement_1 = "EMAIL HAS BEEN SENT! Please close this window."
                 return statement_1
     
             except Exception as e:
-                print ('Something went wrong...')
-                print("This is what went wrong: ",e)
                 statement_2 = "SOMETHING WENT WRONG. YOUR EMAIL WAS NOT SENT!"
                 return statement_2
     

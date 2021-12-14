@@ -10,10 +10,54 @@ def search_refugee_name(e):
     
     value = search_entry.get()
 
+
     if value == '':
-        display_all(treeview,'data/refugees.csv')
+        clear_treeview()
+        update_treeview()
     else:
-        display_all(treeview,'data/refugees.csv',search=('family_name',value))
+        clear_treeview()
+        df = pd.read_csv('data/refugees.csv')
+       
+        
+        df = df.loc[df['family_name'].str.lower().str.contains(value.lower())]
+
+
+        treeview["column"] = list(df.columns)
+        treeview["show"] = "headings"
+        
+        for column in treeview["column"]:
+            treeview.heading(column, text=column)
+        for _,row in df.iterrows():
+            rows = list(row.values)
+            treeview.insert("", "end", values=rows)
+            
+def clear_treeview():
+    """
+      Clears the table so that it can be reloaded
+    """
+
+    treeview.delete(*treeview.get_children())
+
+
+def update_treeview():
+    """
+    Tree view logic for viewing  refugee csv
+    """
+
+    #opens csv using pandas and converts columns to list
+    #also makes the first columns headings
+    df = pd.read_csv('data/refugees.csv')
+    treeview["column"] = list(df.columns)
+    treeview["show"] = "headings"
+
+    for column in treeview["column"]:
+        treeview.heading(column, text=column)
+
+        
+    #retrieves rows and displays them
+    for _,row in df.iterrows():
+        rows = list(row.values)
+        treeview.insert("", "end", values=rows)
 
 def main(x):
     global treeview
@@ -45,6 +89,8 @@ def main(x):
     #search bar gets updated everytime a key is released
     #i.e when soemone types something
     search_bar.bind("<KeyRelease>", search_refugee_name)
-
-    display_all(treeview,'data/refugees.csv')
+    
+    clear_treeview()
+    update_treeview()
+    
     treeview.pack()

@@ -67,7 +67,7 @@ def edit_volunteer():
 
     dfa = pd.read_csv('data/availability.csv')
     new_row = [username, monday_avail, tuesday_avail, wednesday_avail, thursday_avail, friday_avail, saturday_avail, sunday_avail]
-    dfa.loc[df['username'] == username] = [new_row]
+    dfa.loc[dfa['username'] == username] = [new_row]
     dfa.to_csv('data/availability.csv',index=False)
 
     

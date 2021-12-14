@@ -5,8 +5,7 @@ import volunteers.edit_information as ed
 import LoginGUI
 import pandas as pd
 import emergencies_tab as emg
-from emergencies_tab import * 
-from emergencies_tab import emerg_display
+
 
 
 def logout():
@@ -39,7 +38,6 @@ def select_camp_name():
     new_camp_name = StringVar()
     df = pd.read_csv("data/camps.csv")
     all_camps_list = df["camp_name"].values
-    print(all_camps_list)
     new_camp_name.set(all_camps_list[0])
     
     select_camp_screen = Toplevel(volunteer_screen)
@@ -116,7 +114,9 @@ def volunteer_show(username):
         emerg_ref_tab = Frame(volunteer_hub_notebook, width=600, height= 620, bg='#F2F2F2')
         emerg_ref_tab.pack(fill='both', expand = True)
         volunteer_hub_notebook.add(emerg_ref_tab, text='Medical Emergencies')
-        emg.emerg_display(emerg_ref_tab)
+        emg.emerg_display(emerg_ref_tab, username)
+
+        
         
     volunteer_screen.mainloop()
 
