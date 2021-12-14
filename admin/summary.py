@@ -150,16 +150,17 @@ def camp_stats(camp):
     stats['num_medics'] = num_medics
 
     x = df_ref.loc[df_ref['camp_name'] == camp]
-
-    num_refs = x['num_relatives'].sum()
-    stats['num_refs'] = num_refs
+    subset_x = x[x['on_site'] == True]
+    print(subset_x)
+    num_refs_onsite = subset_x['num_relatives'].sum()
+    stats['num_refs'] = num_refs_onsite
 
 
     capacity_index = df.index[df['camp_name'] == camp].tolist()
     capacity = df.at[capacity_index[0], 'capacity']
     stats['capacity']= capacity
     
-    filled_capacity = ((num_refs / capacity) * 100)
+    filled_capacity = ((num_refs_onsite / capacity) * 100)
     stats['filled_capacity'] = filled_capacity
     
     return stats
@@ -187,6 +188,7 @@ def makeSummary(x):
 
         pdf = PDF(orientation='P',unit='mm',format='A4')
         pdf.add_page()
+    
 
         num_refs = plan_stats('num_ref', selected_plan)
         num_vols = plan_stats('num_vol', selected_plan)
@@ -206,18 +208,20 @@ def makeSummary(x):
         <hr>
         </section>
         """)
+
         for camp in camps:
             stats = camp_stats(camp)
             df = pd.read_csv("data/volunteers.csv")
-            generate_pie(camp, df)
             pdf.add_page()
+            generate_pie(camp, df)
+            
             pdf.write_html(f"""
         <section>
 
         <font size = "18"><h2><b>{camp}:</b></h2></font>
         <font size ="16"><p><b>Number of Volunteers:</b> {stats['num_vols']}</p></font>
         <font size="15"><p><b>            Of which medics:</b> {stats['num_medics']}</p> </font>
-        <font size ="16"><p><b>Number of Refugees:</b> {stats['num_refs']}</p></font>
+        <font size ="16"><p><b>Number of Refugees (onsite):</b> {stats['num_refs']}</p></font>
         <font size ="16"><p><b>Total Capacity:</b> {stats['capacity']}</p></font>
         <font size="15"><p><b>            Filled Capacity:</b> {stats['filled_capacity']: .0f}%</p> </font>
         <center><img src="summaries/{camp}.png" width='500'><center>
