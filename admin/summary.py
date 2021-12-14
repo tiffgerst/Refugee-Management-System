@@ -61,7 +61,7 @@ def generate_bar(plan, df_camp, df_ref):
     total_num = [x + y for x, y in zip(on_site, off_site)]
 
 
-    fig, ax = plt.subplots()
+    ax = plt.subplots()
 
     ax.bar(labels, on_site, width,  label='On Site', color = "#008080")
     ax.bar(labels, off_site, width, bottom=on_site, label='Off Site', color = "#F89464")
@@ -151,7 +151,6 @@ def camp_stats(camp):
 
     x = df_ref.loc[df_ref['camp_name'] == camp]
     subset_x = x[x['on_site'] == True]
-    print(subset_x)
     num_refs_onsite = subset_x['num_relatives'].sum()
     stats['num_refs'] = num_refs_onsite
 
