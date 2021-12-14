@@ -96,7 +96,7 @@ def refugee_edit_window():
         default_on_site = refugee_treeview.item(selected_refugee)['values'][5]
         Label(editor_popup, text="", bg='#F2F2F2').pack()
 
-        Label(editor_popup, text='Lead Family Memeber First Name: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
+        Label(editor_popup, text='Lead Family Member First Name: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
         refugee_first_name_label = Entry(editor_popup, textvariable=refugee_first_name, width='30', font=("Calibri", 10))
         refugee_first_name_label.insert(END, default_first_name)
         refugee_first_name_label.pack()
