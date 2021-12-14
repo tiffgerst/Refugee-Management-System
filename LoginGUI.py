@@ -169,6 +169,7 @@ def sign_up_volunteer():
     global camp_name
     global availability
     global plan_location
+    
 
     # Toplevel makes the signupscreen be a child of the main screen
     # this means if you close the main screen the signupscreen will also close
@@ -185,6 +186,12 @@ def sign_up_volunteer():
     
     all_camps = df["camp_name"]
     all_camps_list = list(all_camps)
+    if all_camps_list == []:
+        sign_up_screen.destroy()
+        messagebox.showerror('Contact Admin', 'There are currently no camps available. Please contact the admin or check back later!')
+        return
+        
+        
     all_camps = []
     for camp in all_camps_list:
         camp_plan = df.loc[df['camp_name'] == camp, 'emergency_plan_name'].values.item()
