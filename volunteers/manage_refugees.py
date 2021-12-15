@@ -153,7 +153,9 @@ def edit_refugee():
     df.loc[df['family_name'] == default_family_name] = [updated_row]
     df.to_csv('data/refugees.csv',index=False)
 
-
+    if refugee_emg == 'True':
+        emergency_logic(user)
+        
     # Creates a popup that tells user the refugee edit was successful
     edit_success_popup = Toplevel(editor_popup)
     edit_success_popup.title("Success")
@@ -226,7 +228,7 @@ def register_success_popup():
         Button(register_success, text="OK",command=lambda: delete_popups([register_success,add_new_refugee_popup])).pack()
         clear_treeview_emerg()
         update_treeview_emerg()
-        em.emergency_logic()
+        em.emergency_logic(user)
 
 
 def add_refugee():

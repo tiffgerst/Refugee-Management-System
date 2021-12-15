@@ -10,16 +10,18 @@ from utilities import *
 from utilities import check_blanks,check_date,delete_popups,display_all
 import sys
 import os.path
+from email.message import EmailMessage
+
 sys.path.append(
     os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)))
 
 
 # --------------------------------------- THIS FILE EMAILS MEDIC VOLUNTEERS IN CASE OF AN EMERGENCY -------------------------------------------------------------------------------------------------------------
-def emergency_logic():
+def emergency_logic(username):
     # Setting up connection to the server via the already generated files: credentials.json and token.json
     SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
     creds = None
-
+    user = username
     if os.path.exists('token.json'):
         creds = Credentials.from_authorized_user_file('token.json', SCOPES)
     # If there are no (valid) credentials available, sends user to log in to their provider. 
@@ -44,32 +46,47 @@ def emergency_logic():
     # Setting up the actual email  
     sender = gmail_user
     
+    df = pd.read_csv('data/volunteers.csv')
+    user_email = df.loc[df['username']== user].values[0][5]
+    camp = df.loc[df['username']== user].values[0][3]
     
-    # Uncomment these lines to use medic volunteers emails as receiver. instead of the current email
-    # df = pd.read_csv('data/volunteers.csv')
-    # emails = df.loc[df['medic'] == True, 'email' ]
-    # to = emails
-    to = ['aneliakg1@gmail.com']
+    emails1 = df.loc[(df['medic'] == True) & (df['camp_name'] == camp)].values
+    emails = []
+    for email in emails1:
+        if email[5] == user_email:
+            continue
+        emails.append(email[5])
     
-    
-    subject = 'EMERGENCY!'
-    message = "A refugee needs URGENT attention! Please attend to your e-Adam account ASAP!"
+    to = emails
+   
+
 
     email_text = """
-        From: %s
-        To: %s \n
-        Subject: %s \n
-        %s
-        """ %(sender, ", ".join(to), subject, message)
+        EMERGENCY Medical HELP REQUIRED! \n
+        A refugee in your camp needs URGENT medical attention! Please attend to your e-Adam account ASAP!
+        
+        """ 
+ 
     
     
-    try:
-        server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-        server.ehlo()
-        server.login(gmail_user, gmail_password)
-        server.sendmail(sender, to, email_text)
-        server.close()
+    for email in emails:
+        try:
+            msg = EmailMessage()
+            msg.set_content(email_text)
+            
+            msg['Subject'] = 'Urgent Help Required'
+            msg['From'] = "eadam0066@gmail.com"
+            msg['To'] = email
+            
+            
+            
+            server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+            server.ehlo()
+            server.login(gmail_user, gmail_password)
+            server.send_message(msg)
+            # server.send_message(sender, to, email_text)
+            server.quit()
 
-    except Exception as e:
-        pass
+        except Exception:
+            pass
     

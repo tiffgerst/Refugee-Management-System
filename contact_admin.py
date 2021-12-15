@@ -57,9 +57,10 @@ def contact_admin():
             gmail_user = 'eadam0066@gmail.com'
             gmail_password = 'CourseWork0066'  
             
+            with open('data/admin_email.txt', 'r') as file:
+                email = file.readline()
             
-            
-            to = ["eadam0066@gmail.com"]
+            to = [email]
             
             
             subject = 'New E-Adam Message'
