@@ -240,6 +240,3 @@ def makeSummary(x):
     <br>
     </section>""")
     pdf.output(f"summaries/{selected_plan} Summary.pdf")
-        
-if __name__ == '__main__':
-    Summary('Plan 2 camps')
