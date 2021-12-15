@@ -18,6 +18,7 @@ import admin_logged_in as ad
 from utilities import hash_password, verify_password
 from utilities import verify_username, verify_name, verify_email, verify_phone_number, verify_pass
 from contact_admin import *
+import admin.summary as summary
 
 
 
@@ -368,7 +369,8 @@ def expire_plan():
         if expiration_object < datetime.today():
             expired_plans.append(name)
     
-    for plan_name in expired_plans:     
+    for plan_name in expired_plans:
+        summary.makeSummary(plan_name)     
         df2 = pd.read_csv('data/camps.csv')
         camps = df2.loc[df2['emergency_plan_name'] == plan_name, 'camp_name'].values
         for selected_camp in camps:

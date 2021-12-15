@@ -186,7 +186,6 @@ def camp_stats(camp):
 
 def makeSummary(x):
 
-
     selected_plan = x
 
     df_camp = pd.read_csv('data/camps.csv')
