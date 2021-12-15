@@ -1,3 +1,14 @@
+import os
+
+with open('data/initialiser.txt', 'r') as file:
+    text = file.readline()
+if text == 'first run':
+    with open('data/initialiser.txt', 'w') as file:
+        file.write('not first run')
+    try:
+        os.system("pip install -r requirements.txt")
+    except:
+        os.system("pip3 install -r requirements.txt")
 from tkinter import *
 from tkinter import messagebox, ttk
 import pandas as pd
@@ -7,6 +18,7 @@ import admin_logged_in as ad
 from utilities import hash_password, verify_password
 from utilities import verify_username, verify_name, verify_email, verify_phone_number, verify_pass
 from contact_admin import *
+
 
 
 def login_admin():
@@ -429,13 +441,4 @@ def main_account_screen():
     main_screen.mainloop()
 
 if __name__ == "__main__":
-    
-    with open('data/initialiser.txt', 'r') as file:
-        text = file.readline()
-    if text == 'first run':
-        with open('data/initialiser.txt', 'w') as file:
-            file.write('not first run')
-        os.system("pip install -r requirements.txt")
-        os.system('cls' if os.name == 'nt' else 'clear')
-        
     main_account_screen()
