@@ -9,7 +9,6 @@ import admin.volunteer
 import admin.summary
 from tkPDFViewer import tkPDFViewer as pdf
 from shutil import copy2
-import webbrowser
 
 def summary_popup():
     global summary_messagebox
@@ -31,12 +30,13 @@ def summary_popup():
 
 def view(selected_plan):
     pdf.ShowPdf.img_object_li.clear()
-    admin.summary.makeSummary(selected_plan)
+    if admin.summary.makeSummary(selected_plan) == False:
+        messagebox.showerror('Expired Plan', 'Cannot generate summary for expired plan!')
+        return
     summary_messagebox.destroy()
     summary_popup = Toplevel(emergencyplan_tab)
 
     location = f'summaries/{selected_plan} Summary.pdf'
-    webbrowser.open_new('summaries/sum.pdf')
     v1 = pdf.ShowPdf()
     v2 = v1.pdf_view(summary_popup,
         pdf_location = location,
@@ -271,12 +271,11 @@ def modify_table(add):
     
     modify_popup.destroy()
     if add == True: admin.camp.add_camp_window(default=plan_na)
-    # Display a success popup
-    # success_popup = Toplevel(modify_popup)   
-    # success_popup.title("Success")
-    # if add == True: text = "creation"
-    # else: text = "edit"
-    # Label(success_popup, text="Plan "+text+" was successful. Please add a camp for this plan!", fg='green').pack()
+    success_popup = Toplevel(modify_popup)   
+    success_popup.title("Success")
+    if add == True: text = "creation"
+    else: text = "edit"
+    Label(success_popup, text="Plan "+text+" was successful. Please add a camp for this plan!", fg='green').pack()
     
     
     
@@ -381,7 +380,5 @@ def main(x):
     Button(emergencyplan_tab, text='Edit Plan', command=edit_plan_confirm).pack()
  
     Button(emergencyplan_tab, text='Close Plan', command=lambda: delete_or_close_plan('close')).pack()
-
-    Button(emergencyplan_tab, text='Delete Plan', command=lambda: delete_or_close_plan('delete')).pack()
 
     Button(emergencyplan_tab, text='Summary', command=summary_popup).pack()

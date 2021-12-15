@@ -97,7 +97,14 @@ def register_user():
     medic_entry = medic_var.get()
     activation = True
     camp = camp_name.get()
-    camp = camp.replace(" - " + plan_location, "")
+    camp = camp.replace(' - North America', '')
+    camp = camp.replace(' - Europe', '')
+    camp = camp.replace(' - Oceania', '')
+    camp = camp.replace(' - South America', '')
+    camp = camp.replace(' - Asia', '')
+    camp = camp.replace(' - Africa', '')
+    
+    
     monday_avail = availability["Monday"].get()
     tuesday_avail = availability["Tuesday"].get()
     wednesday_avail = availability["Wednesday"].get()
@@ -359,6 +366,7 @@ def expire_plan():
     
     df1 = pd.read_csv('data/emergency_plans.csv', keep_default_na=False)
     expired_plans = []
+    active_plans = []
     rows = df1.values
     for row in rows:
         expiration_string = row[5]
@@ -368,9 +376,10 @@ def expire_plan():
         expiration_object = datetime.strptime(expiration_string, '%d %b %Y')
         if expiration_object < datetime.today():
             expired_plans.append(name)
+            
     
     for plan_name in expired_plans:
-        summary.makeSummary(plan_name)     
+           
         df2 = pd.read_csv('data/camps.csv')
         camps = df2.loc[df2['emergency_plan_name'] == plan_name, 'camp_name'].values
         for selected_camp in camps:
