@@ -31,7 +31,7 @@ def summary_popup():
 
 def view(selected_plan):
     pdf.ShowPdf.img_object_li.clear()
-    admin.summary.makeSummary(treeview)
+    admin.summary.makeSummary(selected_plan)
     summary_messagebox.destroy()
     summary_popup = Toplevel(emergencyplan_tab)
 
@@ -45,7 +45,7 @@ def view(selected_plan):
 
 def download(selected_plan):
 
-    admin.summary.makeSummary(treeview)
+    admin.summary.makeSummary(selected_plan)
     summary_messagebox.destroy()
     init_path = f"summaries/{selected_plan} Summary.pdf"
     target = filedialog.askdirectory(initialdir="/", title="Select target directory")
