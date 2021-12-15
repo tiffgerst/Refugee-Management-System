@@ -6,6 +6,7 @@ import admin.volunteer as av
 import LoginGUI
 import admin.refugees as ar
 from utilities import hash_password  
+import re
 
 def save_admin_pass():
     admin_pass = new_password.get()
@@ -53,6 +54,36 @@ def logout():
         admin_screen.destroy()
         LoginGUI.main_account_screen()
 
+def change_admin_email():
+    global pop_up1
+    global new_email
+    new_email = StringVar()
+    pop_up1 = Toplevel(admin_screen)
+    pop_up1.title('Change Admin Email')
+    pop_up1.geometry('400x300')
+    Label(pop_up1,
+        text="Change Email:",
+        width="300", height="3",
+        font=("Calibri bold", 25),
+        bg='teal', fg='white').pack()
+    Label(pop_up1, text='').pack()
+    Label(pop_up1, text='New Email:').pack()
+    Entry(pop_up1, textvariable=new_email, width="30", font=("Calibri", 10)).pack()
+    Button(pop_up1, text="Confirm", command=change_admin_email_save).pack()
+    
+        
+def change_admin_email_save():
+    new_admin_email = new_email.get()
+    reg_check = bool(re.fullmatch("(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)", new_admin_email))
+    if reg_check != True:
+        messagebox.showerror('Invalid Email', 'The email adress you have entered is invalid. Please enter a valid email.')
+        return
+    with open('data/admin_email.txt', 'w') as file:
+        file.write(new_admin_email)
+    pop_up1.destroy()
+
+
+
 def admin_logged_in():
     '''
     Displays admin hub as well has the various
@@ -98,6 +129,7 @@ def admin_logged_in():
     admin_hub_notebook.add(manage_refugees_tab, text = "Manage Refugees")
     
     Button(admin_screen, text= 'Change Password', command= change_admin_password).pack()
+    Button(admin_screen, text= 'Change Email Adress', command= change_admin_email).pack()
     Button(admin_screen, text="Logout", command=logout).pack()
     
 
