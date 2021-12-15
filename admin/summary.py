@@ -4,6 +4,7 @@ import pandas as pd
 from fpdf import FPDF, HTMLMixin
 import matplotlib.pyplot as plt
 import numpy as np
+import datetime
 
 
 class PDF(FPDF,HTMLMixin):
@@ -187,55 +188,67 @@ def camp_stats(camp):
 def makeSummary(x):
 
     selected_plan = x
+    df1 = pd.read_csv('data/emergency_plans.csv', keep_default_na=False)
+    expired_plans = []
+    rows = df1.values
+    for row in rows:
+        expiration_string = row[5]
+        name = row[0]
+        if expiration_string == '':
+            continue
+        expiration_object = datetime.datetime.strptime(expiration_string, '%d %b %Y')
+        if expiration_object < datetime.datetime.today():
+            expired_plans.append(name)
+    if selected_plan not in expired_plans:
+        df_camp = pd.read_csv('data/camps.csv')
+        df_ref = pd.read_csv('data/refugees.csv')
+        camp_name = df_camp.loc[df_camp['emergency_plan_name'] == selected_plan]
+        camps = camp_name['camp_name'].to_list()
+        
+        generate_bar(selected_plan, df_camp, df_ref)
 
-    df_camp = pd.read_csv('data/camps.csv')
-    df_ref = pd.read_csv('data/refugees.csv')
-    camp_name = df_camp.loc[df_camp['emergency_plan_name'] == selected_plan]
-    camps = camp_name['camp_name'].to_list()
-    
-    generate_bar(selected_plan, df_camp, df_ref)
-
-    pdf = PDF(orientation='P',unit='mm',format='A4')
-    pdf.add_page()
-
-
-    num_refs = plan_stats('num_ref', selected_plan)
-    num_vols = plan_stats('num_vol', selected_plan)
-    plan_desc = plan_stats('plan_desc', selected_plan)
-    num_refs_departed = plan_stats('num_ref_departed',selected_plan)
-
-    pdf.write_html(f"""
-<font size ="20"><u><h1 align="center">Summary for {selected_plan}</h1></u></font>
-<section>
-    <font size ="16"><p>{selected_plan} began on {plan_desc['start_date']} and is located in {plan_desc['location']}.</p><p> It was created due to a/an {plan_desc['type']}.
-    </p><p>Description: {plan_desc['description']}</p></font>
-    <font size ="16"><p><b>Number of Camps: </b>{len(camps)}</p></font>
-    <font size ="16"><p><b>Number of Refugees: </b>{num_refs}</p></font>
-    <font size ="16"><p><b>Number of Refugees Departed: </b>{num_refs_departed}</p></font>
-    <font size ="16"><p><b>Number of Volunteers: </b>{num_vols}</p></font>
-    <font size ="16"><center><img src="summaries/{selected_plan}.png" width='500'><center></font>
-    <br>
-    <br>
-    </section>
-    """)
-
-    for camp in camps:
-        stats = camp_stats(camp)
-        df = pd.read_csv("data/volunteers.csv")
+        pdf = PDF(orientation='P',unit='mm',format='A4')
         pdf.add_page()
-        generate_pie(camp, df) 
-        pdf.write_html(f"""
-    <section>
 
-    <font size = "18"><h2><b>{camp}:</b></h2></font>
-    <font size ="16"><p><b>Number of Volunteers:</b> {stats['num_vols']}</p></font>
-    <font size="15"><p><b>            Of which medics:</b> {stats['num_medics']}</p> </font>
-    <font size ="16"><p><b>Number of Refugees (onsite):</b> {stats['num_refs']}</p></font>
-    <font size ="16"><p><b>Number of Refugees departed:</b> {stats['num_refs_departed']}</p></font>
-    <font size ="16"><p><b>Total Capacity:</b> {stats['capacity']}</p></font>
-    <font size="15"><p><b>            Filled Capacity:</b> {stats['filled_capacity']: .0f}%</p> </font>
-    <center><img src="summaries/{camp}.png" width='500'><center>
-    <br>
-    <br>
-    </section>""")
-    pdf.output(f"summaries/{selected_plan} Summary.pdf")
+
+        num_refs = plan_stats('num_ref', selected_plan)
+        num_vols = plan_stats('num_vol', selected_plan)
+        plan_desc = plan_stats('plan_desc', selected_plan)
+        num_refs_departed = plan_stats('num_ref_departed',selected_plan)
+
+        pdf.write_html(f"""
+    <font size ="20"><u><h1 align="center">Summary for {selected_plan}</h1></u></font>
+    <section>
+        <font size ="16"><p>{selected_plan} began on {plan_desc['start_date']} and is located in {plan_desc['location']}.</p><p> It was created due to a/an {plan_desc['type']}.
+        </p><p>Description: {plan_desc['description']}</p></font>
+        <font size ="16"><p><b>Number of Camps: </b>{len(camps)}</p></font>
+        <font size ="16"><p><b>Number of Refugees: </b>{num_refs}</p></font>
+        <font size ="16"><p><b>Number of Refugees Departed: </b>{num_refs_departed}</p></font>
+        <font size ="16"><p><b>Number of Volunteers: </b>{num_vols}</p></font>
+        <font size ="16"><center><img src="summaries/{selected_plan}.png" width='500'><center></font>
+        <br>
+        <br>
+        </section>
+        """)
+
+        for camp in camps:
+            stats = camp_stats(camp)
+            df = pd.read_csv("data/volunteers.csv")
+            pdf.add_page()
+            generate_pie(camp, df) 
+            pdf.write_html(f"""
+        <section>
+
+        <font size = "18"><h2><b>{camp}:</b></h2></font>
+        <font size ="16"><p><b>Number of Volunteers:</b> {stats['num_vols']}</p></font>
+        <font size="15"><p><b>            Of which medics:</b> {stats['num_medics']}</p> </font>
+        <font size ="16"><p><b>Number of Refugees (onsite):</b> {stats['num_refs']}</p></font>
+        <font size ="16"><p><b>Number of Refugees departed:</b> {stats['num_refs_departed']}</p></font>
+        <font size ="16"><p><b>Total Capacity:</b> {stats['capacity']}</p></font>
+        <font size="15"><p><b>            Filled Capacity:</b> {stats['filled_capacity']: .0f}%</p> </font>
+        <center><img src="summaries/{camp}.png" width='500'><center>
+        <br>
+        <br>
+        </section>""")
+        pdf.output(f"summaries/{selected_plan} Summary.pdf")
+    
