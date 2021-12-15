@@ -106,18 +106,19 @@ def admin_logged_in():
     Label(admin_screen,
         text="Admin Hub:",
         width="300", height="3",
-        font=("Calibri bold", 25)).pack()
+        font=("Calibri bold", 25),
+        bg='teal', fg='white').pack()
     
     admin_hub_notebook = ttk.Notebook(admin_screen)
     admin_hub_notebook.pack(expand=True)
 
-    emergencyplan_tab = Frame(admin_hub_notebook, width=600, height= 620)
+    emergencyplan_tab = Frame(admin_hub_notebook, width=600, height= 620, bg='#F2F2F2')
     emergencyplan_tab.pack(fill='both', expand = True)
 
-    manage_volunteer_tab = Frame(admin_hub_notebook, width=500, height= 620)
+    manage_volunteer_tab = Frame(admin_hub_notebook, width=500, height= 620, bg='#F2F2F2')
     manage_volunteer_tab.pack(fill='both', expand= True)
     
-    manage_refugees_tab = Frame(admin_hub_notebook, width=500, height= 620)
+    manage_refugees_tab = Frame(admin_hub_notebook, width=500, height= 620, bg='#F2F2F2')
     manage_refugees_tab.pack(fill='both', expand= True)
 
     admin_camp_tab = Frame(admin_hub_notebook, width=500, height= 620, bg='#F2F2F2')
