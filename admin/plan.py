@@ -9,6 +9,7 @@ import admin.volunteer
 import admin.summary
 from tkPDFViewer import tkPDFViewer as pdf
 from shutil import copy2
+import webbrowser
 
 def summary_popup():
     global summary_messagebox
@@ -35,6 +36,7 @@ def view(selected_plan):
     summary_popup = Toplevel(emergencyplan_tab)
 
     location = f'summaries/{selected_plan} Summary.pdf'
+    webbrowser.open_new('summaries/sum.pdf')
     v1 = pdf.ShowPdf()
     v2 = v1.pdf_view(summary_popup,
         pdf_location = location,

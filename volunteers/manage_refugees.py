@@ -52,19 +52,25 @@ def refugee_edit_window():
     global default_family_name
     global emergency
     global default_camp_name
+    global refugee_last_name
+    global default_emergency
 
    
     # Event selected -> get the dictionary of values of the event
     selected_refugee = refugee_treeview.focus()
     try:
         # Try and index the selected_refugee
-        selected_refugee=refugee_treeview.item(selected_refugee)['values'][1]
+        default_first_name=refugee_treeview.item(selected_refugee)['values'][0]
+        refugee_last_name=refugee_treeview.item(selected_refugee)['values'][1]
+        default_camp_name=refugee_treeview.item(selected_refugee)['values'][2]
+        default_medical_conditions=refugee_treeview.item(selected_refugee)['values'][3]
+        default_num_relatives=refugee_treeview.item(selected_refugee)['values'][4]
+        default_on_site=refugee_treeview.item(selected_refugee)['values'][5]
+        default_emergency=refugee_treeview.item(selected_refugee)['values'][6]
     except IndexError:
         # No refugee selected
         messagebox.showerror('Please Select a refugee', 'Please select a refugee you wish to edit.')
-    df = pd.read_csv('data/refugees.csv')
-    refugee_onsite = df.loc[df['family_name'] == selected_refugee, 'on_site'].values
-    if refugee_onsite == False:
+    if default_on_site == 'False':
         messagebox.showerror('Invalid Regufugee', 'You cannot edit departed refugees!')
     else:
         editor_popup = Toplevel(refugee_tab)
@@ -86,14 +92,7 @@ def refugee_edit_window():
         num_relatives = StringVar()
         emergency = BooleanVar()
 
-        selected_refugee = refugee_treeview.focus()
-        # Set the default strings on the form using existing data of event
-        default_first_name = refugee_treeview.item(selected_refugee)['values'][0]
-        default_family_name = refugee_treeview.item(selected_refugee)['values'][1]
-        default_camp_name = refugee_treeview.item(selected_refugee)['values'][2]
-        default_medical_conditions = refugee_treeview.item(selected_refugee)['values'][3]
-        default_num_relatives = refugee_treeview.item(selected_refugee)['values'][4]
-        default_on_site = refugee_treeview.item(selected_refugee)['values'][5]
+        
         Label(editor_popup, text="", bg='#F2F2F2').pack()
 
         Label(editor_popup, text='Lead Family Member First Name: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
@@ -111,10 +110,11 @@ def refugee_edit_window():
         num_relatives_label = Entry(editor_popup, textvariable=num_relatives, width="30", font=("Calibri", 10))
         num_relatives_label.insert(END, default_num_relatives)
         num_relatives_label.pack()
-        
-        Label(editor_popup, text='URGENT medical help needed? True/False *', bg='#F2F2F2', font=("Calibri", 15)).pack()
-        Radiobutton(editor_popup, text="True", variable=emergency, value=True, font=("Calibri", 15)).pack()
-        Radiobutton(editor_popup, text='False', variable=emergency, value=False, font=("Calibri", 15)).pack()
+
+        if default_emergency == 'False':
+            Label(editor_popup, text='URGENT medical help needed? True/False *', bg='#F2F2F2', font=("Calibri", 15)).pack()
+            Radiobutton(editor_popup, text="True", variable=emergency, value=True, font=("Calibri", 15)).pack()
+            Radiobutton(editor_popup, text='False', variable=emergency, value=False, font=("Calibri", 15)).pack()
 
         Button(editor_popup, text="Edit Refugee", height="2", width="30", command=edit_refugee).pack(pady=10)
 
@@ -129,17 +129,20 @@ def edit_refugee():
 
     # Retrieve the variables using .get() - value is str
     refugee_fi = refugee_first_name.get()
-    refugee_fa = refugee_family_name.get()
     refugee_cond = medical_conditions.get()
     refugee_rel = num_relatives.get()
     refugee_on = default_on_site
-    refugee_emg = str(emergency.get())
+    if default_emergency == 'False':
+        refugee_emg = str(emergency.get())
+    else:
+        refugee_emg = 'True'
+    
 
     # Check for blanks
     res = check_blanks(
         name=default_camp_name,
         form={
-        'first_name':refugee_fi,'family_name': default_family_name,'camp_name':default_camp_name,
+        'first_name':refugee_fi,'family_name': refugee_last_name,'camp_name':default_camp_name,
         'medical_conditions':refugee_cond,'emergency':refugee_emg},
         parent=editor_popup)
     if res == False: return
@@ -149,11 +152,11 @@ def edit_refugee():
         
     # Open csv -> change the refugee attributes -> save csv
     df = pd.read_csv('data/refugees.csv')
-    updated_row = [refugee_fi, refugee_fa, default_camp_name, refugee_cond, refugee_rel, refugee_on, refugee_emg]
-    df.loc[df['family_name'] == default_family_name] = [updated_row]
+    updated_row = [refugee_fi, refugee_last_name, default_camp_name, refugee_cond, refugee_rel, refugee_on, refugee_emg]
+    df.loc[df['family_name'] == refugee_last_name] = [updated_row]
     df.to_csv('data/refugees.csv',index=False)
 
-    if refugee_emg == 'True':
+    if refugee_emg == 'True' and default_emergency == 'False':
         emergency_logic(user)
         
     # Creates a popup that tells user the refugee edit was successful
