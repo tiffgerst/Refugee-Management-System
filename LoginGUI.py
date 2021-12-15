@@ -365,15 +365,10 @@ def expire_plan():
         if expiration_string == '':
             continue
         expiration_object = datetime.strptime(expiration_string, '%d %b %Y')
-        if expiration_object > datetime.today():
+        if expiration_object < datetime.today():
             expired_plans.append(name)
     
-   
-    
-    for plan_expiration in expired_plans:
-        if plan_expiration == '':
-            continue
-        plan_name = df1.loc[df1['end_date'] == plan_expiration, 'name'].values[0]
+    for plan_name in expired_plans:     
         df2 = pd.read_csv('data/camps.csv')
         camps = df2.loc[df2['emergency_plan_name'] == plan_name, 'camp_name'].values
         for selected_camp in camps:
