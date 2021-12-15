@@ -7,7 +7,7 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from tkinter import *
-from tkinter import ttk
+from tkinter import ttk, messagebox
 from utilities import *
 from utilities import check_blanks,check_date,delete_popups,display_all
 import sys
@@ -16,9 +16,11 @@ sys.path.append(
     os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)))
 import tkinter as tk
 from tkinter import ttk
+from email.message import EmailMessage
 
-def contact_admin():
 
+def contact_admin(x):
+    volunteer_sign_in_tab = x
     # SETUP
     SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
     creds = None
@@ -58,38 +60,46 @@ def contact_admin():
             gmail_password = 'CourseWork0066'  
             
             with open('data/admin_email.txt', 'r') as file:
-                email = file.readline()
-            
-            to = [email]
+                admin_email = file.readline()
             
             
-            subject = 'New E-Adam Message'
             sender = self.sender_box_entry.get()
             message = self.mess_box_entry.get('1.0', 'end')
+            sender_name =  self.name_box_entry.get()
+            
+            reg_check = bool(re.fullmatch("(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)", sender))
+            if reg_check != True:
+                messagebox.showerror('Invalid Email', 'The email adress you have entered is invalid. Please enter a valid email.')
+                return
             
             
-            email_text = """
-            From: %s
-            To: %s \n
-            Subject: %s \n
-            %s
-            """ %(sender, ", ".join(to), subject, message)
-    
+            if sender_name == '':
+                sender_name = 'a volunteer'
+            
+            
+            email_text = f'{message} \n You can contact this individual via {sender}'
     
             try:
+                msg = EmailMessage()
+                msg.set_content(email_text)
+                msg['Subject'] = f'Message from {sender_name}'
+                msg['From'] = sender
+                msg['To'] = admin_email
                 server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
                 server.ehlo()
                 # server.starttls()
                 server.login(gmail_user, gmail_password)
-                server.sendmail(sender, to, email_text)
+                server.send_message(msg)
                 # server.quit()
                 server.close()
-                statement_1 = "EMAIL HAS BEEN SENT! Please close this window."
-                return statement_1
+                new_window.destroy()
+                return
+            
+                
     
             except Exception as e:
-                statement_2 = "SOMETHING WENT WRONG. YOUR EMAIL WAS NOT SENT!"
-                return statement_2
+                pass
+            self.the_window
     
         def display_mess(self, btn_clicked):
             self.display['text'] = btn_clicked()
@@ -104,7 +114,7 @@ def contact_admin():
             self.sender_box_entry = ttk.Entry(self.the_window, textvariable=self.sender_box)
             self.name_box_entry = ttk.Entry(self.the_window, textvariable=self.name_sender)
             self.mess_box_entry = tk.Text(self.the_window, width=55, height=10, wrap=tk.WORD)
-            self.button_send = ttk.Button(self.the_window, text="Send", command= lambda:self.display_mess(self.btn_clicked))
+            self.button_send = ttk.Button(self.the_window, text="Send", command= self.btn_clicked)
     
             self.sender_label.grid(row=0, column=0, pady=(20,0))
             self.sender_box_entry.grid(row=0, column=1, pady=(20,0))
@@ -114,10 +124,10 @@ def contact_admin():
             self.mess_box_entry.grid(row=4,column=0, columnspan=2, padx=30)
             self.button_send.grid(row=5,column=1, pady=(10,0))
             self.display.grid(row=5, column=0, padx=(20,0))
+        
     
-    new_window = tk.Tk()
+    new_window = Toplevel(volunteer_sign_in_tab)
     application = Contact(new_window)
-    new_window.mainloop()
 
     '''
     Emails for testing: 

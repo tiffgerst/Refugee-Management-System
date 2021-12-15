@@ -62,8 +62,8 @@ def emergency_logic(username):
 
 
     email_text = """
-        EMERGENCY Medical HELP REQUIRED! \n
-        A refugee in your camp needs URGENT medical attention! Please attend to your e-Adam account ASAP!
+EMERGENCY MEDICAL HELP REQUIRED! \n
+A refugee in your camp needs URGENT medical attention! Please attend to your e-Adam account ASAP!
         
         """ 
  

@@ -7,6 +7,7 @@ import admin_logged_in as ad
 from utilities import hash_password, verify_password
 from utilities import verify_username, verify_name, verify_email, verify_phone_number, verify_pass
 from contact_admin import *
+import LoginGUI as LG
 
 
 def login_admin():
@@ -259,6 +260,9 @@ def sign_up_volunteer():
 
     Button(sign_up_screen, text="Sign Up", height="2", width="30", command=register_user).pack()
 
+def contact_admin1():
+    contact_admin(volunteer_sign_in_tab)
+
 
 def volunteer_signin_tab():
     """
@@ -301,7 +305,7 @@ def volunteer_signin_tab():
     
     Label(volunteer_sign_in_tab, text="", bg='#F2F2F2').pack()
     # Contact Admin
-    Button(volunteer_sign_in_tab, text="Contact Admin", height="2", width="30", command=contact_admin).pack()
+    Button(volunteer_sign_in_tab, text="Contact Admin", height="2", width="30", command=contact_admin1).pack()
     Label(volunteer_sign_in_tab, text="", bg='#F2F2F2').pack()
 
 def admin_signin_tab():
@@ -393,7 +397,7 @@ def main_account_screen():
     main_screen = Tk()
     main_screen.geometry("600x500")
     main_screen.title("E-Adam")
-    #main_screen.configure(bg='#F2F2F2')
+    main_screen.configure(bg='#F2F2F2')
 
     style = ttk.Style(main_screen)
     style.theme_use('clam')
