@@ -264,10 +264,13 @@ def modify_table(add):
 
     # Check the proposed plan is OK
     res = is_valid_plan(modify_popup,plan_na,plan_ty,plan_loc,plan_desc,plan_start,plan_end)
-    if not res: return
+    if not res: 
+        messagebox.showerror('Invalid Entries',"End date must not be before start date or today's date")
+        return
     else: plan_start, plan_end = res
 
     df = pd.read_csv('data/emergency_plans.csv')
+    
     
     if add == True:
         # Check if plan already exists
@@ -332,9 +335,11 @@ def is_valid_plan(parent,plan_na,plan_ty,plan_loc,plan_desc,plan_start,plan_end)
     # If end date is specified - validate it
     if plan_end != '':
         end_date_res = check_date(plan_end,"%d %b %Y",parent=parent)
-        if end_date_res == False: return
+        if end_date_res == False: return 
         # If the end date is before the start date
-        if end_date_res<start_date_res: return
+        if end_date_res<start_date_res: return 
+        
+        if datetime.strptime(plan_end, '%d %b %Y')<= datetime.today(): return
     else: end_date_res = None
     
     return start_date_res,end_date_res
