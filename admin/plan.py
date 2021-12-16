@@ -157,6 +157,7 @@ def modify_plan_window(add):
     
     if add == True:
         title = "Please enter plan details"
+        
     else:
         # We shouldn't be able to modify the plan name if we are editting
         names.pop(0); textvariables.pop(0)
@@ -169,6 +170,23 @@ def modify_plan_window(add):
         # Overrite the plan name on the form from empty to
         # The correct value, then remove it from defaults
         plan_name = defaults[0]; defaults.pop(0)
+        
+        df1 = pd.read_csv('data/emergency_plans.csv', keep_default_na=False)
+        expired_plans = []
+        active_plans = []
+        rows = df1.values
+        for row in rows:
+            expiration_string = row[5]
+            name = row[0]
+            if expiration_string == '':
+                continue
+            expiration_object = datetime.strptime(expiration_string, '%d %b %Y')
+            if expiration_object < datetime.today():
+                expired_plans.append(name)
+        
+        if plan_name in expired_plans:
+            messagebox.showerror('Unable to edit Plan', 'Cannot Edit Expired Plans')
+            return
 
         # If end_date is null (displayed by tk as "nan") convert it to empty str
         if defaults[-1] == 'nan': defaults[-1] = ''
