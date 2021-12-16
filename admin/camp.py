@@ -47,6 +47,26 @@ def add_camp_window(**kwargs):
     add_new_camp_popup.geometry('600x500')
     add_new_camp_popup.title('Add New Camp')
     
+    df1 = pd.read_csv('data/emergency_plans.csv', keep_default_na=False)
+    expired_plans = []
+    active_plans = []
+    rows = df1.values
+    for row in rows:
+        expiration_string = row[5]
+        name = row[0]
+        if expiration_string == '':
+            continue
+        expiration_object = datetime.datetime.strptime(expiration_string, '%d %b %Y')
+        if expiration_object < datetime.datetime.today():
+            expired_plans.append(name)
+        else:
+            active_plans.append(name)
+    
+    if len(active_plans) < 1:
+        messagebox.showerror('No Plans Available', 'Please make an active plan!')
+        add_new_camp_popup.destroy()
+        return
+    
     df = pd.read_csv("./data/emergency_plans.csv", keep_default_na=False)
     emergency_plans = []
     rows = df.values
@@ -99,6 +119,9 @@ def add_camp_window(**kwargs):
     
 
 def add_camp():
+
+        
+    
     camps_df = pd.read_csv("./data/camps.csv")
     emergency_plan = camp_plan.get()
     shelter = camp_shelter.get()
