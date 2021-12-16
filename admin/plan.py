@@ -35,7 +35,6 @@ def view(selected_plan):
         return
     summary_messagebox.destroy()
     summary_popup = Toplevel(emergencyplan_tab)
-
     location = f'summaries/{selected_plan} Summary.pdf'
     v1 = pdf.ShowPdf()
     v2 = v1.pdf_view(summary_popup,

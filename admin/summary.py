@@ -7,6 +7,7 @@ import numpy as np
 import datetime
 
 
+
 class PDF(FPDF,HTMLMixin):
     pass
 
@@ -14,11 +15,13 @@ class PDF(FPDF,HTMLMixin):
 def generate_pie(camp, df):
 
     x = df.loc[df['camp_name'] == camp]
+   
 
     num_of_medic = x[x["medic"]==True]['username'].count()
     not_medic = x[x["medic"]==False]['username'].count()
 
     y = np.array([not_medic, num_of_medic])
+   
     
     def absolute_value(val):
         a  = np.round(val/100.*y.sum())
@@ -27,7 +30,7 @@ def generate_pie(camp, df):
     mylabels = ['Non-Medically Trained','Medically Trained']
     mycolors = ["#008080", "#F89464"]
     plt.pie(y, labels = mylabels, colors = mycolors, autopct=absolute_value)
-
+    camp = camp.replace(' ', '_')
     
     plt.savefig(f'summaries/{camp}.png', bbox_inches='tight')
     plt.close()
@@ -235,7 +238,13 @@ def makeSummary(x):
             stats = camp_stats(camp)
             df = pd.read_csv("data/volunteers.csv")
             pdf.add_page()
-            generate_pie(camp, df) 
+            try:
+                generate_pie(camp, df)
+                camp = camp.replace(' ', '_')
+                pie = f"summaries/{camp}.png"
+            except ValueError:
+                pie = "summaries/noimage.png"
+
             pdf.write_html(f"""
         <section>
 
@@ -246,7 +255,7 @@ def makeSummary(x):
         <font size ="16"><p><b>Number of Refugees departed:</b> {stats['num_refs_departed']}</p></font>
         <font size ="16"><p><b>Total Capacity:</b> {stats['capacity']}</p></font>
         <font size="15"><p><b>            Filled Capacity:</b> {stats['filled_capacity']: .0f}%</p> </font>
-        <center><img src="summaries/{camp}.png" width='500'><center>
+        <center><img src={pie} width='500'><center>
         <br>
         <br>
         </section>""")
