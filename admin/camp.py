@@ -43,9 +43,7 @@ def add_camp_window(**kwargs):
     global camp_city
     global country_options
     
-    add_new_camp_popup = Toplevel(admin_camp_tab)
-    add_new_camp_popup.geometry('600x500')
-    add_new_camp_popup.title('Add New Camp')
+    
     
     df1 = pd.read_csv('data/emergency_plans.csv', keep_default_na=False)
     expired_plans = []
@@ -64,8 +62,11 @@ def add_camp_window(**kwargs):
     
     if len(active_plans) < 1:
         messagebox.showerror('No Plans Available', 'Please make an active plan!')
-        add_new_camp_popup.destroy()
         return
+    
+    add_new_camp_popup = Toplevel(admin_camp_tab)
+    add_new_camp_popup.geometry('600x500')
+    add_new_camp_popup.title('Add New Camp')
     
     df = pd.read_csv("./data/emergency_plans.csv", keep_default_na=False)
     emergency_plans = []
