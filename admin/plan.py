@@ -157,6 +157,7 @@ def modify_plan_window(add):
     
     if add == True:
         title = "Please enter plan details"
+        
     else:
         # We shouldn't be able to modify the plan name if we are editting
         names.pop(0); textvariables.pop(0)
@@ -169,6 +170,23 @@ def modify_plan_window(add):
         # Overrite the plan name on the form from empty to
         # The correct value, then remove it from defaults
         plan_name = defaults[0]; defaults.pop(0)
+        
+        df1 = pd.read_csv('data/emergency_plans.csv', keep_default_na=False)
+        expired_plans = []
+        active_plans = []
+        rows = df1.values
+        for row in rows:
+            expiration_string = row[5]
+            name = row[0]
+            if expiration_string == '':
+                continue
+            expiration_object = datetime.strptime(expiration_string, '%d %b %Y')
+            if expiration_object < datetime.today():
+                expired_plans.append(name)
+        
+        if plan_name in expired_plans:
+            messagebox.showerror('Unable to edit Plan', 'Cannot Edit Expired Plans')
+            return
 
         # If end_date is null (displayed by tk as "nan") convert it to empty str
         if defaults[-1] == 'nan': defaults[-1] = ''
@@ -246,10 +264,13 @@ def modify_table(add):
 
     # Check the proposed plan is OK
     res = is_valid_plan(modify_popup,plan_na,plan_ty,plan_loc,plan_desc,plan_start,plan_end)
-    if not res: return
+    if not res: 
+        messagebox.showerror('Invalid Entries',"End date must not be before start date or today's date")
+        return
     else: plan_start, plan_end = res
 
     df = pd.read_csv('data/emergency_plans.csv')
+    
     
     if add == True:
         # Check if plan already exists
@@ -314,9 +335,11 @@ def is_valid_plan(parent,plan_na,plan_ty,plan_loc,plan_desc,plan_start,plan_end)
     # If end date is specified - validate it
     if plan_end != '':
         end_date_res = check_date(plan_end,"%d %b %Y",parent=parent)
-        if end_date_res == False: return
+        if end_date_res == False: return 
         # If the end date is before the start date
-        if end_date_res<start_date_res: return
+        if end_date_res<start_date_res: return 
+        
+        if datetime.strptime(plan_end, '%d %b %Y')<= datetime.today(): return
     else: end_date_res = None
     
     return start_date_res,end_date_res
