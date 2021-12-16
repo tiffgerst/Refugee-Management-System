@@ -45,6 +45,9 @@ def view(selected_plan):
 
 def download(selected_plan):
 
+    if admin.summary.makeSummary(selected_plan) == False:
+        messagebox.showerror('Expired Plan', 'Cannot generate summary for expired plan!')
+        return
     admin.summary.makeSummary(selected_plan)
     summary_messagebox.destroy()
     init_path = f"summaries/{selected_plan} Summary.pdf"

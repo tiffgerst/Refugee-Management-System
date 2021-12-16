@@ -251,4 +251,6 @@ def makeSummary(x):
         <br>
         </section>""")
         pdf.output(f"summaries/{selected_plan} Summary.pdf")
+    else: 
+        return False
     
