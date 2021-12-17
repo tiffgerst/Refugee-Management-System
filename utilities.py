@@ -7,35 +7,35 @@ import os
 import re
 
 
-def check_blanks(name,form,parent):
+def check_blanks(name, form, parent):
     """
     Args
     ----
     name : str
         one of: camp, plan
-    
+
     form : dict
         key = str of attribute name
         value = the value entered by the user
-    
+
     parent : tkinter object
     """
     for key in form:
         if form[key] == "":
             message1 = 'Invalid '+name+' '+key.title()
             message2 = 'Please do not leave the '+key+' entry blank.'
-            tk.messagebox.showerror(message1,message2, parent=parent)
+            tk.messagebox.showerror(message1, message2, parent=parent)
             return False
 
     return True
 
 
-def check_date(date,format,parent):
+def check_date(date, format, parent):
     """
     Args
     ----
     date : str
-    
+
     format : str
         the desired date format e.g. %d %b %Y
 
@@ -45,12 +45,13 @@ def check_date(date,format,parent):
         timestamp if the date is valid
         False if not
     """
-    
+
     try:
-        timestamp = datetime.strptime(date,format)
+        timestamp = datetime.strptime(date, format)
         return timestamp.strftime('%d %b %Y')
     except:
-        tk.messagebox.showerror("Invalid Plan Date","Please enter date in the format "+format, parent=parent)
+        tk.messagebox.showerror(
+            "Invalid Plan Date", "Please enter date in the format "+format, parent=parent)
         return False
 
 
@@ -61,15 +62,15 @@ def delete_popups(popups):
     popups : list
         list of popups to destroy
     """
-    
-    while len(popups)>0:
+
+    while len(popups) > 0:
         popups[0].destroy()
         popups.pop(0)
 
     return
 
 
-def display_all(parent,csv,**kwargs):
+def display_all(parent, csv, **kwargs):
     """
     Args
     ----
@@ -81,35 +82,36 @@ def display_all(parent,csv,**kwargs):
     cols_to_hide - list of strings (optional) 
         a list of columns to hide
     """
-    
-    cols_to_hide = kwargs.get("cols_to_hide",None)
-    search = kwargs.get('search',None)
+
+    cols_to_hide = kwargs.get("cols_to_hide", None)
+    search = kwargs.get('search', None)
     cols_to_sort = kwargs.get('cols_to_sort', None)
     parent.delete(*parent.get_children())
     if csv == "data/volunteers.csv":
-        df = pd.read_csv('data/volunteers.csv', converters={'phone_number': lambda a: str(a)})
+        df = pd.read_csv('data/volunteers.csv',
+                         converters={'phone_number': lambda a: str(a)})
     else:
         df = pd.read_csv(csv)
-    
+
     if cols_to_hide:
-        df = df.loc[:,[col for col in df.columns if col not in cols_to_hide]]
+        df = df.loc[:, [col for col in df.columns if col not in cols_to_hide]]
     if search:
         col, term = search
         df = df.loc[df[col].str.lower().str.contains(term.lower())]
     if cols_to_sort:
-        df = df.sort_values(by= f'{cols_to_sort}', ascending=True)
-        
-    
+        df = df.sort_values(by=f'{cols_to_sort}', ascending=True)
+
     parent["column"] = df.columns.tolist()
     parent["show"] = "headings"
 
     for column in parent["column"]:
         parent.heading(column, text=column.title())
 
-    for _,row in df.iterrows():
+    for _, row in df.iterrows():
         parent.insert("", "end", values=list(row))
 
     return
+
 
 def clear_treeview(treeview):
     treeview.delete(*treeview.get_children())
@@ -142,27 +144,28 @@ def verify_password(stored_password, provided_password):
     return pwdhash == stored_password
 
 
-def verify_username(username): # Between 6-20 chars. No , _ or . 
-    reg_check = bool(re.fullmatch("^(?=.{6,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$", username))
+def verify_username(username):  # Between 6-20 chars. No , _ or .
+    reg_check = bool(re.fullmatch(
+        "^(?=.{6,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$", username))
     return reg_check
-    
 
-def verify_name(name): # uppercase & lowercase char, no numbers or spec chars, can be 1 or 2 words with single space in the middle, first name and last name btw 2-25 chars each
+
+def verify_name(name):  # uppercase & lowercase char, no numbers or spec chars, can be 1 or 2 words with single space in the middle, first name and last name btw 2-25 chars each
     reg_check = bool(re.fullmatch("[A-Za-z]{2,25}\s[A-Za-z]{2,25}", name))
     return reg_check
-    
 
-def verify_email(email): # valid email structure
-    reg_check = bool(re.fullmatch("(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)", email))
+
+def verify_email(email):  # valid email structure
+    reg_check = bool(re.fullmatch(
+        "(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)", email))
     return reg_check
-    
-        
-def verify_phone_number(number): # only numbers; limit 6 to 20
+
+
+def verify_phone_number(number):  # only numbers; limit 6 to 20
     reg_check = bool(re.fullmatch("[0-9]{6,20}", number))
     return reg_check
 
-        
-def verify_pass(password): # min 8 , no white spaces, spec chars allowed
+
+def verify_pass(password):  # min 8 , no white spaces, spec chars allowed
     reg_check = bool(re.fullmatch("[A-Za-z0-9@#$%^&+=]{8,}", password))
     return reg_check
-
