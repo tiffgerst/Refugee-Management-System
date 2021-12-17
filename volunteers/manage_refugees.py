@@ -249,7 +249,7 @@ def add_refugee():
     global emergency
 
     add_new_refugee_popup = Toplevel(refugee_tab)
-    add_new_refugee_popup.geometry('600x500')
+    add_new_refugee_popup.geometry('600x600')
 
     add_new_refugee_popup.configure(bg='#F2F2F2')
 

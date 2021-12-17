@@ -41,6 +41,7 @@ def change_admin_password():
     Entry(pop_up, textvariable=new_password, width="30", font=("Calibri", 10)).pack()
     Label(pop_up, text='Confirm Password:').pack()
     Entry(pop_up, textvariable=confirm_new_password, width="30", font=("Calibri", 10)).pack()
+    Label(pop_up, text="", bg='#F2F2F2').pack()
     Button(pop_up, text="Confirm", command=save_admin_pass).pack()
     
 
@@ -69,6 +70,7 @@ def change_admin_email():
     Label(pop_up1, text='').pack()
     Label(pop_up1, text='New Email:').pack()
     Entry(pop_up1, textvariable=new_email, width="30", font=("Calibri", 10)).pack()
+    Label(pop_up1, text="", bg='#F2F2F2').pack()
     Button(pop_up1, text="Confirm", command=change_admin_email_save).pack()
     
         
@@ -76,7 +78,7 @@ def change_admin_email_save():
     new_admin_email = new_email.get()
     reg_check = bool(re.fullmatch("(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)", new_admin_email))
     if reg_check != True:
-        messagebox.showerror('Invalid Email', 'The email adress you have entered is invalid. Please enter a valid email.')
+        messagebox.showerror('Invalid Email', 'The email address you have entered is invalid. Please enter a valid email.')
         return
     with open('data/admin_email.txt', 'w') as file:
         file.write(new_admin_email)
@@ -97,7 +99,7 @@ def admin_logged_in():
 
     admin_screen = Tk()
     admin_screen.title("Admin Hub")
-    admin_screen.geometry('820x650')
+    admin_screen.geometry('820x680')
     admin_screen.configure(bg='#F2F2F2')
 
     style = ttk.Style(admin_screen)
@@ -124,13 +126,13 @@ def admin_logged_in():
     admin_camp_tab = Frame(admin_hub_notebook, width=500, height= 620, bg='#F2F2F2')
     admin_camp_tab.pack(fill='both', expand= True)
 
-    admin_hub_notebook.add(emergencyplan_tab, text='Emergency Plan')
+    admin_hub_notebook.add(emergencyplan_tab, text='Emergency Plans')
     admin_hub_notebook.add(manage_volunteer_tab, text='Manage Volunteers')
     admin_hub_notebook.add(admin_camp_tab, text = "Manage Camps")
     admin_hub_notebook.add(manage_refugees_tab, text = "Manage Refugees")
     
     Button(admin_screen, text= 'Change Password', command= change_admin_password).pack()
-    Button(admin_screen, text= 'Change Email Adress', command= change_admin_email).pack()
+    Button(admin_screen, text= 'Change Email Address', command= change_admin_email).pack()
     Button(admin_screen, text="Logout", command=logout).pack()
     
 

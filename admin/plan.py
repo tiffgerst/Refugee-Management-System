@@ -204,7 +204,7 @@ def modify_plan_window(add):
     global modify_popup
     modify_popup = Toplevel(emergencyplan_tab)
     modify_popup.title('Editor')
-    modify_popup.geometry('600x500')
+    modify_popup.geometry('600x620')
     modify_popup.configure(bg='#F2F2F2')
     Label(modify_popup, text=title,width="300", height="3",
         font=("Calibri bold", 25),bg='grey', fg='white').pack()
@@ -231,7 +231,7 @@ def modify_plan_window(add):
         
         # Save the entry box
         label.pack()
-
+    Label(modify_popup, text="", bg='#F2F2F2').pack()
     Button(modify_popup, text="Confirm", height="2", width="30", command=lambda: modify_table(add=add)).pack(pady=10)
 
 

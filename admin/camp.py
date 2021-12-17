@@ -111,6 +111,7 @@ def add_camp_window(**kwargs):
     Entry(add_new_camp_popup, textvariable=camp_city, width='30', font=("Calibri", 10)).pack()
     Label(add_new_camp_popup, text='Number of Beds: *', bg='#F2F2F2', font=("Calibri", 15)).pack()
     Entry(add_new_camp_popup, textvariable=camp_shelter, width='30', font=("Calibri", 10)).pack()
+    Label(add_new_camp_popup, text="", bg='#F2F2F2').pack()
     Button(add_new_camp_popup, text="Add Camp", height="2", width="30", command=add_camp).pack(pady=10)
     
     if default:
