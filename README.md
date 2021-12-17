@@ -9,4 +9,11 @@ LoginGUI.py - application entry point
     * \admin
         * camp.py
         * plan.py 
-* volunteer_hub.py
+        * refugees.py
+        * summary.py
+        * volunteer.py
+        
+* volunteers_logged_in.py
+    * \volunteers
+        * edit_information.py
+        * manage_refugees.py 
