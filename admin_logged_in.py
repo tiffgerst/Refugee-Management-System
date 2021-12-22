@@ -42,10 +42,10 @@ def change_admin_password():
           bg='teal', fg='white').pack()
     Label(pop_up, text='').pack()
     Label(pop_up, text='New Password:').pack()
-    Entry(pop_up, textvariable=new_password,
+    Entry(pop_up, textvariable=new_password, show="*",
           width="30", font=("Calibri", 10)).pack()
     Label(pop_up, text='Confirm Password:').pack()
-    Entry(pop_up, textvariable=confirm_new_password,
+    Entry(pop_up, textvariable=confirm_new_password, show="*",
           width="30", font=("Calibri", 10)).pack()
     Label(pop_up, text="", bg='#F2F2F2').pack()
     Button(pop_up, text="Confirm", command=save_admin_pass).pack()
