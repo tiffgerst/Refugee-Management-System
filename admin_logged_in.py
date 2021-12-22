@@ -141,8 +141,8 @@ def admin_logged_in():
     admin_camp_tab.pack(fill='both', expand=True)
 
     admin_hub_notebook.add(emergencyplan_tab, text='Emergency Plans')
-    admin_hub_notebook.add(manage_volunteer_tab, text='Manage Volunteers')
     admin_hub_notebook.add(admin_camp_tab, text="Manage Camps")
+    admin_hub_notebook.add(manage_volunteer_tab, text='Manage Volunteers')
     admin_hub_notebook.add(manage_refugees_tab, text="Manage Refugees")
 
     Button(admin_screen, text='Change Password',
