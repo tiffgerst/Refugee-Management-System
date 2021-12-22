@@ -57,7 +57,10 @@ def download(selected_plan):
             'Expired Plan', 'Cannot generate summary for expired plan!')
         return
     admin.summary.makeSummary(selected_plan)
-    summary_messagebox.destroy()
+    try: 
+        summary_messagebox.destroy()
+    except:
+        pass
     init_path = f"summaries/{selected_plan} Summary.pdf"
     target = filedialog.askdirectory(
         initialdir="/", title="Select target directory")
@@ -126,6 +129,8 @@ def delete_or_close_plan(operation):
             df1 = df1.loc[df1['name'] != selected_plan]
         if operation == "close":
             # Add end date (today)
+            messagebox.showerror('Download Plan Summary', 'Please choose where to dowload the summary to!')
+            download(selected_plan)
             df1.loc[df1['name'] == selected_plan,
                     'end_date'] = datetime.today().strftime('%d %b %Y')
         df2 = pd.read_csv('data/camps.csv')
