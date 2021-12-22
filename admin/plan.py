@@ -5,6 +5,7 @@ import pandas as pd
 from utilities import check_blanks, check_date, clear_treeview, delete_popups, display_all
 from datetime import datetime
 import admin.camp
+import admin.refugees
 import admin.volunteer
 import admin.summary
 from tkPDFViewer import tkPDFViewer as pdf
@@ -140,6 +141,7 @@ def delete_or_close_plan(operation):
         display_all(admin.camp.treeview, 'data/camps.csv')
         display_all(admin.volunteer.treeview,
                     'data/volunteers.csv', cols_to_hide=['password'])
+        display_all(admin.refugees.treeview, 'data/refugees.csv')
 
 
 def modify_plan_window(add):
