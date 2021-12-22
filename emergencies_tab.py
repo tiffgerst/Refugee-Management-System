@@ -112,7 +112,7 @@ def update_treeview_emerg():
     dfv = pd.read_csv('data/volunteers.csv')
     vol_camp = dfv.loc[dfv['username'] == user].values[0][3]
     df = pd.read_csv('data/refugees.csv')
-    df = df.loc[(df['emergency'] == True) & (df['camp_name'] == vol_camp)]
+    df = df.loc[(df['emergency'] == True) & (df['camp_name'] == vol_camp) & (df['on_site'] == True)]
     treeview["column"] = list(df.columns)
     treeview["show"] = "headings"
 
