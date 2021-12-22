@@ -111,6 +111,17 @@ def delete_or_close_plan(operation):
     if confirmation == 'yes':
         df1 = pd.read_csv('data/emergency_plans.csv')
         if operation == "delete":
+            end_date =  df1.loc[df1['name'] == selected_plan, 'end_date'].values[0]
+            end_date = str(end_date)
+            if end_date == 'nan':
+                messagebox.showerror('Unable to Delete Plan', 'Unable to delete an active plan. Please close the plan before deleting it!')
+                return
+            end_date = datetime.strptime(end_date, '%d %b %Y')
+            if end_date > datetime.today():
+                messagebox.showerror('Unable to Delete Plan', 'Unable to delete an active plan. Please close the plan before deleting it!')
+                return
+            else:
+                df1 = df1.loc[df1['name'] != selected_plan]
             # Remove the row
             df1 = df1.loc[df1['name'] != selected_plan]
         if operation == "close":
@@ -458,5 +469,7 @@ def main(x):
 
     Button(emergencyplan_tab, text='Close Plan',
            command=lambda: delete_or_close_plan('close')).pack()
+    Button(emergencyplan_tab, text='Delete Plan',
+           command=lambda: delete_or_close_plan('delete')).pack()
 
     Button(emergencyplan_tab, text='Summary', command=summary_popup).pack()
