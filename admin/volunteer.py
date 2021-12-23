@@ -3,6 +3,7 @@ from tkinter import ttk, messagebox
 import numpy
 import pandas as pd
 from utilities import check_blanks, delete_popups, display_all
+from contact_volunteer import contact_volunteer
 
 
 def volunteer_activation():
@@ -37,7 +38,7 @@ def volunteer_activation():
 def delete_volunteer_confirm():
     """
     Asks user if they are sure they want to delete a volunteer, then deletes it.
-    Execpts Index Error if user tries to delete a volunteer without first selecting one.
+    Except Index Error if user tries to delete a volunteer without first selecting one.
     """
 
     selected_volunteer = treeview.focus()
@@ -56,6 +57,27 @@ def delete_volunteer_confirm():
             df.to_csv('data/volunteers.csv', index=False)
             display_all(treeview, 'data/volunteers.csv',
                         cols_to_hide=['password'])
+            
+            
+
+def contact_volunteer_confirm():
+    """
+    Asks user if they are sure they want to contact a volunteer, then deletes it.
+    Except Index Error if user tries to contact a volunteer without first selecting one.
+    """
+
+    selected_volunteer = treeview.focus()
+    try:
+        selected_volunteer = treeview.item(selected_volunteer)
+        print(selected_volunteer)
+    except IndexError:
+        messagebox.showerror('Please Select a Volunteer',
+                             'Please select the Volunteer you wish to contact.')
+    else:    
+        df = pd.read_csv('data/volunteers.csv')
+        selected_volunteer_email = selected_volunteer['values'][4]
+        contact_volunteer(selected_volunteer_email, treeview)
+        
 
 
 def search_volunteer_name(e):
@@ -125,3 +147,6 @@ def main(x):
            command=volunteer_activation).pack()
     Button(volunteer_tab, text='Delete Volunteer',
            command=delete_volunteer_confirm).pack()
+    Button(volunteer_tab, text='Contact Volunteer',
+           command=contact_volunteer_confirm).pack()
+    
