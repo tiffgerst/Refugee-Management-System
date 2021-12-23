@@ -397,7 +397,6 @@ def is_valid_plan(parent, plan_na, plan_ty, plan_loc, plan_desc, plan_start, pla
             return
         # If the end date is before the start date
         if end_date_dt < start_date_dt:
-            print('why')
             return
 
         if datetime.strptime(plan_end, '%d %b %Y') <= datetime.today():
