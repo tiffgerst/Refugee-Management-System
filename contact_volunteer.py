@@ -37,7 +37,6 @@ def contact_volunteer(z, x):
 
 
             email_text = f'{message} \nYou can contact E-Adam admin back via {sender}'
-            print(selected_volunteer_email)
         
             try:
                 msg = EmailMessage()
