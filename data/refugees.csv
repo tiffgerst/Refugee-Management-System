@@ -303,7 +303,7 @@ Kelly,Guilfoyle,Neutral Peace Zone,,16,False,False
 Roberto,Lewis,Tesla Refugee Camp,Food poisoning,0,True,True
 Romelia,Latriano,Tesla Refugee Camp,Chest pain,1,True,True
 Militsa,Ivanova,Tesla Refugee Camp,None,2,True,True
-Simon,Francesco,Tesla Refugee Camp,Leg injury,1,True,True
-Sally,Sandros,Tesla Refugee Camp,Cut arm,0,True,True
-Lidiya,Lamyro,Tesla Refugee Camp,Head injury,0,True,True
-Roger,Wills,Tesla Refugee Camp,None,0,True,True
+Simon,Francesco,Tesla Refugee Camp,None,1,True,False
+Sally,Sandros,Tesla Refugee Camp,None,0,True,False
+Lidiya,Lamyro,Tesla Refugee Camp,None,0,True,True
+Roger,Wills,Tesla Refugee Camp,Healthy,0,True,False

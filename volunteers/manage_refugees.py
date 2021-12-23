@@ -172,22 +172,29 @@ def edit_refugee():
                    refugee_cond, refugee_rel, refugee_on, refugee_emg]
     df.loc[df['family_name'] == refugee_last_name] = [updated_row]
     df.to_csv('data/refugees.csv', index=False)
-
-    if refugee_emg == 'True' and default_emergency == 'False':
-        emergency_emails(user)
-
-    # Creates a popup that tells user the refugee edit was successful
-    edit_success_popup = Toplevel(editor_popup)
-    edit_success_popup.title("Success")
-    Label(edit_success_popup, text="Refugee edit was successful", fg='green').pack()
-    Button(edit_success_popup, text="OK", command=lambda: delete_popups(
-        [edit_success_popup, editor_popup])).pack()
-
+    
+    # Update treeview
     clear_treeview()
     update_treeview()
-    clear_treeview_emerg()
-    update_treeview_emerg()
 
+    if refugee_emg == 'True' and default_emergency == 'False':
+        edit_success_popup = Toplevel(editor_popup)
+        edit_success_popup.title("Success")
+        Label(edit_success_popup, text="Refugee edit was successful.\n All volunteers with medical training will be informed of the emergency!", fg='green').pack()
+        Button(edit_success_popup, text="OK", command=lambda: delete_popups(
+            [edit_success_popup, editor_popup])).pack()
+        clear_treeview_emerg()
+        update_treeview_emerg()
+        emergency_emails(user)
+        
+    else:
+        # Creates a popup that tells user the refugee edit was successful
+        edit_success_popup = Toplevel(editor_popup)
+        edit_success_popup.title("Success")
+        Label(edit_success_popup, text="Refugee edit was successful", fg='green').pack()
+        Button(edit_success_popup, text="OK", command=lambda: delete_popups(
+            [edit_success_popup, editor_popup])).pack()
+    
 
 def depart_refugee_confirm():
     """
