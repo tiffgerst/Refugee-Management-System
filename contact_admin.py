@@ -1,44 +1,13 @@
-# pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib
-from __future__ import print_function
 from email.message import EmailMessage
 from tkinter import ttk
 import tkinter as tk
 import smtplib
-import os.path
-from googleapiclient.discovery import build
-from google_auth_oauthlib.flow import InstalledAppFlow
-from google.auth.transport.requests import Request
-from google.oauth2.credentials import Credentials
 from tkinter import *
 from tkinter import ttk, messagebox
 from utilities import *
-from utilities import check_blanks, check_date, delete_popups, display_all
-import sys
-import os.path
-sys.path.append(
-    os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)))
 
 def contact_admin(x):
     volunteer_sign_in_tab = x
-    # SETUP
-    SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
-    creds = None
-
-    if os.path.exists('token.json'):
-        creds = Credentials.from_authorized_user_file('token.json', SCOPES)
-    # If there are no (valid) credentials available, sends user to log in to their provider.
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            flow = InstalledAppFlow.from_client_secrets_file(
-                'credentials.json', SCOPES)
-            creds = flow.run_local_server(port=0)
-        # Save the credentials for the next run
-        with open('token.json', 'w') as token:
-            token.write(creds.to_json())
-
-        service = build('gmail', 'v1', credentials=creds)
     class Contact():
 
         def __init__(self, the_window):
@@ -74,7 +43,7 @@ def contact_admin(x):
             if sender_name == '':
                 sender_name = 'a volunteer'
 
-            email_text = f'{message} \n You can contact this individual via {sender}'
+            email_text = f'{message} \nYou can contact this individual via {sender}'
 
             try:
                 msg = EmailMessage()
@@ -82,18 +51,19 @@ def contact_admin(x):
                 msg['Subject'] = f'Message from {sender_name}'
                 msg['From'] = sender
                 msg['To'] = admin_email
-                server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-                server.ehlo()
-                # server.starttls()
+                server = smtplib.SMTP('smtp.gmail.com', 587)
+                #server.ehlo()
+                server.starttls()
                 server.login(gmail_user, gmail_password)
                 server.send_message(msg)
                 # server.quit()
                 server.close()
-                new_window.destroy()
-                return
+                print("Email was successfully sent!")
+                self.success_popup()
+                return 
 
             except Exception as e:
-                pass
+                print("Email was not sent:", e)
             self.the_window
 
         def display_mess(self, btn_clicked):
@@ -123,18 +93,29 @@ def contact_admin(x):
             self.mess_box_entry.grid(row=4, column=0, columnspan=2, padx=30)
             self.button_send.grid(row=5, column=1, pady=(10, 0))
             self.display.grid(row=5, column=0, padx=(20, 0))
+            
+        def success_popup(self):
+            new_window.destroy()
+            contact_admin_success = Toplevel(volunteer_sign_in_tab)
+            contact_admin_success.title("Success")
+            contact_admin_success.geometry("400x90")
+            Label(contact_admin_success, text="Success!\n\nYour email to Admin was sent!\nThey will contact you as soon as possible. ",
+                fg='green').pack()
+            Button(contact_admin_success, text="OK", command=lambda: delete_popups(
+                [contact_admin_success])).pack()
+            
 
     new_window = Toplevel(volunteer_sign_in_tab)
     application = Contact(new_window)
 
-    '''
-    Emails for testing: 
-    You can log in in each of them and see the emails sent/received
+'''
+Emails for testing: 
+You can log in in each of them and see the emails sent/received
 
-    #email eadam0066@outlook.com
-    #pass CourseWork0066
+#email eadam0066@outlook.com
+#pass CourseWork0066
 
-    #email eadam0066@gmail.com
-    #pass CourseWork0066
+#email eadam0066@gmail.com
+#pass CourseWork0066
 
-    '''
+'''
