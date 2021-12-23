@@ -48,15 +48,15 @@ def contact_admin(x):
             try:
                 msg = EmailMessage()
                 msg.set_content(email_text)
+                
                 msg['Subject'] = f'Message from {sender_name}'
                 msg['From'] = sender
                 msg['To'] = admin_email
+                
                 server = smtplib.SMTP('smtp.gmail.com', 587)
-                #server.ehlo()
                 server.starttls()
                 server.login(gmail_user, gmail_password)
                 server.send_message(msg)
-                # server.quit()
                 server.close()
                 print("Email was successfully sent!")
                 self.success_popup()

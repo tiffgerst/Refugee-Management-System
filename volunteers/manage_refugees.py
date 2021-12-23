@@ -1,9 +1,9 @@
 from emergencies_tab import clear_treeview_emerg
 from emergencies_tab import update_treeview_emerg
 from emergencies_tab import *
-from emergencies import emergency_logic
-from emergencies import *
-import emergencies as em
+from emergency_emails import emergency_emails
+from emergency_emails import *
+import emergency_emails as em
 from utilities import check_blanks, delete_popups
 from tkinter import *
 from tkinter import ttk, messagebox
@@ -174,7 +174,7 @@ def edit_refugee():
     df.to_csv('data/refugees.csv', index=False)
 
     if refugee_emg == 'True' and default_emergency == 'False':
-        emergency_logic(user)
+        emergency_emails(user)
 
     # Creates a popup that tells user the refugee edit was successful
     edit_success_popup = Toplevel(editor_popup)
@@ -252,7 +252,7 @@ def register_success_popup():
             [register_success, add_new_refugee_popup])).pack()
         clear_treeview_emerg()
         update_treeview_emerg()
-        em.emergency_logic(user)
+        em.emergency_emails(user)
 
 
 def add_refugee():

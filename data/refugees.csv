@@ -23,7 +23,7 @@ Sheelagh,Becke,Moderna,Gunshot wound,19,False,True
 Bernhard,Massie,Neutral Peace Zone,Radioactive decay,13,False,True
 Ceciley,Neylon,Argentina Earthquake Relief,Cough,4,True,True
 Mervin,Ovington,Argentina Earthquake Relief,Broken Arm,1,False,True
-Pasquale,Le Prevost,Tesla Refugee Camp,,4,True,False
+Pasquale,Le Prevost,Tesla Refugee Camp,Head injury,4,True,True
 Adella,Ramelot,Argentina Earthquake Relief,,17,True,False
 Keane,Tidcombe,Brazil Earthquake relief,Cough,7,False,False
 Lia,Osmar,Argentina Earthquake Relief,Concussion,18,True,False
@@ -62,7 +62,7 @@ Inessa,Roumier,Moderna,Cough,16,False,True
 Corissa,Colhoun,Moderna,Gunshot wound,17,False,True
 Fax,Bonome,Neutral Peace Zone,Broken Arm,3,True,True
 Juliet,Winsome,BioNTech,Corona,3,False,True
-Bridie,Duberry,Tesla Refugee Camp,Radioactive decay,9,True,False
+Bridie,Duberry,Tesla Refugee Camp,Radioactive decay,9,True,True
 Ardith,Castanos,BioNTech,Broken Arm,6,False,False
 Hogan,Frazer,Astrazeneca,Radioactive decay,2,False,True
 Bram,Tideswell,Tesla Refugee Camp,PTSD,13,False,True
@@ -300,3 +300,10 @@ Teador,Courtier,No Brainer,Corona,5,False,False
 Atalanta,Widdison,Brazil Earthquake relief,Gunshot wound,9,True,True
 Mellie,Cullingworth,Argentina Earthquake Relief,Gunshot wound,11,False,True
 Kelly,Guilfoyle,Neutral Peace Zone,,16,False,False
+Roberto,Lewis,Tesla Refugee Camp,Food poisoning,0,True,True
+Romelia,Latriano,Tesla Refugee Camp,Chest pain,1,True,True
+Militsa,Ivanova,Tesla Refugee Camp,Injured hand,2,True,True
+Simon,Francesco,Tesla Refugee Camp,Leg injury,1,True,True
+Sally,Sandros,Tesla Refugee Camp,Cut arm,0,True,True
+Lidiya,Lamyro,Tesla Refugee Camp,Head injury,0,True,True
+Roger,Wills,Tesla Refugee Camp,Arm wound ,0,True,True
