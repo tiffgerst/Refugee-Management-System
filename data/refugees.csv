@@ -106,7 +106,7 @@ Zelma,Tapin,BioNTech,Head Injury,8,False,True
 Thorndike,Farge,Tesla Refugee Camp,Concussion,20,False,False
 Elfreda,Dannohl,Amazon Fulfillment Centre,Head Injury,19,True,False
 Teena,Sanson,Tesla Refugee Camp,Broken Foot,17,False,True
-Alden,Bowles,Tesla Refugee Camp,PTSD,9,True,False
+Alden,Bowles,Tesla Refugee Camp,PTSD,1,True,True
 Quillan,Gleeson,Neutral Peace Zone,Gunshot wound,2,False,False
 Agatha,Chappel,Astrazeneca,Concussion,10,False,True
 Lodovico,Hawkwood,BioNTech,PTSD,10,False,False
@@ -302,8 +302,8 @@ Mellie,Cullingworth,Argentina Earthquake Relief,Gunshot wound,11,False,True
 Kelly,Guilfoyle,Neutral Peace Zone,,16,False,False
 Roberto,Lewis,Tesla Refugee Camp,Food poisoning,0,True,True
 Romelia,Latriano,Tesla Refugee Camp,Chest pain,1,True,True
-Militsa,Ivanova,Tesla Refugee Camp,Injured hand,2,True,True
+Militsa,Ivanova,Tesla Refugee Camp,None,2,True,True
 Simon,Francesco,Tesla Refugee Camp,Leg injury,1,True,True
 Sally,Sandros,Tesla Refugee Camp,Cut arm,0,True,True
 Lidiya,Lamyro,Tesla Refugee Camp,Head injury,0,True,True
-Roger,Wills,Tesla Refugee Camp,Arm wound ,0,True,True
+Roger,Wills,Tesla Refugee Camp,None,0,True,True

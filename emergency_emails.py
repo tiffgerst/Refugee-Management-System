@@ -32,23 +32,19 @@ A refugee in your camp needs URGENT medical attention! Please attend to your e-A
         
         """
     try:
-        for email in emails:
-            print(emails)
-            msg = EmailMessage()
-            msg.set_content(email_text)
+        msg = EmailMessage()
+        msg.set_content(email_text)
 
-            msg['Subject'] = 'Urgent Help Required'
-            msg['From'] = "eadam0066@gmail.com"
-            msg['To'] = email
-            print(email)
+        msg['Subject'] = 'Urgent Help Required'
+        msg['From'] = "eadam0066@gmail.com"
+        msg['To'] = emails
 
-            server = smtplib.SMTP('smtp.gmail.com', 587)
-            server.starttls()
-            server.login(gmail_user, gmail_password)
-            server.send_message(msg)
-            server.close()
-            print("Email was successfully sent!")
-            return
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+        server.login(gmail_user, gmail_password)
+        server.send_message(msg)
+        server.close()
+        print("Emails were successfully sent!")
             
     except Exception as e:
         print("Email was not sent:", e)
