@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import ttk, messagebox
 import volunteers.manage_refugees as mr
 import volunteers.edit_information as ed
-import init
+import main
 import pandas as pd
 import emergencies_tab as emg
 
@@ -16,7 +16,7 @@ def logout():
 
     if logout_q == 'yes':
         volunteer_screen.destroy()
-        init.main_account_screen()
+        main.main_account_screen()
 
 
 def save_new_camp():
@@ -109,7 +109,7 @@ def volunteer_show(username):
         messagebox.showerror(
             'No Camps Available!', 'There are currently no camps available. Please contact the admin or check back later.', parent=volunteer_screen)
         volunteer_screen.destroy()
-        init.main_account_screen()
+        main.main_account_screen()
 
 # If a volunteer is a medic, show EMERGENCIES tab
     df = pd.read_csv('data/volunteers.csv',

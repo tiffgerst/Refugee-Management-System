@@ -3,7 +3,7 @@ from tkinter import ttk, messagebox
 import admin.camp as ac
 import admin.plan as ap
 import admin.volunteer as av
-import init
+import main
 import admin.refugees as ar
 from utilities import hash_password
 import re
@@ -60,7 +60,7 @@ def logout():
 
     if logout_q == 'yes':
         admin_screen.destroy()
-        init.main_account_screen()
+        main.main_account_screen()
 
 
 def change_admin_email():
