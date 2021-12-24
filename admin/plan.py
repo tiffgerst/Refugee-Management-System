@@ -211,7 +211,6 @@ def modify_plan_window(add):
 
         df1 = pd.read_csv('data/emergency_plans.csv', keep_default_na=False)
         expired_plans = []
-        active_plans = []
         rows = df1.values
         for row in rows:
             expiration_string = row[5]
@@ -385,16 +384,19 @@ def is_valid_plan(parent, plan_na, plan_ty, plan_loc, plan_desc, plan_start, pla
 
     # Validate start date
     start_date_res = check_date(plan_start, "%d %b %Y", parent=parent)
+    
     if start_date_res == False:
         return
 
     # If end date is specified - validate it
     if plan_end != '':
         end_date_res = check_date(plan_end, "%d %b %Y", parent=parent)
+        end_date_dt = datetime.strptime(end_date_res, '%d %b %Y')
+        start_date_dt = datetime.strptime(start_date_res, '%d %b %Y')
         if end_date_res == False:
             return
         # If the end date is before the start date
-        if end_date_res < start_date_res:
+        if end_date_dt < start_date_dt:
             return
 
         if datetime.strptime(plan_end, '%d %b %Y') <= datetime.today():
