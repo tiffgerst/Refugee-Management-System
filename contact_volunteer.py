@@ -51,12 +51,11 @@ def contact_volunteer(z, x):
                 server.login(gmail_user, gmail_password)
                 server.send_message(msg)
                 server.close()
-                print("Email was successfully sent!")
                 self.success_popup()
                 return 
 
             except Exception as e:
-                print("Email was not sent:", e)
+               pass
             self.the_window
 
         def display_mess(self, btn_clicked):

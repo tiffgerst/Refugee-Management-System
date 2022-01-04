@@ -412,7 +412,6 @@ def expire_plan():
 
     df1 = pd.read_csv('data/emergency_plans.csv', keep_default_na=False)
     expired_plans = []
-    active_plans = []
     rows = df1.values
     for row in rows:
         expiration_string = row[5]

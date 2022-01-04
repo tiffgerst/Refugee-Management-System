@@ -18,28 +18,28 @@ Sacha,Coathup,Argentina Earthquake Relief,Concussion,8,False,False
 Jessalin,Rossborough,BioNTech,Cough,11,False,True
 Aloisia,Dorkens,Moderna,Concussion,20,False,True
 Merrile,Yeliashev,Astrazeneca,Concussion,6,False,False
-Clayborn,Cornthwaite,Brazil Earthquake relief,Corona,12,True,False
+Clayborn,Cornthwaite,Brazil Earthquake relief,Corona,12,False,False
 Sheelagh,Becke,Moderna,Gunshot wound,19,False,True
 Bernhard,Massie,Neutral Peace Zone,Radioactive decay,13,False,True
-Ceciley,Neylon,Argentina Earthquake Relief,Cough,4,True,True
+Ceciley,Neylon,Argentina Earthquake Relief,Cough,4,False,True
 Mervin,Ovington,Argentina Earthquake Relief,Broken Arm,1,False,True
 Pasquale,Le Prevost,Tesla Refugee Camp,Head injury,4,True,True
-Adella,Ramelot,Argentina Earthquake Relief,,17,True,False
+Adella,Ramelot,Argentina Earthquake Relief,,17,False,False
 Keane,Tidcombe,Brazil Earthquake relief,Cough,7,False,False
-Lia,Osmar,Argentina Earthquake Relief,Concussion,18,True,False
-Suzann,Jepperson,Argentina Earthquake Relief,,19,True,True
-Rock,Alexandrou,Ecuador Earthquake Relief,Cough,2,True,False
+Lia,Osmar,Argentina Earthquake Relief,Concussion,18,False,False
+Suzann,Jepperson,Argentina Earthquake Relief,,19,False,True
+Rock,Alexandrou,Ecuador Earthquake Relief,Cough,2,False,False
 Gale,Lovell,Brazil Earthquake relief,Broken Foot,11,False,False
 Bartholomeo,McCosh,Astrazeneca,PTSD,19,False,False
 Cody,Patsall,Neutral Peace Zone,Radioactive decay,8,True,True
 Freddie,MacRonald,Tesla Refugee Camp,Broken Foot,13,False,False
 Berri,Housley,BioNTech,Cough,17,False,False
 Hulda,Abbate,Moderna,PTSD,15,False,False
-Lind,Buggs,Brazil Earthquake relief,Gunshot wound,6,True,False
+Lind,Buggs,Brazil Earthquake relief,Gunshot wound,6,False,False
 Dev,Trayte,No Brainer,Concussion,16,True,True
 Camellia,Caley,No Brainer,PTSD,6,False,False
 Ronalda,Wickson,Moderna,Radioactive decay,14,False,False
-Austine,Rew,Ecuador Earthquake Relief,Broken Foot,13,True,False
+Austine,Rew,Ecuador Earthquake Relief,Broken Foot,13,False,False
 Dehlia,Melarkey,Amazon Fulfillment Centre,Radioactive decay,14,False,True
 Ros,Caisley,No Brainer,Gunshot wound,19,True,True
 Anthe,Inkster,Amazon Fulfillment Centre,Cough,3,True,False
@@ -48,14 +48,14 @@ Sigmund,Reveley,No Brainer,Concussion,17,False,False
 Donall,Benediktsson,Ecuador Earthquake Relief,Cough,13,False,True
 Read,Chippindale,Brazil Earthquake relief,Head Injury,10,False,False
 Rowena,O'Heyne,Argentina Earthquake Relief,Broken Arm,6,False,False
-Beltran,Gooke,Ecuador Earthquake Relief,Broken Foot,9,True,True
+Beltran,Gooke,Ecuador Earthquake Relief,Broken Foot,9,False,True
 Olenka,Shannahan,Amazon Fulfillment Centre,Concussion,4,False,True
 Nicolina,Davidow,Neutral Peace Zone,Concussion,10,False,False
 Dotti,Scrivenor,No Brainer,Radioactive decay,9,True,False
 Elisha,Ghidini,Astrazeneca,Corona,4,False,True
 Larry,Rubinsaft,Ecuador Earthquake Relief,PTSD,15,False,False
 Darin,Donisthorpe,Astrazeneca,Concussion,15,False,True
-Nanice,Wedgwood,Brazil Earthquake relief,Radioactive decay,3,True,True
+Nanice,Wedgwood,Brazil Earthquake relief,Radioactive decay,3,False,True
 Danny,Hallward,Amazon Fulfillment Centre,Broken Foot,15,False,True
 Verge,Alexsandrovich,Amazon Fulfillment Centre,Broken Foot,17,False,False
 Inessa,Roumier,Moderna,Cough,16,False,True
@@ -76,10 +76,10 @@ Lorri,Bossons,No Brainer,Radioactive decay,17,False,True
 Armando,Lamborn,Neutral Peace Zone,Broken Foot,18,False,True
 Jess,Arnley,Amazon Fulfillment Centre,Broken Foot,20,True,True
 Rae,Thickens,No Brainer,PTSD,2,True,False
-Emelita,Lesley,Argentina Earthquake Relief,Head Injury,11,True,False
+Emelita,Lesley,Argentina Earthquake Relief,Head Injury,11,False,False
 Clementius,Clayborn,Tesla Refugee Camp,Gunshot wound,15,True,True
 Tarrance,Piele,Ecuador Earthquake Relief,,16,False,False
-Shela,Tindall,Argentina Earthquake Relief,,8,True,False
+Shela,Tindall,Argentina Earthquake Relief,,8,False,False
 Raff,MacDonnell,Argentina Earthquake Relief,Radioactive decay,2,False,True
 Camilla,Clapson,Amazon Fulfillment Centre,Head Injury,9,False,False
 Nessa,Longwood,Moderna,Radioactive decay,16,False,True
@@ -87,7 +87,7 @@ Reta,Lovelace,No Brainer,Cough,19,False,False
 Siffre,Hobell,Ecuador Earthquake Relief,Cough,3,False,False
 Jacklyn,Christofe,Amazon Fulfillment Centre,Concussion,3,True,True
 Bearnard,Hadkins,Brazil Earthquake relief,,12,False,False
-Florina,Claw,Ecuador Earthquake Relief,Concussion,14,True,True
+Florina,Claw,Ecuador Earthquake Relief,Concussion,14,False,True
 Eba,Carruth,Moderna,Corona,4,False,False
 Christophe,Ownsworth,Argentina Earthquake Relief,,17,False,False
 Sigismondo,Arp,Brazil Earthquake relief,PTSD,14,False,True
@@ -95,11 +95,11 @@ Vlad,Symcoxe,Brazil Earthquake relief,Corona,17,False,False
 Dave,Canon,Moderna,Head Injury,16,False,False
 Purcell,Swindells,No Brainer,Concussion,10,False,False
 Deny,Tolan,Neutral Peace Zone,Head Injury,18,False,False
-Allyn,Smelley,Brazil Earthquake relief,Gunshot wound,13,True,False
+Allyn,Smelley,Brazil Earthquake relief,Gunshot wound,13,False,False
 Barry,Beverstock,No Brainer,Corona,13,False,False
 Derrik,Santostefano.,Tesla Refugee Camp,PTSD,7,True,True
 Aharon,Sarre,Moderna,Broken Foot,6,False,True
-Lind,Lorentzen,Ecuador Earthquake Relief,Broken Foot,9,True,True
+Lind,Lorentzen,Ecuador Earthquake Relief,Broken Foot,9,False,True
 Jeramie,McAline,Ecuador Earthquake Relief,,5,False,False
 Amitie,Maybery,Tesla Refugee Camp,Broken Arm,7,False,False
 Zelma,Tapin,BioNTech,Head Injury,8,False,True
@@ -112,7 +112,7 @@ Agatha,Chappel,Astrazeneca,Concussion,10,False,True
 Lodovico,Hawkwood,BioNTech,PTSD,10,False,False
 Chet,Wylie,BioNTech,Gunshot wound,3,False,False
 Irene,Prynne,No Brainer,Corona,12,False,False
-Ferdinand,Feacham,Ecuador Earthquake Relief,,6,True,False
+Ferdinand,Feacham,Ecuador Earthquake Relief,,6,False,False
 Frederik,Plitz,Astrazeneca,Broken Foot,5,False,False
 Juana,Self,Moderna,Gunshot wound,10,False,True
 Niel,Springtorpe,No Brainer,Broken Arm,4,False,False
@@ -121,38 +121,38 @@ Ewan,Gary,Amazon Fulfillment Centre,Gunshot wound,5,True,True
 Brynn,Duff,Tesla Refugee Camp,Cough,18,False,True
 Dedie,Fawdry,No Brainer,Cough,13,False,True
 Christyna,Chrystie,Astrazeneca,Broken Foot,5,False,False
-Mack,Killen,Ecuador Earthquake Relief,Corona,16,True,False
+Mack,Killen,Ecuador Earthquake Relief,Corona,16,False,False
 Aindrea,Hampe,Ecuador Earthquake Relief,Broken Foot,19,False,True
 Cesaro,Androli,Tesla Refugee Camp,,8,False,True
 Derk,Ticksall,Tesla Refugee Camp,Corona,9,True,True
 Candy,Abson,Moderna,Radioactive decay,1,False,False
-Jed,Wathan,Brazil Earthquake relief,,9,True,False
-Dickie,Chamberlaine,Ecuador Earthquake Relief,Gunshot wound,4,True,True
+Jed,Wathan,Brazil Earthquake relief,,9,False,False
+Dickie,Chamberlaine,Ecuador Earthquake Relief,Gunshot wound,4,False,True
 Chadwick,Epperson,Neutral Peace Zone,Broken Arm,12,False,False
 Ilene,Todeo,No Brainer,Corona,12,False,True
 Ingeberg,Ormrod,BioNTech,PTSD,4,False,False
-Caralie,Rapp,Argentina Earthquake Relief,Radioactive decay,8,True,False
+Caralie,Rapp,Argentina Earthquake Relief,Radioactive decay,8,False,False
 Roz,Filip,Astrazeneca,Gunshot wound,10,False,False
 Bertie,Kegley,BioNTech,Cough,14,False,True
 Dorelia,Woolmore,Neutral Peace Zone,Corona,3,True,False
 Kara-lynn,Thurber,BioNTech,PTSD,11,False,True
 Concettina,Daborne,Tesla Refugee Camp,Broken Arm,14,False,False
-Roshelle,Kettlestringes,Brazil Earthquake relief,Cough,19,True,False
+Roshelle,Kettlestringes,Brazil Earthquake relief,Cough,19,False,False
 Irene,Darby,Tesla Refugee Camp,,7,True,True
 Angelita,Vennart,Amazon Fulfillment Centre,Broken Foot,14,False,True
 Lynnea,Anthoine,BioNTech,Concussion,12,False,True
 Nelson,Beiderbecke,BioNTech,Concussion,17,False,True
-Brandtr,Grigoriev,Brazil Earthquake relief,Concussion,1,True,False
-Doti,Budge,Ecuador Earthquake Relief,Broken Foot,11,True,True
+Brandtr,Grigoriev,Brazil Earthquake relief,Concussion,1,False,False
+Doti,Budge,Ecuador Earthquake Relief,Broken Foot,11,False,True
 Gail,Hayzer,Moderna,Corona,12,False,False
 Harli,Rawcliffe,Tesla Refugee Camp,Concussion,17,False,True
 Debi,MacHoste,Moderna,Concussion,1,False,True
 Daffie,Ferneyhough,Neutral Peace Zone,Radioactive decay,10,False,False
 Bern,Albery,Amazon Fulfillment Centre,Head Injury,19,False,False
-Irina,Starford,Ecuador Earthquake Relief,Broken Arm,9,True,False
+Irina,Starford,Ecuador Earthquake Relief,Broken Arm,9,False,False
 Meredeth,Proctor,Neutral Peace Zone,Broken Foot,3,True,False
 Brinn,Blackmoor,Moderna,Cough,19,False,True
-Fania,Ivachyov,Ecuador Earthquake Relief,Gunshot wound,12,True,True
+Fania,Ivachyov,Ecuador Earthquake Relief,Gunshot wound,12,False,True
 Henrieta,Losseljong,Astrazeneca,Gunshot wound,14,False,True
 Shannon,Stern,Astrazeneca,Broken Arm,4,False,False
 Fleming,Ballantyne,Amazon Fulfillment Centre,Broken Foot,9,True,False
@@ -163,9 +163,9 @@ Walsh,Casbolt,Argentina Earthquake Relief,Radioactive decay,5,False,True
 Petr,Sillito,Astrazeneca,PTSD,18,False,True
 Filia,Champness,No Brainer,Radioactive decay,12,True,False
 Wynnie,Jirik,Argentina Earthquake Relief,Concussion,2,False,True
-Aurelie,Yearnes,Argentina Earthquake Relief,Corona,20,True,False
+Aurelie,Yearnes,Argentina Earthquake Relief,Corona,20,False,False
 Miquela,Ive,Amazon Fulfillment Centre,Head Injury,4,False,True
-Clyde,Cathery,Argentina Earthquake Relief,Radioactive decay,14,True,True
+Clyde,Cathery,Argentina Earthquake Relief,Radioactive decay,14,False,True
 Kendell,Canto,Moderna,,5,False,True
 Sashenka,Rimington,Tesla Refugee Camp,Broken Foot,12,True,False
 Silvain,Bourdel,Moderna,Gunshot wound,3,False,True
@@ -174,7 +174,7 @@ Tomkin,Adderson,Tesla Refugee Camp,Gunshot wound,16,True,True
 Zebulon,Menhenitt,Tesla Refugee Camp,Concussion,10,True,False
 Alexis,McGeffen,BioNTech,Head Injury,2,False,True
 Zaccaria,Cousens,Neutral Peace Zone,Broken Arm,11,False,True
-Roxanna,Milward,Ecuador Earthquake Relief,Head Injury,9,True,False
+Roxanna,Milward,Ecuador Earthquake Relief,Head Injury,9,False,False
 Danila,Bantham,Tesla Refugee Camp,Cough,16,True,False
 Haley,Degan,Amazon Fulfillment Centre,Corona,4,True,False
 Cos,Curnok,Tesla Refugee Camp,Head Injury,14,True,True
@@ -187,7 +187,7 @@ Correy,Witherbed,Astrazeneca,,3,False,True
 Wainwright,McGinley,BioNTech,Concussion,18,False,True
 Gretal,Attle,Brazil Earthquake relief,PTSD,1,False,False
 Max,Beacle,Ecuador Earthquake Relief,Gunshot wound,1,False,True
-Jason,Fabb,Brazil Earthquake relief,Broken Arm,6,True,True
+Jason,Fabb,Brazil Earthquake relief,Broken Arm,6,False,True
 Major,Kindred,Astrazeneca,Radioactive decay,17,False,False
 Ollie,Kerridge,Amazon Fulfillment Centre,Gunshot wound,13,False,True
 Kira,Lucia,Tesla Refugee Camp,Gunshot wound,2,True,True
@@ -199,8 +199,8 @@ Silvanus,Oakland,Tesla Refugee Camp,Radioactive decay,15,True,True
 Stefano,Robilliard,Argentina Earthquake Relief,PTSD,15,False,False
 Corabella,Foxwell,Tesla Refugee Camp,Radioactive decay,19,True,False
 Bone,Teeney,Neutral Peace Zone,Radioactive decay,3,True,False
-Hubey,Mattiazzi,Brazil Earthquake relief,Broken Arm,1,True,True
-Boonie,Donahue,Ecuador Earthquake Relief,Gunshot wound,16,True,False
+Hubey,Mattiazzi,Brazil Earthquake relief,Broken Arm,1,False,True
+Boonie,Donahue,Ecuador Earthquake Relief,Gunshot wound,16,False,False
 Legra,De Rechter,Astrazeneca,,8,False,False
 Amory,Pelfer,Amazon Fulfillment Centre,Cough,15,True,False
 Nikolai,Peaden,Neutral Peace Zone,,2,True,True
@@ -210,22 +210,22 @@ Jackie,Lezemere,Brazil Earthquake relief,Cough,3,False,False
 Karlan,Ridsdole,Amazon Fulfillment Centre,,13,True,False
 Lurette,Hackinge,BioNTech,,1,False,True
 Bernardina,Endecott,Moderna,Concussion,13,False,False
-Georgy,Tchir,Argentina Earthquake Relief,Cough,9,True,True
+Georgy,Tchir,Argentina Earthquake Relief,Cough,9,False,True
 Clark,Charity,Tesla Refugee Camp,PTSD,17,False,False
-Dari,Matterdace,Argentina Earthquake Relief,Head Injury,1,True,False
+Dari,Matterdace,Argentina Earthquake Relief,Head Injury,1,False,False
 Xever,Shimoni,No Brainer,PTSD,10,True,True
 Kiley,Pawelec,Neutral Peace Zone,Broken Arm,7,True,True
 Pauly,Aldcorn,No Brainer,Broken Foot,12,False,False
 Cathee,Travis,Astrazeneca,PTSD,18,False,True
 Jerrie,Seifenmacher,BioNTech,Corona,18,False,False
-Jeno,Amorts,Brazil Earthquake relief,Broken Foot,7,True,False
+Jeno,Amorts,Brazil Earthquake relief,Broken Foot,7,False,False
 Forester,Treacher,BioNTech,Broken Arm,6,False,True
-Zaneta,Kemshell,Argentina Earthquake Relief,Concussion,7,True,True
-Archie,Tissell,Brazil Earthquake relief,Concussion,10,True,False
+Zaneta,Kemshell,Argentina Earthquake Relief,Concussion,7,False,True
+Archie,Tissell,Brazil Earthquake relief,Concussion,10,False,False
 Elle,Sketcher,Moderna,Corona,15,False,False
 Agnesse,Roder,Astrazeneca,Head Injury,16,False,True
 Petunia,Corder,No Brainer,Cough,10,True,False
-Hillary,Beament,Brazil Earthquake relief,Radioactive decay,7,True,True
+Hillary,Beament,Brazil Earthquake relief,Radioactive decay,7,False,True
 Katrinka,Keatch,Tesla Refugee Camp,Corona,10,False,True
 Lina,Tunbridge,Moderna,Broken Arm,11,False,True
 Swen,Olligan,BioNTech,Broken Foot,2,False,True
@@ -240,27 +240,27 @@ Galvan,Mac Giolla Pheadair,Tesla Refugee Camp,,13,False,True
 Hamlen,Quincey,BioNTech,Corona,5,False,True
 Ines,Volonte,No Brainer,Radioactive decay,3,True,False
 Pavla,Mapp,Brazil Earthquake relief,Head Injury,1,False,False
-Antonia,Matasov,Brazil Earthquake relief,Gunshot wound,19,True,True
+Antonia,Matasov,Brazil Earthquake relief,Gunshot wound,19,False,True
 Hershel,Smedley,No Brainer,Cough,8,True,True
 Risa,Lakenton,Neutral Peace Zone,Radioactive decay,15,True,True
-Maryjane,Magarrell,Argentina Earthquake Relief,Radioactive decay,10,True,False
+Maryjane,Magarrell,Argentina Earthquake Relief,Radioactive decay,10,False,False
 Gerri,Sanbrooke,BioNTech,Corona,18,False,True
 Paige,Fried,No Brainer,Gunshot wound,18,True,False
 Perry,Tremellan,Tesla Refugee Camp,Radioactive decay,3,True,True
 Wye,Micco,Ecuador Earthquake Relief,Concussion,13,False,False
 Monika,Germon,Tesla Refugee Camp,Corona,17,True,False
 Melisa,Huchot,Brazil Earthquake relief,Broken Arm,6,False,True
-Wolfgang,Waything,Ecuador Earthquake Relief,Corona,16,True,True
-Cornie,Ramsell,Brazil Earthquake relief,PTSD,18,True,True
+Wolfgang,Waything,Ecuador Earthquake Relief,Corona,16,False,True
+Cornie,Ramsell,Brazil Earthquake relief,PTSD,18,False,True
 Cassie,Heiton,Moderna,Concussion,20,False,False
 Keelby,Waplington,Astrazeneca,Cough,20,False,True
 Nancie,Eilers,BioNTech,Head Injury,9,False,False
-Terra,Windus,Brazil Earthquake relief,Gunshot wound,16,True,True
+Terra,Windus,Brazil Earthquake relief,Gunshot wound,16,False,True
 Aggi,Ferrand,Ecuador Earthquake Relief,PTSD,15,False,False
 Smitty,Choat,Neutral Peace Zone,,11,False,True
 Germayne,Titcombe,Astrazeneca,Radioactive decay,5,False,True
 Eve,Hark,Ecuador Earthquake Relief,Gunshot wound,3,False,False
-Artair,Dench,Ecuador Earthquake Relief,Head Injury,16,True,False
+Artair,Dench,Ecuador Earthquake Relief,Head Injury,16,False,False
 Toby,Lynas,Amazon Fulfillment Centre,Corona,3,False,True
 Elke,Pulver,Astrazeneca,PTSD,9,False,True
 Reinhard,Children,Tesla Refugee Camp,Corona,4,True,True
@@ -269,23 +269,23 @@ Kat,Jendrusch,Moderna,Radioactive decay,19,False,True
 Lynne,Merigon,Moderna,Radioactive decay,15,False,True
 Talbert,Songest,Brazil Earthquake relief,Radioactive decay,6,False,False
 Haily,Dellit,BioNTech,Radioactive decay,14,False,True
-Amabelle,Monkleigh,Brazil Earthquake relief,Corona,1,True,False
+Amabelle,Monkleigh,Brazil Earthquake relief,Corona,1,False,False
 Suki,Harbisher,Argentina Earthquake Relief,Head Injury,5,False,True
 Ulrick,Popov,Tesla Refugee Camp,Head Injury,2,False,False
-Inigo,Lettsom,Brazil Earthquake relief,,17,True,False
+Inigo,Lettsom,Brazil Earthquake relief,,17,False,False
 Che,Brophy,Brazil Earthquake relief,Concussion,9,False,False
-Amye,Tuffs,Brazil Earthquake relief,Broken Foot,18,True,True
-Micky,Tolman,Ecuador Earthquake Relief,Head Injury,16,True,True
-Rogerio,Atwel,Argentina Earthquake Relief,Concussion,12,True,True
+Amye,Tuffs,Brazil Earthquake relief,Broken Foot,18,False,True
+Micky,Tolman,Ecuador Earthquake Relief,Head Injury,16,False,True
+Rogerio,Atwel,Argentina Earthquake Relief,Concussion,12,False,True
 Jozef,Flann,Tesla Refugee Camp,Cough,9,False,True
 Pinchas,Readmire,Amazon Fulfillment Centre,Head Injury,6,False,False
 Rivalee,Manketell,BioNTech,Head Injury,14,False,False
 Giulio,Sneaker,Amazon Fulfillment Centre,PTSD,6,True,True
 Galen,Costain,Ecuador Earthquake Relief,Gunshot wound,10,False,False
 Raff,Handyside,Tesla Refugee Camp,Corona,8,False,True
-Zara,Gribble,Brazil Earthquake relief,Radioactive decay,3,True,True
+Zara,Gribble,Brazil Earthquake relief,Radioactive decay,3,False,True
 Clementine,Sebrook,No Brainer,Broken Arm,18,True,True
-Eloisa,Drummond,Brazil Earthquake relief,Concussion,3,True,True
+Eloisa,Drummond,Brazil Earthquake relief,Concussion,3,False,True
 Odele,Macilhench,BioNTech,Corona,10,False,False
 Juanita,Crayk,Tesla Refugee Camp,Broken Arm,17,True,False
 Jillie,Barnson,Neutral Peace Zone,Corona,17,False,False
@@ -297,7 +297,7 @@ Kaycee,Casoni,BioNTech,,16,False,False
 Ardyth,Giacovazzo,Ecuador Earthquake Relief,Head Injury,9,False,False
 Nolana,MacPaik,Neutral Peace Zone,Gunshot wound,15,True,True
 Teador,Courtier,No Brainer,Corona,5,False,False
-Atalanta,Widdison,Brazil Earthquake relief,Gunshot wound,9,True,True
+Atalanta,Widdison,Brazil Earthquake relief,Gunshot wound,9,False,True
 Mellie,Cullingworth,Argentina Earthquake Relief,Gunshot wound,11,False,True
 Kelly,Guilfoyle,Neutral Peace Zone,,16,False,False
 Roberto,Lewis,Tesla Refugee Camp,Food poisoning,0,True,True

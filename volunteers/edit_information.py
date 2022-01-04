@@ -3,6 +3,8 @@ from tkinter import messagebox
 import pandas as pd
 from utilities import check_blanks, delete_popups, hash_password
 from utilities import verify_pass, verify_phone_number, verify_email
+import volunteers.manage_refugees as mr
+import emergencies_tab as et
 
 
 def edit_volunteer():
@@ -84,6 +86,11 @@ def edit_volunteer():
     Label(edit_success_popup, text="Volunteer edit was successful", fg='green').pack()
     Button(edit_success_popup, text="OK", command=lambda: delete_popups(
         [edit_success_popup, editor_popup])).pack()
+    mr.clear_treeview()
+    mr.update_treeview()
+    et.clear_treeview_emerg()
+    et.update_treeview_emerg()
+    
 
 
 def edit_popup(screen, user):
@@ -131,8 +138,9 @@ def edit_popup(screen, user):
     df = pd.read_csv('data/volunteers.csv',
                      converters={'phone_number': lambda a: str(a)})
     row = df.loc[df['username'] == username]
+    camp = row['camp_name'].values[0]
 
-    camp_name.set(all_camps[0])
+    camp_name.set(camp)
 
     Label(editor_popup, text="", bg='#F2F2F2').pack()
 

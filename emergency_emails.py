@@ -44,10 +44,9 @@ A refugee in your camp needs URGENT medical attention! Please attend to your e-A
         server.login(gmail_user, gmail_password)
         server.send_message(msg)
         server.close()
-        print("Emails were successfully sent!")
             
     except Exception as e:
-        print("Email was not sent:", e)
+        pass
 
 
 
